@@ -1,0 +1,58 @@
+/**
+ * Design System Tokens — Via Rider Management
+ * Desktop dashboard design system.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --brand-primary: #0069e2;
+    --brand-light: #e1efff;
+    --brand-dark: #0054b4;
+    --brand-green: #00b277;
+    --brand-green-light: #e6f9f1;
+
+    --text-primary: #222429;
+    --text-secondary: #4f545d;
+    --text-tertiary: #6c7380;
+    --text-quaternary: #8f949e;
+    --text-on-brand: #ffffff;
+
+    --bg-primary: #ffffff;
+    --bg-secondary: #f7f8fa;
+    --bg-tertiary: #f0f1f3;
+    --bg-quaternary: #e8e9eb;
+    --bg-nav: #2c2d31;
+
+    --positive: #0e734f;
+    --positive-light: #e6f9f1;
+    --negative: #da2c2c;
+    --negative-light: #fde8e8;
+    --warning: #e68a00;
+    --warning-light: #fff4e0;
+
+    --separator: #e8e9eb;
+    --separator-light: #f0f1f3;
+
+    --space-xs: 4px;
+    --space-sm: 8px;
+    --space-md: 12px;
+    --space-lg: 16px;
+    --space-xl: 24px;
+    --space-2xl: 32px;
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-full: 9999px;
+
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --header-height: 56px;
+    --subheader-height: 56px;
+    --nav-width: 56px;
+    --sidebar-width: 336px;
+}

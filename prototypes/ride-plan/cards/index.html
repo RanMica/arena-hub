@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rider Management</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+</head>
+<body>
+
+<!-- Left Navigation -->
+<nav class="left-nav">
+    <div class="nav-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </div>
+    <div class="nav-item active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+    </div>
+    <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    </div>
+    <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    </div>
+    <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    </div>
+    <div class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    </div>
+</nav>
+
+<div class="main-layout">
+
+    <!-- Header -->
+    <header class="header">
+        <span class="header-title">Rider management</span>
+        <div class="header-center">
+            <div class="header-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>VOC Search</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn-icon-green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sub-header with tabs -->
+    <div class="subheader">
+        <div class="tab-bar">
+            <div class="tab-item active">Rides</div>
+            <div class="tab-item">Account</div>
+        </div>
+        <div class="subheader-actions">
+            <button class="btn-icon-outline">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            </button>
+            <button class="btn-primary">
+                Book a ride
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content-area">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-status">
+                <span class="status-dot"></span>
+                Active
+            </div>
+
+            <div class="profile-section">
+                <div class="avatar">JS</div>
+                <div class="profile-name">John Smith</div>
+                <div class="profile-ids">
+                    <span>External ID: K0137</span>
+                    <span>Rider ID: 2860</span>
+                </div>
+            </div>
+
+            <div class="operator-notes">
+                <div class="operator-notes-header">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                    Operator notes
+                </div>
+                <p>Rider insists that he doesn't need assistance walking to his... <a href="#">Show more</a></p>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Details -->
+            <div class="sidebar-section-title">Details</div>
+            <div class="info-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span>657-679 N Railroad Ave, Staten Island,...</span>
+            </div>
+            <div class="info-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                <span>jeanie_roberts@ratke.us</span>
+            </div>
+            <div class="info-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                <span>929-076-5783</span>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Services -->
+            <div class="sidebar-section-title">Services</div>
+
+            <div class="service-item">
+                <div class="service-header">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    </div>
+                    <span class="service-name">Mountain-line <svg class="alert-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12" stroke="white" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="16" x2="12.01" y2="16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg></span>
+                    <span class="service-status">Active</span>
+                </div>
+                <div class="progress-row">
+                    <span class="progress-label">2 weekly rides left</span>
+                    <span class="progress-count">8/10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%"></div>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-header">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    </div>
+                    <span class="service-name">Kaiser Permanente</span>
+                    <span class="service-status">Active</span>
+                </div>
+                <div class="progress-row">
+                    <span class="progress-label">Weekly ride limit reached</span>
+                    <span class="progress-count">10/10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill full" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <div class="service-item">
+                <div class="service-header">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    </div>
+                    <span class="service-name">Wix</span>
+                    <span class="service-status">Active</span>
+                </div>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Payments -->
+            <div class="sidebar-section-title">Payments</div>
+            <div class="info-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                Default payment method:
+                <span class="value">Ticket</span>
+            </div>
+            <div class="info-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4-4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Default sponsor:
+                <span class="value">Clalit</span>
+            </div>
+            <div class="info-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                Remaining credit:
+                <span class="value">$7.20</span>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Ride activity -->
+            <div class="sidebar-section-title">Ride activity</div>
+            <div class="activity-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--positive)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Completed rides</span>
+                <span class="count">12</span>
+            </div>
+            <div class="activity-row">
+                <svg viewBox="0 0 24 24" fill="none" stroke="var(--negative)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                <span>No show</span>
+                <span class="count">4</span>
+            </div>
+        </aside>
+
+        <!-- Table Area -->
+        <div class="table-area">
+
+            <!-- Filters -->
+            <div class="filter-bar">
+                <div class="search-input">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" placeholder="Search ride...">
+                </div>
+                <div class="filter-divider"></div>
+                <div class="toggle-group">
+                    <button class="toggle-btn active">Today & Upcoming</button>
+                    <button class="toggle-btn">Past</button>
+                    <button class="toggle-btn">Custom</button>
+                </div>
+                <button class="chip-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/></svg>
+                    Status
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <button class="chip-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    Services
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+                </button>
+                <button class="add-filter-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                    Add Filter
+                </button>
+            </div>
+
+            <!-- Rides Cards -->
+            <div class="rides-grid">
+
+                <div class="ride-card ride-card--today">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="badge-today">Today</span>
+                            <span class="ride-card__sub">Arrive by 10:00</span>
+                        </div>
+                        <span class="status-badge on-the-way"><span class="status-icon"></span>On the way</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">2118 Thornridge Cir. Syracuse, Connecticut 35624</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">5 Imp. des Orteaux, 75020 Paris</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge bus-lines"><span class="service-dot"></span>Bus-lines</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Jan 8, Friday</span>
+                            <span class="ride-card__sub">Arrive by 11:00</span>
+                        </div>
+                        <span class="status-badge booked"><span class="status-icon"></span>Booked</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">Halles de Paris, Paris, France</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">Gare du Nord</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                        <svg class="notes-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Jan 12, Monday</span>
+                            <span class="ride-card__sub">Arrive by 14:00</span>
+                        </div>
+                        <span class="status-badge cancelled"><span class="status-icon"></span>Cancelled</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">2 Rue Louis Pergaud, Paris</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">Gare d'Austerlitz</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge bubble-dan"><span class="service-dot"></span>Bubble Dan</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Jan 15, Thursday</span>
+                            <span class="ride-card__sub">Depart at 11:00</span>
+                        </div>
+                        <span class="status-badge waitlisted"><span class="status-icon"></span>Waitlisted</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">12 Av. de la Habette, 94000 Créteil</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">Aéroport Orly</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge bus-lines"><span class="service-dot"></span>Bus-lines</span>
+                        <span class="ride-card__window">Window: 11:30 – 12:15</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Jan 21, Tuesday</span>
+                            <span class="ride-card__sub">Arrive by 9:00</span>
+                        </div>
+                        <span class="status-badge no-ride"><span class="status-icon"></span>No Ride</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">4517 Washington Ave. Manchester, Kentucky 3948</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">5 Imp. des Orteaux, 75020 Paris</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                        <span class="ride-card__window">Window: 9:00 – 9:30</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Jan 24, Tuesday</span>
+                            <span class="ride-card__sub">Arrive by 13:00</span>
+                        </div>
+                        <span class="status-badge mode-ineligible">Mode Ineligible</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">59 Rue Claude Bernard, 75005 Paris</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">21 Rue Dupin, 75006 Paris, France</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Feb 4, Monday</span>
+                            <span class="ride-card__sub">Depart at 14:00</span>
+                        </div>
+                        <span class="status-badge booked"><span class="status-icon"></span>Booked</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">4517 Washington Ave. Manchester, Kentucky 39495</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">5 Imp. des Orteaux, 75020 Paris</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Feb 7, Thursday</span>
+                            <span class="ride-card__sub">Arrive by 12:30</span>
+                        </div>
+                        <span class="status-badge booked"><span class="status-icon"></span>Booked</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">2P Rue Louis Pergaud, Paris</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">Tournan-en-Brie</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge wix"><span class="service-dot"></span>Wix</span>
+                        <svg class="notes-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                        <span class="ride-card__window">Window: 11:30 – 12:15</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Feb 19, Tuesday</span>
+                            <span class="ride-card__sub">Depart at 15:00</span>
+                        </div>
+                        <span class="status-badge cancelled"><span class="status-icon"></span>Cancelled</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">13 Ave Parmentier, 94120 Fontenay sais</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">3517 W. Gray St. Utica, Pennsylvania 57867</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Mar 4, Monday</span>
+                            <span class="ride-card__sub">Arrive by 16:00</span>
+                        </div>
+                        <span class="status-badge booked"><span class="status-icon"></span>Booked</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">Aéroport Orly</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">5 Imp. des Orteaux, 75020 Paris</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Apr 23, Sunday</span>
+                            <span class="ride-card__sub">Arrive by 10:30</span>
+                        </div>
+                        <span class="status-badge booked"><span class="status-icon"></span>Booked</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">41 Rte du Vésinet, 78400 Chatou, France</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">2118 Thornridge Cir. Syracuse, Connecticut 35624</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                    </div>
+                </div>
+
+                <div class="ride-card">
+                    <div class="ride-card__header">
+                        <div class="ride-card__time">
+                            <span class="ride-card__date">Apr 24, Monday</span>
+                            <span class="ride-card__sub">Arrive by 10:30</span>
+                        </div>
+                        <span class="status-badge booked"><span class="status-icon"></span>Booked</span>
+                    </div>
+                    <div class="ride-card__route">
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--pickup"></span>
+                            <span class="ride-card__addr">41 Rte du Vésinet, 78400 Chatou, France</span>
+                        </div>
+                        <div class="ride-card__stop">
+                            <span class="ride-card__dot ride-card__dot--dropoff"></span>
+                            <span class="ride-card__addr">2118 Thornridge Cir. Syracuse, Connecticut 35624</span>
+                        </div>
+                    </div>
+                    <div class="ride-card__footer">
+                        <span class="service-badge mountain-line"><span class="service-dot"></span>Mountain-line Paratransit</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <div class="pagination-left">
+                    <div class="page-size-select">
+                        <select>
+                            <option>50</option>
+                            <option>25</option>
+                            <option>100</option>
+                        </select>
+                    </div>
+                    <span class="page-info">Items per page</span>
+                    <span class="page-info">1 – 50 of 2000 items</span>
+                </div>
+                <div class="pagination-right">
+                    <button class="page-btn" disabled>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">5</button>
+                    <span class="page-dots">...</span>
+                    <button class="page-btn">54</button>
+                    <button class="page-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -46,6 +46,30 @@
         }
       ],
       "createdAt": "2026-03-15"
+    },
+    {
+      "id": "ride-plan",
+      "name": "ride plan f",
+      "description": "example",
+      "createdBy": "ran",
+      "variants": [
+        {
+          "id": "calender-view",
+          "name": "Calender view",
+          "path": "prototypes/ride-plan/calender-view/"
+        },
+        {
+          "id": "cards",
+          "name": "Cards",
+          "path": "prototypes/ride-plan/cards/"
+        },
+        {
+          "id": "default",
+          "name": "Default",
+          "path": "prototypes/ride-plan/default/"
+        }
+      ],
+      "createdAt": "2026-03-09"
     }
   ]
 }
