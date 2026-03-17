@@ -114,7 +114,7 @@ git commit -m "Publish: $PROTO_NAME"
 
 if git remote get-url origin &>/dev/null; then
     echo "  Pushing to remote..."
-    git push
+    git push --set-upstream origin main
     echo ""
     echo "Done! \"$PROTO_NAME\" is now live on the public hub."
 else
