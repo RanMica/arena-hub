@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Via - Booking Agent</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/figma-tokens.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/scheduling-modal.css">
+</head>
+<body>
+    <!-- Demo Controls (outside app frame) -->
+    <div class="demo-controls" id="demo-controls">
+        <!-- View Mode Toggle -->
+        <div class="view-toggle" id="view-toggle">
+            <button class="view-toggle-btn" data-view="410" title="Mobile (410px)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <rect x="6" y="2" width="12" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <line x1="10" y1="18" x2="14" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+            <button class="view-toggle-btn" data-view="720" title="Tablet (720px)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <circle cx="12" cy="17" r="1" fill="currentColor"/>
+                </svg>
+            </button>
+            <button class="view-toggle-btn active" data-view="full" title="Full Width">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                    <line x1="6" y1="20" x2="18" y2="20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <div class="demo-controls-divider"></div>
+        
+        <!-- Theme Toggle -->
+        <button class="demo-toggle-btn" id="demo-theme-toggle" title="Toggle dark mode">
+            <svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 2V4M12 20V22M4 12H2M22 12H20M5.64 5.64L4.22 4.22M19.78 19.78L18.36 18.36M5.64 18.36L4.22 19.78M19.78 4.22L18.36 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+        
+        <!-- TTS Toggle -->
+        <button class="demo-toggle-btn" id="demo-tts-toggle" title="Toggle premium voice (ElevenLabs)">
+            <svg class="tts-browser-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M19 10V12C19 15.866 15.866 19 12 19C8.134 19 5 15.866 5 12V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 19V23M8 23H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <svg class="tts-premium-icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z" fill="currentColor" stroke="currentColor" stroke-width="2"/>
+                <path d="M19 10V12C19 15.866 15.866 19 12 19C8.134 19 5 15.866 5 12V10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 19V23M8 23H16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="18" cy="5" r="4" fill="#10B981" stroke="#10B981"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- App Container -->
+    <div id="app" class="app-container" data-view-mode="full">
+        
+        <!-- Recording Overlay (shows when recording - covers entire app frame) -->
+        <div class="recording-overlay" id="recording-overlay"></div>
+        
+        <!-- HOME PAGE SCREEN -->
+        <div id="home-screen" class="screen active">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="time">9:41</span>
+                <div class="status-icons">
+                    <span class="signal-icon">📶</span>
+                    <span class="wifi-icon">📡</span>
+                    <span class="battery-icon">🔋</span>
+                </div>
+            </div>
+
+            <!-- Header with hamburger menu and account -->
+            <div class="home-header">
+                <button class="icon-btn hamburger">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <div class="home-header-right">
+                    <div class="account-chip">
+                        <span class="visa-icon">💳</span>
+                        <span>3322</span>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                            <path d="M3 5L6 8L9 5" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Map Container (blank) -->
+            <div id="home-map" class="map-container"></div>
+
+            <!-- Full Screen Agent Banner Overlay -->
+            <div class="agent-banner-fullscreen" id="agent-banner">
+                <div class="agent-banner-fullscreen-bg"></div>
+                <div class="agent-banner-fullscreen-content">
+                    <div class="agent-banner-fullscreen-icon-wrapper">
+                        <img src="assets/agent%20icon.svg" class="agent-banner-fullscreen-icon" alt="Agent">
+                    </div>
+                    <div class="agent-banner-fullscreen-text">
+                        <span class="agent-banner-fullscreen-greeting" id="banner-greeting-line">Good evening, Ran</span>
+                        <span class="agent-banner-fullscreen-headline">How can I help you today?</span>
+                        <span class="agent-banner-fullscreen-subtitle">Book rides, get service info, manage trips and more — all through a simple conversation.</span>
+                    </div>
+                    <button class="agent-banner-fullscreen-cta">
+                        <span>Chat with Agent</span>
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M4 10H16M16 10L11 5M16 10L11 15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sidebar Container (for full width mode) -->
+            <div class="sidebar-container">
+                <!-- Bottom Drawer -->
+                <div class="bottom-drawer">
+                <div class="drawer-handle"></div>
+                <!-- Date/Time and Passengers -->
+                <div class="booking-params">
+                    <button class="chip home-chip">
+                        <img src="assets/schedule.svg" alt="Schedule" class="icon-img">
+                        <span>Now</span>
+                    </button>
+                    <button class="chip home-chip">
+                        <img src="assets/passengers.svg" alt="Passengers" class="icon-img">
+                        <span>1</span>
+                    </button>
+                </div>
+
+                <!-- Origin/Destination -->
+                <div class="location-inputs">
+                    <div class="location-connector"></div>
+                    <div class="location-row origin-row">
+                        <div class="origin-marker-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <circle cx="8" cy="8" r="7" fill="#007AFF"/>
+                                <circle cx="8" cy="8" r="3" fill="white"/>
+                            </svg>
+                        </div>
+                        <div class="location-content">
+                            <div class="location-label">Current location</div>
+                            <div class="location-address">1124 W Inwood Drive</div>
+                        </div>
+                    </div>
+                    <div class="location-row destination-row">
+                        <div class="destination-marker-icon">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M8 1C5.24 1 3 3.24 3 6C3 9.75 8 15 8 15C8 15 13 9.75 13 6C13 3.24 10.76 1 8 1Z" fill="#FF3B30"/>
+                                <circle cx="8" cy="6" r="2" fill="white"/>
+                            </svg>
+                        </div>
+                        <input type="text" class="destination-input" placeholder="Where to?">
+                    </div>
+                </div>
+
+                <!-- Saved Places -->
+                <div class="saved-places">
+                    <div class="place-item">
+                        <img src="assets/home_fav.svg" alt="Home" class="place-icon-img">
+                        <div class="place-info">
+                            <div class="place-name">Home</div>
+                            <div class="place-address">1124 W Inwood Drive</div>
+                        </div>
+                    </div>
+                    <div class="place-item">
+                        <img src="assets/work_fav.svg" alt="Work" class="place-icon-img">
+                        <div class="place-info">
+                            <div class="place-name">Work</div>
+                            <div class="place-address">700 Highlander Blvd</div>
+                        </div>
+                    </div>
+                    <div class="place-item">
+                        <span class="place-icon">🏈</span>
+                        <div class="place-info">
+                            <div class="place-name">AT&T Stadium</div>
+                            <div class="place-address">1 AT&T Way</div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <!-- iOS Home Indicator -->
+            <div class="home-indicator"></div>
+        </div>
+
+        <!-- AGENT VOICE SCREEN -->
+        <div id="agent-voice-screen" class="screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="time">9:41</span>
+                <div class="status-icons">
+                    <span class="signal-icon">📶</span>
+                    <span class="wifi-icon">📡</span>
+                    <span class="battery-icon">🔋</span>
+                </div>
+            </div>
+            
+            <!-- Header -->
+            <div class="agent-header">
+                <button class="icon-btn hamburger" id="agent-menu-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <h1 class="agent-title">Agent</h1>
+                <button class="close-btn" id="back-to-home">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Welcome Content Area -->
+            <div class="agent-welcome-area" id="voice-input-area">
+                <!-- Centered Content Wrapper -->
+                <div class="agent-welcome-content">
+                    <!-- Agent Greeting -->
+                    <div class="agent-greeting">
+                        <img src="assets/agent%20icon.svg" class="agent-greeting-icon" alt="Agent">
+                        <div class="agent-greeting-text">
+                            <span class="greeting-line" id="greeting-line">Good evening, Ran</span>
+                            <span class="greeting-headline">How can I help?</span>
+                        </div>
+                    </div>
+
+                    <!-- Quick Action Chips -->
+                    <div class="quick-actions-grid">
+                        <button class="quick-action-chip" data-action="book-home">
+                            Ride Home
+                        </button>
+                        <button class="quick-action-chip" data-action="book-work">
+                            Ride to Work
+                        </button>
+                        <button class="quick-action-chip" data-action="book-recent">
+                            My recent rides
+                        </button>
+                        <button class="quick-action-chip" data-action="view-upcoming" id="upcoming-rides-chip">
+                            My upcoming rides
+                        </button>
+                        <button class="quick-action-chip" data-action="service-info">
+                            Service info
+                        </button>
+                        <button class="quick-action-chip" data-action="points-of-interest">
+                            Points of interest in Arlington
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Voice Feedback Indicator (appears at tap location) -->
+                <div class="voice-feedback" id="voice-feedback">
+                    <div class="voice-feedback-ripple"></div>
+                    <div class="voice-feedback-dot"></div>
+                </div>
+
+                <!-- Voice Transcript -->
+                <p class="voice-transcript" id="voice-transcript"></p>
+            </div>
+
+            <!-- Footer with Input -->
+            <div class="agent-footer">
+                <p class="voice-instruction">Tap and hold anywhere to speak</p>
+                <div class="agent-input-row">
+                    <input type="text" class="agent-text-input" id="text-input" placeholder="Ask Via...">
+                    <button class="agent-send-btn" id="agent-send-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <button class="mic-button" id="mic-btn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z" fill="currentColor"/>
+                            <path d="M19 10V12C19 15.866 15.866 19 12 19C8.134 19 5 15.866 5 12V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M12 19V23M8 23H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+
+        <!-- AGENT CHAT SCREEN -->
+        <div id="agent-chat-screen" class="screen">
+            <!-- Status Bar -->
+            <div class="status-bar">
+                <span class="time">9:41</span>
+                <div class="status-icons">
+                    <span class="signal-icon">📶</span>
+                    <span class="wifi-icon">📡</span>
+                    <span class="battery-icon">🔋</span>
+                </div>
+            </div>
+            
+            <!-- Header -->
+            <div class="agent-header">
+                <button class="back-btn" id="back-from-chat">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <h1 class="agent-title">Agent</h1>
+            </div>
+
+            <!-- Chat Messages Container -->
+            <div class="chat-container" id="chat-container">
+                <!-- Messages will be dynamically inserted here -->
+            </div>
+
+            <!-- Text Input -->
+            <div class="text-input-container">
+                <input type="text" class="text-input" id="text-input-chat" placeholder="Type a message...">
+                <button class="voice-btn-chat" id="voice-btn-chat">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 1C10.34 1 9 2.34 9 4V12C9 13.66 10.34 15 12 15C13.66 15 15 13.66 15 12V4C15 2.34 13.66 1 12 1Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M19 10V12C19 15.866 15.866 19 12 19C8.134 19 5 15.866 5 12V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 19V23M8 23H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <button class="send-btn" id="send-btn-chat">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="home-indicator"></div>
+        </div>
+
+        <!-- Trip Details Modal -->
+        <div id="trip-modal" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Trip details</h2>
+                    <button class="modal-close" id="modal-close">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <!-- Trip details will be dynamically inserted -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/config.js"></script>
+    <!-- Load local config if it exists (contains API keys) -->
+    <script src="js/config.local.js" onerror="console.log('No local config found - using defaults')"></script>
+    <script src="js/geocoding.js"></script>
+    <script src="js/booking-service.js"></script>
+    <script src="js/gemini-client.js"></script>
+    <script src="js/location-context.js"></script>
+    <script src="js/scheduling-modal.js"></script>
+    <script src="js/payment-modal.js"></script>
+    <script src="js/passengers-modal.js"></script>
+    <script src="js/ai-agent.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

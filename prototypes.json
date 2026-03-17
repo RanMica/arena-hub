@@ -1,0 +1,51 @@
+{
+  "team": [
+    {
+      "id": "ran",
+      "name": "Ran Michaeli",
+      "role": "Product",
+      "email": "ran.michaeli@ridewithvia.com",
+      "admin": true
+    }
+  ],
+  "prototypes": [
+    {
+      "id": "booking-agent",
+      "name": "Booking Agent",
+      "description": "AI-powered ride booking prototype with voice and chat interfaces for the Via rider app.",
+      "createdBy": "ran",
+      "variants": [
+        {
+          "id": "default",
+          "name": "Current Design",
+          "path": "prototypes/booking-agent/default/"
+        },
+        {
+          "id": "full-screen-banner",
+          "name": "Full screen banner",
+          "path": "prototypes/booking-agent/full-screen-banner/"
+        },
+        {
+          "id": "without-map",
+          "name": "Without map",
+          "path": "prototypes/booking-agent/without-map/"
+        }
+      ],
+      "createdAt": "2025-01-01"
+    },
+    {
+      "id": "ride-managment",
+      "name": "ride managment",
+      "description": "",
+      "createdBy": "ran",
+      "variants": [
+        {
+          "id": "default",
+          "name": "Default",
+          "path": "prototypes/ride-managment/"
+        }
+      ],
+      "createdAt": "2026-03-15"
+    }
+  ]
+}

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arena — Via</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="hub/hub.css">
+</head>
+<body>
+    <!-- ===== Identity Prompt (first visit) ===== -->
+    <div class="identity-prompt" id="identity-prompt" style="display:none">
+        <span class="identity-prompt-label">Enter your email to identify yourself:</span>
+        <input type="email" class="identity-prompt-input" id="identity-email-input" placeholder="you@ridewithvia.com">
+        <button class="hub-btn hub-btn-primary identity-prompt-btn" id="identity-save-btn">Save</button>
+    </div>
+
+    <!-- ===== Dashboard View ===== -->
+    <div id="dashboard-view" class="view active">
+        <nav class="hub-navbar" id="hub-navbar">
+            <div class="hub-navbar-left">
+                <div class="hub-logo">
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                        <rect width="28" height="28" rx="8" fill="#0069e2"/>
+                        <path d="M8 10l4 8 4-8M20 10v8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h1 class="hub-title">Arena</h1>
+                </div>
+                <div class="hub-space-toggle" id="space-toggle" style="display:none">
+                    <button class="space-toggle-btn active" data-space="personal">My Space</button>
+                    <button class="space-toggle-btn" data-space="hub">Public Hub</button>
+                </div>
+            </div>
+            <div class="hub-navbar-right">
+                <button class="hub-nav-circle" id="btn-how-it-works" title="How It Works">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </button>
+                <button class="hub-nav-circle identity-indicator" id="identity-indicator" style="display:none" title="Profile"></button>
+            </div>
+        </nav>
+
+        <main class="hub-main">
+            <div class="hub-toolbar">
+                <div class="hub-filters">
+                    <button class="filter-chip active" data-filter="all">All</button>
+                </div>
+                <button class="hub-btn hub-btn-primary hub-btn-sm" id="btn-new-prototype">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    New
+                </button>
+            </div>
+            <div class="prototype-grid" id="prototype-grid"></div>
+            <div class="empty-state" id="empty-state" style="display:none">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                <p>No prototypes yet. Click <strong>New Prototype</strong> to get started.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- ===== Prototype Detail View ===== -->
+    <div id="detail-view" class="view">
+        <button class="sp-tab" id="sp-tab" title="Open panel">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="sp-shell" id="sp-shell">
+            <div class="sp-drawer" id="sp-drawer">
+                <div class="sp-header">
+                    <div class="sp-logo">
+                        <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#0069e2"/><path d="M8 10l4 8 4-8M20 10v8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        <span class="sp-logo-text">Arena</span>
+                    </div>
+                    <button class="sp-close" id="sp-close" title="Close panel">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><polyline points="16 15 13 12 16 9"/></svg>
+                    </button>
+                </div>
+                <div class="sp-section-label">Prototypes</div>
+                <div class="sp-proto-list" id="sp-proto-list"></div>
+                <div class="sp-footer">
+                    <button class="sp-footer-link" id="sp-how-it-works" title="How It Works">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <span>How It Works</span>
+                        <svg class="sp-footer-link-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                    <button class="sp-footer-link" id="sp-back" title="Back to Dashboard">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        <span>Back to Dashboard</span>
+                    </button>
+                    <div class="sp-footer-separator"></div>
+                    <button class="sp-footer-profile" id="sp-profile" title="Profile">
+                        <div class="sp-footer-avatar" id="sp-footer-avatar"></div>
+                        <span class="sp-footer-username" id="sp-footer-username"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="sp-viewport-frame">
+                <div class="prototype-viewport">
+                    <iframe id="prototype-iframe" src="about:blank" allow="geolocation; microphone; camera; autoplay; fullscreen"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== How It Works Modal ===== -->
+    <div class="modal-overlay" id="guide-modal-overlay">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">How It Works</h3>
+                <button class="modal-close" id="guide-modal-close">&times;</button>
+            </div>
+            <div class="modal-body guide-body" id="guide-body"></div>
+        </div>
+    </div>
+
+    <!-- ===== New Prototype Modal ===== -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="new-prototype-modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modal-title">New Prototype</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label">
+                    Prototype Name
+                    <input type="text" class="form-input" id="input-name" placeholder="e.g. Ride Scheduling Redesign">
+                </label>
+                <label class="form-label">
+                    Description
+                    <textarea class="form-input form-textarea" id="input-description" placeholder="Brief description of what this prototype explores..."></textarea>
+                </label>
+                <label class="form-label">
+                    Created By
+                    <select class="form-input" id="input-creator"></select>
+                </label>
+                <div class="modal-output" id="modal-output" style="display:none">
+                    <p class="modal-output-label">Run this in your terminal:</p>
+                    <pre class="modal-output-code" id="modal-output-code"></pre>
+                    <button class="hub-btn hub-btn-primary modal-copy-btn" id="btn-copy-output">Copy to Clipboard</button>
+                </div>
+            </div>
+            <div class="modal-footer" id="modal-footer">
+                <button class="hub-btn hub-btn-ghost" id="btn-modal-cancel">Cancel</button>
+                <button class="hub-btn hub-btn-primary" id="btn-modal-generate">Generate Instructions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Edit Prototype Modal ===== -->
+    <div class="modal-overlay" id="edit-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="edit-modal-title">Edit Prototype</h3>
+                <button class="modal-close" id="edit-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label">
+                    Prototype Name
+                    <input type="text" class="form-input" id="input-edit-name" placeholder="e.g. Ride Scheduling Redesign">
+                </label>
+                <label class="form-label">
+                    Description
+                    <textarea class="form-input form-textarea" id="input-edit-description" placeholder="Brief description of what this prototype explores..."></textarea>
+                </label>
+                <div class="modal-output" id="edit-modal-output" style="display:none">
+                    <p class="modal-output-label">Run this in your terminal:</p>
+                    <pre class="modal-output-code" id="edit-modal-output-code"></pre>
+                    <button class="hub-btn hub-btn-primary modal-copy-btn" id="btn-edit-copy-output">Copy to Clipboard</button>
+                </div>
+            </div>
+            <div class="modal-footer" id="edit-modal-footer">
+                <button class="hub-btn hub-btn-ghost" id="btn-edit-cancel">Cancel</button>
+                <button class="hub-btn hub-btn-primary" id="btn-edit-generate">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== New Variant Modal ===== -->
+    <div class="modal-overlay" id="variant-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="variant-modal-title">New Variant</h3>
+                <button class="modal-close" id="variant-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label">
+                    Variant Name
+                    <input type="text" class="form-input" id="input-variant-name" placeholder="e.g. Option B — Inline Counter">
+                </label>
+                <label class="form-label">
+                    Description
+                    <textarea class="form-input form-textarea" id="input-variant-description" placeholder="What makes this variant different..."></textarea>
+                </label>
+                <label class="form-label">
+                    Based On
+                    <select class="form-input" id="input-variant-source"></select>
+                </label>
+                <div class="modal-output" id="variant-modal-output" style="display:none">
+                    <p class="modal-output-label">Run this in your terminal:</p>
+                    <pre class="modal-output-code" id="variant-modal-output-code"></pre>
+                    <button class="hub-btn hub-btn-primary modal-copy-btn" id="btn-variant-copy-output">Copy to Clipboard</button>
+                </div>
+            </div>
+            <div class="modal-footer" id="variant-modal-footer">
+                <button class="hub-btn hub-btn-ghost" id="btn-variant-cancel">Cancel</button>
+                <button class="hub-btn hub-btn-primary" id="btn-variant-generate">Generate Command</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Delete Variant Confirmation Modal ===== -->
+    <div class="modal-overlay" id="delete-modal-overlay">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Variant</h3>
+                <button class="modal-close" id="delete-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="delete-modal-message" id="delete-modal-message">Are you sure you want to delete this variant?</p>
+                <div class="modal-output" id="delete-modal-output" style="display:none">
+                    <p class="modal-output-label">Run this in your terminal:</p>
+                    <pre class="modal-output-code" id="delete-modal-output-code"></pre>
+                    <button class="hub-btn hub-btn-primary modal-copy-btn" id="btn-delete-copy-output">Copy to Clipboard</button>
+                </div>
+            </div>
+            <div class="modal-footer" id="delete-modal-footer">
+                <button class="hub-btn hub-btn-ghost" id="btn-delete-cancel">Cancel</button>
+                <button class="hub-btn hub-btn-danger" id="btn-delete-confirm">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Team Management Modal ===== -->
+    <div class="modal-overlay" id="team-view-overlay">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Team Management</h3>
+                <div class="modal-header-actions">
+                    <button class="hub-btn hub-btn-primary hub-btn-sm" id="btn-add-member">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add Member
+                    </button>
+                    <button class="modal-close" id="team-view-close">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="team-list" id="team-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Team Member Modal (Add / Edit) ===== -->
+    <div class="modal-overlay" id="team-modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="team-modal-title">Add Team Member</h3>
+                <button class="modal-close" id="team-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label class="form-label">
+                    Full Name
+                    <input type="text" class="form-input" id="input-member-name" placeholder="e.g. Jane Doe">
+                </label>
+                <label class="form-label">
+                    Email
+                    <input type="email" class="form-input" id="input-member-email" placeholder="e.g. jane@ridewithvia.com">
+                </label>
+                <label class="form-label">
+                    Role
+                    <input type="text" class="form-input" id="input-member-role" placeholder="e.g. Designer, Product, Engineer">
+                </label>
+                <label class="form-label form-checkbox-label">
+                    <input type="checkbox" id="input-member-admin">
+                    <span>Grant admin access</span>
+                </label>
+                <div class="modal-output" id="team-modal-output" style="display:none">
+                    <p class="modal-output-label">Run this in your terminal:</p>
+                    <pre class="modal-output-code" id="team-modal-output-code"></pre>
+                    <button class="hub-btn hub-btn-primary modal-copy-btn" id="btn-team-copy-output">Copy to Clipboard</button>
+                </div>
+            </div>
+            <div class="modal-footer" id="team-modal-footer">
+                <button class="hub-btn hub-btn-ghost" id="btn-team-modal-cancel">Cancel</button>
+                <button class="hub-btn hub-btn-primary" id="btn-team-modal-generate">Generate Command</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Profile Modal ===== -->
+    <div class="modal-overlay" id="identity-modal-overlay">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 class="modal-title">Profile</h3>
+                <button class="modal-close" id="identity-modal-close">&times;</button>
+            </div>
+            <div class="modal-body profile-modal-body">
+                <div class="profile-modal-user" id="identity-modal-user"></div>
+
+                <div class="profile-modal-section" id="profile-teams-section" style="display:none">
+                    <label class="profile-modal-label">Team</label>
+                    <button class="profile-action-row" id="profile-manage-team">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                        <span>Manage team members</span>
+                        <svg class="profile-action-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                </div>
+
+                <div class="profile-modal-section">
+                    <label class="profile-modal-label">Photo</label>
+                    <div class="profile-photo-row">
+                        <div class="profile-photo-preview" id="profile-photo-preview"></div>
+                        <div class="profile-photo-actions">
+                            <button class="hub-btn hub-btn-ghost hub-btn-sm" id="profile-upload-photo">Upload photo</button>
+                            <button class="hub-btn hub-btn-ghost hub-btn-sm profile-remove-photo" id="profile-remove-photo" style="display:none">Remove</button>
+                        </div>
+                        <input type="file" id="profile-photo-input" accept="image/*" style="display:none">
+                    </div>
+                </div>
+
+                <div class="profile-modal-section">
+                    <label class="profile-modal-label">Appearance</label>
+                    <div class="profile-theme-row">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                        <span class="profile-theme-text">Dark mode</span>
+                        <button class="profile-theme-switch" id="profile-theme-toggle">
+                            <span class="profile-theme-knob"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="hub-btn hub-btn-ghost" id="btn-identity-switch">Switch User</button>
+                <button class="hub-btn hub-btn-primary" id="btn-identity-cancel">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Publish Modal ===== -->
+    <div class="modal-overlay" id="publish-modal-overlay">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <h3 class="modal-title">Publish to Hub</h3>
+                <button class="modal-close" id="publish-modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="publish-modal-message" id="publish-modal-message"></p>
+                <div class="modal-output" id="publish-modal-output" style="display:none">
+                    <p class="modal-output-label">Run this in your terminal:</p>
+                    <pre class="modal-output-code" id="publish-modal-output-code"></pre>
+                    <button class="hub-btn hub-btn-primary modal-copy-btn" id="btn-publish-copy-output">Copy to Clipboard</button>
+                </div>
+            </div>
+            <div class="modal-footer" id="publish-modal-footer">
+                <button class="hub-btn hub-btn-ghost" id="btn-publish-cancel">Cancel</button>
+                <button class="hub-btn hub-btn-primary" id="btn-publish-confirm">Publish</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="hub/hub.js"></script>
+</body>
+</html>

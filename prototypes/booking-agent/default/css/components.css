@@ -1,0 +1,2575 @@
+/**
+ * Reusable Component Styles
+ * Via Transportation - Rider Agent
+ */
+
+/* Chip Component - Figma design */
+.chip {
+    display: flex;
+    flex-direction: row; /* icon and text in same row */
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-100); /* 8px gap between icon and text */
+    height: 48px;
+    padding: 6px var(--spacing-200) 6px var(--spacing-200); /* 6px top/bottom, 16px left/right */
+    flex: 0 0 auto; /* allow width to expand based on content */
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    color: var(--label-primary);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap; /* prevent text wrapping */
+    transform: translateY(0);
+}
+
+.chip:hover {
+    background: var(--background-secondary);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.chip:active {
+    transform: translateY(0) scale(0.97);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+}
+
+.chip .icon,
+.chip .icon-img {
+    font-size: 16px;
+    line-height: 1;
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.chip.selected {
+    background: var(--brand-1);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+/* Choose on Map Button */
+.choose-on-map-wrapper {
+    padding: var(--spacing-100) 0;
+    padding-left: 28px; /* Align with chat messages */
+    display: flex;
+    justify-content: flex-start;
+}
+
+.choose-on-map-btn {
+    display: inline-flex;
+    height: 48px;
+    padding: 8px 16px;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border-radius: 16px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    width: auto;
+    flex-shrink: 0;
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-regular-weight);
+    color: var(--label-primary);
+    margin: 12px 0;
+}
+
+.choose-on-map-btn:hover {
+    background: var(--background-secondary);
+    border-color: var(--label-tertiary);
+}
+
+.choose-on-map-btn:active {
+    transform: scale(0.98);
+}
+
+.choose-on-map-btn .map-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.choose-on-map-btn .map-icon svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Service Area Message */
+.service-area-message {
+    background: var(--background-secondary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 12px;
+    padding: 12px;
+    margin: 8px 0;
+    font-size: var(--caption-medium-size);
+    color: var(--label-secondary);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.service-area-message .icon {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* Chat Message Wrapper with Agent Icon */
+.chat-message-wrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    max-width: 100%;
+    align-self: flex-start;
+}
+
+.chat-agent-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    animation: agentPulse 2s ease-in-out infinite;
+}
+
+/* Chat Bubble */
+.chat-bubble {
+    max-width: 80%;
+    padding: var(--spacing-100) var(--spacing-150);
+    border-radius: var(--radius-200);
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-regular-weight);
+    line-height: var(--callout-regular-line-height);
+    word-wrap: break-word;
+    animation: bubbleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bubbleIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.chat-bubble.user {
+    align-self: flex-end;
+    background: var(--background-tertiary);
+    color: var(--label-primary);
+    border-bottom-right-radius: var(--radius-100);
+    border-top-right-radius: var(--radius-100);
+}
+
+.chat-bubble.ai {
+    align-self: flex-start;
+    background: transparent;
+    color: var(--label-primary);
+    border-radius: 0;
+    padding: 0;
+    max-width: 100%;
+}
+
+/* Proposal Card - white frame; 12px padding from card edge to map & content; ~10% wider */
+.proposal-card {
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 24px;
+    box-shadow: var(--shadow-1);
+    /* overflow: hidden removed to prevent shadow clipping on hover */
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 330px; /* ~10% wider than 300px */
+    scroll-snap-align: center;
+    padding: var(--spacing-150); /* 12px inset for map and proposal info */
+}
+
+.proposal-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.proposal-card:active {
+    transform: translateY(-1px) scale(0.98);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.proposal-map {
+    width: 100%;
+    height: 240px;
+    background: var(--background-tertiary);
+    position: relative;
+    border-radius: var(--radius-100); /* soften map corners inside card */
+    overflow: hidden; /* clip map content to rounded corners */
+}
+
+.proposal-info {
+    padding-top: var(--spacing-150); /* 12px gap between map and details */
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0; /* card padding provides bottom inset */
+}
+
+/* Single row: minutes (left) | price + duration + ETA (right) */
+.proposal-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-150);
+    flex-wrap: nowrap;
+}
+
+.proposal-pickup {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    font-size: var(--callout-regular-size);
+    font-weight: var(--headline-strong-weight);
+    color: var(--feedback-positive-primary);
+}
+
+.proposal-pickup-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.proposal-pickup-text {
+    white-space: nowrap;
+}
+
+.proposal-price-eta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    color: var(--label-primary);
+}
+
+.proposal-price {
+    padding: 2px 6px;
+    border-radius: var(--radius-100);
+    background: var(--background-secondary);
+    border: 1px solid var(--separator-secondary);
+    font-weight: var(--callout-regular-weight);
+    color: var(--label-primary);
+}
+
+.proposal-sep {
+    color: var(--label-secondary);
+    font-weight: var(--callout-regular-weight);
+}
+
+.proposal-eta {
+    font-weight: var(--callout-medium-weight);
+}
+
+.proposal-legs {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    margin-top: var(--spacing-100);
+    font-size: var(--caption-regular-size);
+    color: var(--label-secondary);
+}
+
+.proposal-legs .leg-icon {
+    font-size: 16px;
+}
+
+/* Status Widget - Booking Summary */
+.booking-widget {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: var(--spacing-300); /* 24px */
+    width: 100%;
+    padding: var(--spacing-200); /* 16px */
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+}
+
+.booking-widget-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    width: 100%;
+    align-self: stretch; /* full width despite parent's align-items: flex-end */
+}
+
+.booking-widget-icon-img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.booking-widget-icon {
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.booking-widget-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.booking-widget-label {
+    font-size: var(--caption-regular-size);
+    font-weight: var(--caption-regular-weight);
+    color: var(--label-secondary);
+    margin-bottom: 2px;
+}
+
+.booking-widget-value {
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    color: var(--label-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Driver Widget - Microtransit Card - Figma design */
+/* Microtransit Card (Driver Widget) */
+.microtransit-card {
+    display: flex;
+    width: calc(100% - 40px); /* 24px left + 16px right margin */
+    max-width: 450px;
+    margin-left: 24px;
+    margin-right: 16px;
+    padding: 16px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 24px;
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+}
+
+/* Header: Microtransit icon + YRT logo + ETA */
+.microtransit-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.microtransit-header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.microtransit-vehicle-icon {
+    width: 28px;
+    height: 28px;
+}
+
+.microtransit-logo {
+    height: 24px;
+}
+
+.microtransit-eta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--feedback-positive-primary);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.microtransit-eta-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Body: Progress column + Content */
+.microtransit-body {
+    display: flex;
+    width: 100%;
+    gap: 24px;
+}
+
+/* Left column: Progress line + Dropoff circle */
+.microtransit-progress-column {
+    display: flex;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    align-self: stretch;
+}
+
+/* Add top margin to align with avatar */
+.microtransit-progress-column .microtransit-progress-line {
+    margin-top: 12px;
+}
+
+/* Blue progress line */
+.microtransit-progress-line {
+    flex: 1;
+    width: 6px;
+    background: #007AFF;
+    border-radius: 3px;
+}
+
+/* Dropoff circle at the end of the line */
+.microtransit-dropoff-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 3px solid #007AFF;
+    background: var(--background-primary);
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+/* Right column: Driver info, vehicle details, dropoff */
+.microtransit-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Driver Section */
+.microtransit-driver-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.microtransit-driver-photo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.microtransit-driver-info {
+    flex: 1;
+}
+
+.microtransit-driver-name {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--label-primary);
+    margin-bottom: 4px;
+}
+
+.microtransit-driver-vehicle {
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--label-secondary);
+}
+
+.microtransit-call-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    color: var(--label-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+.microtransit-call-btn:hover {
+    background: var(--background-tertiary);
+}
+
+/* Dark theme - match chip styling */
+[data-theme="dark"] .microtransit-call-btn {
+    background: var(--background-tertiary);
+    border-color: var(--separator-secondary);
+}
+
+/* Vehicle Details */
+.microtransit-vehicle-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.microtransit-vehicle-row {
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--label-primary);
+}
+
+.microtransit-vehicle-row strong {
+    font-weight: 600;
+}
+
+/* Dropoff Section - now inside content column */
+.microtransit-dropoff {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-top: 12px;
+    border-top: 1px solid var(--separator-secondary);
+}
+
+.microtransit-dropoff-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.microtransit-dropoff-label {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--label-primary);
+}
+
+.microtransit-dropoff-time {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--label-primary);
+}
+
+/* Footer: Chips + Menu */
+.microtransit-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding-left: 40px;
+}
+
+.microtransit-footer .chip {
+    flex: 0 0 auto;
+    height: 44px;
+}
+
+.microtransit-menu-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    color: var(--label-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    margin-left: auto;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+.microtransit-menu-btn:hover {
+    background: var(--background-secondary);
+}
+
+/* Legacy driver-widget support */
+.driver-widget {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: var(--spacing-300);
+    width: 100%;
+    padding: var(--spacing-200);
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    position: relative;
+}
+
+.driver-route {
+    position: relative;
+    padding-left: var(--spacing-300);
+    width: 100%;
+    align-self: stretch; /* full width despite parent's align-items: flex-end */
+}
+
+.driver-route::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 12px;
+    bottom: 12px;
+    width: 2px;
+    background: var(--separator-secondary);
+}
+
+.driver-stop {
+    position: relative;
+    margin-bottom: var(--spacing-200);
+}
+
+.driver-stop::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    top: 4px;
+    width: 8px;
+    height: 8px;
+    background: var(--brand-primary);
+    border-radius: 50%;
+}
+
+.driver-stop-label {
+    font-size: var(--caption-regular-size);
+    font-weight: var(--caption-regular-weight);
+    color: var(--label-secondary);
+}
+
+.driver-stop-location {
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    color: var(--label-primary);
+}
+
+.driver-stop-time {
+    font-size: var(--caption-regular-size);
+    font-weight: var(--caption-regular-weight);
+    color: var(--label-tertiary);
+}
+
+/* Legacy driver-widget-footer support */
+.driver-widget-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    width: 100%;
+    align-self: stretch;
+    padding-top: var(--spacing-200);
+    border-top: 1px solid var(--separator-secondary);
+}
+
+.driver-widget-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    padding: var(--spacing-100) var(--spacing-150);
+    background: var(--background-secondary);
+    border-radius: var(--radius-100);
+    font-size: var(--caption-medium-size);
+    font-weight: var(--caption-medium-weight);
+}
+
+/* Loading Animation */
+.loading-dots {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.loading-dots span {
+    width: 6px;
+    height: 6px;
+    background: var(--label-tertiary);
+    border-radius: 50%;
+    animation: loadingDot 1.4s infinite;
+}
+
+.loading-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.loading-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes loadingDot {
+    0%, 60%, 100% {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+    30% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Button Components */
+.btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-100);
+    width: 100%;
+    height: 48px;
+    background: var(--brand-primary);
+    color: var(--label-button);
+    border: none;
+    border-radius: var(--radius-150);
+    font-size: var(--callout-medium-size);
+    font-weight: var(--callout-medium-weight);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-primary:hover {
+    background: var(--brand-5);
+}
+
+.btn-primary:active {
+    transform: scale(0.98);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-100);
+    width: 100%;
+    height: 48px;
+    background: var(--background-primary);
+    color: var(--brand-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: var(--radius-150);
+    font-size: var(--callout-medium-size);
+    font-weight: var(--callout-medium-weight);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.btn-secondary:hover {
+    background: var(--background-secondary);
+}
+
+.btn-secondary:active {
+    transform: scale(0.98);
+}
+
+.icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: var(--background-primary);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    color: var(--label-primary);
+}
+
+.icon-btn:hover {
+    background: var(--background-secondary);
+}
+
+.icon-btn:active {
+    transform: scale(0.95);
+}
+
+/* Carousel - 16px top, 4px bottom, 24px left from screen edge */
+.carousel-container {
+    display: flex;
+    gap: var(--spacing-200);
+    overflow-x: auto;
+    overflow-y: visible; /* allow shadows to extend vertically */
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    /* 24px left padding from screen edge (chat has 12px padding, -12px margin = 0, then 24px padding = 24px from edge) */
+    padding: var(--spacing-200) var(--spacing-300) var(--spacing-200) var(--spacing-300);
+    margin-left: 0px;
+    margin-right: calc(var(--spacing-150) * -1); /* -12px to extend into chat's right padding */
+    /* scroll-padding tells scroll-snap to respect padding for snap positions */
+    scroll-padding-left: var(--spacing-300);
+    scroll-padding-right: var(--spacing-300);
+    -webkit-overflow-scrolling: touch;
+    flex-shrink: 0; /* keep carousel and cards from being trimmed */
+}
+
+.carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Typing Indicator */
+.typing-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    white-space: nowrap;
+}
+
+.typing-agent-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    animation: agentLoading 1.5s ease-in-out infinite;
+}
+
+.typing-text {
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-regular-weight);
+    color: var(--label-secondary);
+    white-space: nowrap;
+    animation: typingTextFade 2s ease-in-out infinite;
+}
+
+@keyframes typingTextFade {
+    0%, 100% {
+        opacity: 0.6;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+
+@keyframes agentLoading {
+    0% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.7;
+    }
+    25% {
+        transform: scale(1.2) rotate(90deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1) rotate(180deg);
+        opacity: 0.7;
+    }
+    75% {
+        transform: scale(1.2) rotate(270deg);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+        opacity: 0.7;
+    }
+}
+
+
+/* Trip Details Map - Full Width */
+.trip-details-map-full {
+    width: 100%;
+    height: 34vh; /* 40% of modal max-height (85vh) */
+    flex-shrink: 0; /* don't shrink */
+    background: var(--background-tertiary);
+    background-color: #e8ecf0; /* fallback background color */
+    overflow: hidden;
+    margin: 0;
+    position: relative;
+    min-height: 200px; /* ensure minimum visibility */
+}
+
+/* Trip Details Drawer */
+.trip-details-drawer {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-200);
+    padding-bottom: 140px; /* Space for sticky footer */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-150);
+    min-height: 0;
+    background: var(--background-secondary);
+}
+
+/* Trip Summary Header */
+.trip-summary-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--spacing-150);
+}
+
+.trip-eta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.trip-eta-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.trip-eta-text {
+    font-size: var(--body-medium-size);
+    font-weight: var(--body-medium-weight);
+    color: #22C55E; /* Green */
+}
+
+.trip-duration {
+    font-size: var(--callout-regular-size);
+    color: var(--label-primary);
+}
+
+.trip-duration-dot {
+    color: var(--label-tertiary);
+    margin: 0 4px;
+}
+
+/* Journey Mode Summary */
+.journey-mode-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: var(--spacing-150) var(--spacing-200);
+    background: var(--background-primary);
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    width: fit-content;
+}
+
+.journey-mode-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--footnote-regular-size);
+    color: var(--label-primary);
+}
+
+.journey-mode-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.journey-mode-via {
+    font-weight: 600;
+    color: #007AFF;
+}
+
+.journey-mode-chevron {
+    color: var(--label-tertiary);
+    font-size: 14px;
+}
+
+/* Journey Legs Container */
+.journey-legs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* Journey Card (elevated) */
+.journey-card {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    padding: var(--spacing-200);
+    background: var(--background-primary);
+    border-radius: 12px;
+    border: 1px solid var(--separator-secondary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+}
+
+.journey-card-icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.journey-start-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 4px solid #007AFF;
+    background: var(--background-primary);
+}
+
+.journey-card-content {
+    flex: 1;
+}
+
+.journey-card-title {
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-medium-weight);
+    color: var(--label-primary);
+}
+
+.journey-card-time {
+    font-size: var(--body-regular-size);
+    color: var(--label-primary);
+    font-weight: var(--body-medium-weight);
+}
+
+/* Journey Walking Leg (surface level) */
+.journey-leg-walking {
+    display: flex;
+    gap: var(--spacing-150);
+    padding: var(--spacing-150) var(--spacing-200);
+    padding-left: 28px;
+}
+
+.journey-leg-dots {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+}
+
+.journey-leg-dots .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--label-quaternary);
+}
+
+.journey-leg-content {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-100);
+}
+
+.journey-leg-icon {
+    color: var(--label-secondary);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.journey-leg-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.journey-leg-title {
+    font-size: var(--body-regular-size);
+    color: var(--label-primary);
+}
+
+.journey-leg-detail {
+    font-size: var(--footnote-regular-size);
+    color: var(--label-secondary);
+}
+
+/* Journey Ride Card */
+.journey-card-ride {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.journey-card-header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    padding: var(--spacing-150) var(--spacing-200);
+    border-bottom: 1px solid var(--separator-secondary);
+}
+
+.journey-ride-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.journey-ride-brand {
+    font-size: var(--body-medium-size);
+    font-weight: 700;
+    color: #007AFF;
+    flex: 1;
+}
+
+.journey-ride-eta {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #22C55E;
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+}
+
+.journey-ride-eta-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.journey-ride-body {
+    display: flex;
+    padding: var(--spacing-200);
+    gap: var(--spacing-150);
+}
+
+.journey-ride-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 6px;
+    padding-top: 4px;
+}
+
+.journey-ride-line {
+    flex: 1;
+    width: 6px;
+    background: #007AFF;
+    border-radius: 3px;
+    min-height: 80px;
+}
+
+.journey-ride-circle {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 3px solid #007AFF;
+    background: var(--background-primary);
+    margin-top: -1px;
+}
+
+.journey-ride-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-100);
+}
+
+.journey-ride-pickup {
+    display: flex;
+    align-items: center;
+}
+
+.journey-ride-label {
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-medium-weight);
+    color: var(--label-primary);
+}
+
+.journey-ride-duration {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.journey-ride-duration-text {
+    font-size: var(--footnote-regular-size);
+    color: var(--label-secondary);
+}
+
+.journey-ride-duration-chevron {
+    font-size: 10px;
+    color: var(--label-tertiary);
+}
+
+.journey-ride-note {
+    font-size: var(--footnote-regular-size);
+    color: var(--label-tertiary);
+    line-height: 1.4;
+}
+
+.journey-ride-dropoff {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--spacing-100);
+}
+
+.journey-ride-dropoff-label {
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-medium-weight);
+    color: var(--label-primary);
+}
+
+.journey-ride-dropoff-time {
+    font-size: var(--body-regular-size);
+    color: var(--label-primary);
+}
+
+/* Trip Details Footer (Sticky) */
+.trip-details-footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: var(--spacing-200);
+    background: var(--background-primary);
+    border-top: 1px solid var(--separator-secondary);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-150);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Trip Details Chips */
+.trip-details-chips {
+    display: flex;
+    gap: var(--spacing-100);
+    flex-wrap: wrap;
+}
+
+/* Legacy Trip Details Content (keep for compatibility) */
+.trip-details-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-200);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-200);
+    min-height: 0;
+}
+
+/* Walking Directions Button */
+.walking-map-button-wrapper {
+    padding: var(--spacing-100) 0;
+    padding-left: 28px; /* Align with chat messages */
+    display: flex;
+    justify-content: flex-start;
+}
+
+.walking-map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    padding: var(--spacing-150) var(--spacing-200);
+    border-radius: 20px;
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    transition: all var(--transition-fast);
+    width: auto; /* Don't fill container */
+    flex-shrink: 0;
+}
+
+.walking-map-btn svg {
+    flex-shrink: 0;
+}
+
+.walking-map-btn:hover {
+    background: var(--brand-1);
+}
+
+/* Walking Map Container in Modal */
+.walking-map-container {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Cancellation Reasons Widget - Figma design */
+.cancellation-reasons-widget {
+    padding: var(--spacing-100) 0;
+    padding-left: 28px; /* Align with chat messages */
+}
+
+.cancellation-reasons-options {
+    display: flex;
+    max-width: calc(100% - 28px);
+    flex-direction: column;
+    align-items: flex-start;
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    overflow: hidden;
+}
+
+.cancellation-reason-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    width: 100%;
+    padding: var(--spacing-200);
+    border: none;
+    border-bottom: 1px solid var(--separator-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.cancellation-reason-option:last-child {
+    border-bottom: none;
+}
+
+.cancellation-reason-option:hover {
+    background: var(--background-secondary);
+}
+
+.cancellation-reason-option.selected {
+    background: var(--brand-1);
+}
+
+/* Radio button styling for cancellation */
+.cancellation-radio {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--separator-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+}
+
+.cancellation-radio.checked {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary);
+}
+
+.cancellation-radio-inner {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all var(--transition-fast);
+}
+
+.cancellation-radio.checked .cancellation-radio-inner {
+    background: var(--background-primary);
+}
+
+/* Cancellation label - same font as agent responses */
+.cancellation-label {
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-regular-weight);
+    line-height: var(--callout-regular-line-height);
+    color: var(--label-primary);
+}
+
+/* Cancellation confirmation buttons */
+.cancellation-confirmation-buttons {
+    padding: var(--spacing-100) 0;
+    padding-left: 28px; /* Align with chat messages */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-100);
+    max-width: calc(100% - 28px);
+}
+
+.cancellation-confirm-btn {
+    padding: var(--spacing-150) var(--spacing-200);
+    border-radius: 24px;
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    text-align: center;
+}
+
+.cancellation-confirm-btn.yes {
+    background: #E53935;
+    color: #FFFFFF;
+    border: none;
+}
+
+.cancellation-confirm-btn.yes:hover {
+    background: #C62828;
+}
+
+.cancellation-confirm-btn.dismiss {
+    background: #FFFFFF;
+    color: #1A1A1A;
+    border: 1px solid #E0E0E0;
+}
+
+.cancellation-confirm-btn.dismiss:hover {
+    background: #F5F5F5;
+}
+
+/* Payment Methods Widget - Figma design */
+.payment-methods-widget {
+    padding: var(--spacing-100) 0;
+    padding-left: 28px; /* Align with chat messages */
+}
+
+.payment-methods-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    overflow: hidden;
+    max-width: calc(100% - 28px);
+}
+
+.payment-method-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    width: 100%;
+    padding: var(--spacing-200);
+    border: none;
+    border-bottom: 1px solid var(--separator-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.payment-method-option:last-child {
+    border-bottom: none;
+}
+
+.payment-method-option:hover {
+    background: var(--background-secondary);
+}
+
+/* Radio button styling */
+.payment-radio {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid var(--separator-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
+}
+
+.payment-radio.checked {
+    border-color: var(--brand-primary);
+    background: var(--brand-primary);
+}
+
+.payment-radio-inner {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all var(--transition-fast);
+}
+
+.payment-radio.checked .payment-radio-inner {
+    background: var(--background-primary);
+}
+
+/* Payment icon */
+.payment-icon {
+    width: 32px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.payment-icon svg {
+    width: 32px;
+    height: 20px;
+}
+
+/* Payment label - same font as agent responses */
+.payment-label {
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-regular-weight);
+    line-height: var(--callout-regular-line-height);
+    color: var(--label-primary);
+}
+
+/* ============================================
+   Payment Modal Styles
+   ============================================ */
+
+.payment-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.payment-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.payment-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 24px;
+}
+
+.payment-modal-content {
+    position: relative;
+    width: calc(100% - 32px);
+    max-width: 380px;
+    max-height: calc(100% - 48px);
+    margin: 0 16px;
+    background: var(--background-secondary);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.payment-modal.active .payment-modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.payment-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-200);
+    background: var(--background-secondary);
+    border-radius: 24px 24px 0 0;
+}
+
+.payment-modal-header h2 {
+    font-size: var(--title3-size);
+    font-weight: 700;
+    color: var(--label-primary);
+    margin: 0;
+}
+
+.payment-modal-close {
+    background: none;
+    border: none;
+    padding: var(--spacing-100);
+    cursor: pointer;
+    color: var(--label-secondary);
+    border-radius: 50%;
+    transition: background var(--transition-fast);
+}
+
+.payment-modal-close:hover {
+    background: var(--background-secondary);
+}
+
+.payment-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 var(--spacing-200);
+}
+
+.payment-modal-options {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    overflow: hidden;
+}
+
+.payment-modal-option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    width: 100%;
+    padding: var(--spacing-200);
+    border: none;
+    border-bottom: 1px solid var(--separator-secondary);
+    background: transparent;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.payment-modal-option:last-child {
+    border-bottom: none;
+}
+
+.payment-modal-option:hover {
+    background: var(--background-secondary);
+}
+
+.payment-modal-option.selected {
+    background: var(--brand-1);
+}
+
+.payment-modal-footer {
+    padding: var(--spacing-200);
+    padding-top: 0;
+    margin-top: var(--spacing-200);
+}
+
+.payment-confirm-btn {
+    width: 100%;
+    padding: var(--spacing-200);
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-medium-weight);
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.payment-confirm-btn:hover {
+    opacity: 0.9;
+}
+
+/* ============================================
+   Passengers Widget & Modal Styles
+   ============================================ */
+
+/* Passengers Widget in Chat */
+.passengers-widget {
+    padding: var(--spacing-100) 0;
+    padding-left: 28px; /* Align with chat messages */
+}
+
+.passengers-options {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    overflow: hidden;
+    max-width: calc(100% - 28px);
+}
+
+.passenger-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-200);
+    border-bottom: 1px solid var(--separator-secondary);
+}
+
+.passenger-row:last-child {
+    border-bottom: none;
+}
+
+.passenger-label {
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-regular-weight);
+    line-height: var(--callout-regular-line-height);
+    color: var(--label-primary);
+}
+
+.passenger-counter {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+}
+
+.counter-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: var(--label-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.counter-btn:hover {
+    background: var(--background-secondary);
+    color: var(--label-primary);
+}
+
+.counter-btn:active {
+    background: var(--background-tertiary);
+}
+
+.counter-value {
+    min-width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--separator-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-medium-weight);
+    color: var(--label-secondary);
+    transition: all var(--transition-fast);
+}
+
+.counter-value.active {
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background: rgba(0, 122, 255, 0.1);
+}
+
+/* Update count button in widget */
+.passengers-widget-footer {
+    padding: 8px var(--spacing-200) var(--spacing-200);
+}
+
+.passengers-update-btn {
+    width: 100%;
+    padding: var(--spacing-200);
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-medium-weight);
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.passengers-update-btn:hover {
+    opacity: 0.9;
+}
+
+/* Passengers Modal */
+.passengers-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.passengers-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.passengers-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 24px;
+}
+
+.passengers-modal-content {
+    position: relative;
+    width: calc(100% - 32px);
+    max-width: 380px;
+    max-height: calc(100% - 48px);
+    margin: 0 16px;
+    background: var(--background-secondary);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95) translateY(10px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.passengers-modal.active .passengers-modal-content {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.passengers-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-200);
+    background: var(--background-secondary);
+    border-radius: 24px 24px 0 0;
+}
+
+.passengers-modal-header h2 {
+    font-size: var(--title3-size);
+    font-weight: 700;
+    color: var(--label-primary);
+    margin: 0;
+}
+
+.passengers-modal-close {
+    background: none;
+    border: none;
+    padding: var(--spacing-100);
+    cursor: pointer;
+    color: var(--label-secondary);
+    border-radius: 50%;
+    transition: background var(--transition-fast);
+}
+
+.passengers-modal-close:hover {
+    background: var(--background-secondary);
+}
+
+.passengers-modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 var(--spacing-200);
+}
+
+.passengers-modal-body .passengers-options {
+    max-width: 100%;
+}
+
+.passengers-modal-footer {
+    padding: var(--spacing-200);
+    padding-top: 0;
+    margin-top: var(--spacing-200);
+}
+
+/* ================================
+   Service Hours Widget
+   ================================ */
+
+.service-hours-widget {
+    padding: var(--spacing-100) 0;
+    padding-left: 28px;
+    max-width: 343px;
+}
+
+.service-hours-content {
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    border: 1px solid var(--separator-secondary);
+    background: var(--background-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* Summary Section */
+.service-hours-summary {
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-200);
+    gap: var(--spacing-150);
+}
+
+.service-hours-summary-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+}
+
+.service-hours-summary-row .summary-icon {
+    color: var(--label-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.service-hours-summary-row .summary-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+.service-hours-summary-row .summary-label {
+    flex: 1;
+    font-size: var(--body-size);
+    font-weight: var(--body-weight);
+    color: var(--label-primary);
+}
+
+.service-hours-summary-row .summary-value {
+    font-size: var(--body-size);
+    font-weight: var(--body-weight);
+    color: var(--label-primary);
+}
+
+.service-hours-summary-row .summary-value.not-operating {
+    color: var(--label-secondary);
+}
+
+.service-hours-summary-row.info .summary-label {
+    font-size: var(--callout-regular-size);
+    color: var(--label-secondary);
+}
+
+/* Chart Section */
+.service-hours-chart-section {
+    border-top: 1px solid var(--separator-secondary);
+    padding: var(--spacing-200);
+}
+
+/* Day Tabs */
+.service-hours-tabs {
+    display: flex;
+    gap: var(--spacing-50);
+    margin-bottom: var(--spacing-200);
+}
+
+.service-hours-day-tab {
+    flex: 1;
+    padding: var(--spacing-100) 0;
+    background: none;
+    border: none;
+    font-size: var(--caption1-size);
+    font-weight: var(--caption1-medium-weight);
+    color: var(--label-secondary);
+    cursor: pointer;
+    position: relative;
+    transition: color var(--transition-fast);
+}
+
+.service-hours-day-tab:hover {
+    color: var(--label-primary);
+}
+
+.service-hours-day-tab.active {
+    color: var(--label-primary);
+    font-weight: var(--caption1-medium-weight);
+}
+
+.service-hours-day-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--system-blue);
+    border-radius: 1px;
+}
+
+/* Bar Chart */
+.service-hours-chart {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-100);
+}
+
+.service-hours-bars {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100px;
+    gap: 4px;
+    padding: 0 var(--spacing-50);
+}
+
+.service-hours-bar {
+    flex: 1;
+    background: var(--system-blue);
+    border-radius: 3px 3px 0 0;
+    min-height: 4px;
+    transition: height 0.3s ease;
+}
+
+.service-hours-x-axis {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 var(--spacing-50);
+}
+
+.service-hours-x-axis span {
+    font-size: var(--caption2-size);
+    color: var(--label-secondary);
+}
+
+/* ============================================
+   RESPONSIVE STYLES - Components
+   ============================================ */
+
+/* Wider mobile/tablet screens */
+@media screen and (min-width: 480px) {
+    /* Chat bubbles can be wider */
+    .chat-bubble {
+        max-width: 70%;
+    }
+    
+    /* Widgets take more width */
+    .cancellation-reasons-widget,
+    .payment-methods-widget,
+    .passengers-widget,
+    .service-hours-widget {
+        max-width: calc(100% - 40px);
+    }
+}
+
+/* Tablet screens (up to 800px) */
+@media screen and (min-width: 600px) {
+    /* Chat bubbles stay readable */
+    .chat-bubble {
+        max-width: 60%;
+    }
+    
+    /* Active ride card wider */
+    .active-ride-card {
+        max-width: 500px;
+    }
+    
+    /* Booking widgets wider */
+    .booking-widget {
+        padding: var(--spacing-200) var(--spacing-250);
+    }
+}
+
+/* Wider screens (800px+) */
+@media screen and (min-width: 800px) {
+    /* Chat bubbles capped for readability */
+    .chat-bubble {
+        max-width: 500px;
+    }
+    
+    /* Active ride card capped */
+    .active-ride-card {
+        max-width: 600px;
+    }
+    
+    /* Widgets capped */
+    .cancellation-reasons-widget,
+    .payment-methods-widget,
+    .passengers-widget,
+    .service-hours-widget {
+        max-width: 500px;
+    }
+    
+    /* Message chips wider */
+    .message-chips {
+        max-width: 500px;
+    }
+}
+
+/* ============================================
+   Message Chips - Styling for chat chips
+   ============================================ */
+
+/* Reduce gap when chips follow carousel (proposals) */
+.carousel-container + .message-chips {
+    margin-top: -20px; /* Much tighter spacing between proposals and chips */
+}
+
+.message-chips .chip {
+    background: var(--background-primary);
+    color: var(--label-primary);
+    border: 1px solid var(--separator-secondary);
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    height: 48px;
+    min-width: fit-content;
+    flex-shrink: 0;
+}
+
+/* ============================================
+   Dark Mode Overrides
+   ============================================ */
+
+[data-theme="dark"] .chat-bubble.user {
+    background: var(--brand-primary);
+    color: var(--label-button);
+}
+
+[data-theme="dark"] .chat-bubble.agent {
+    background: var(--background-primary);
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .message-chips .chip {
+    background: var(--background-primary);
+    color: var(--label-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .message-chips .chip:hover {
+    background: var(--background-tertiary);
+}
+
+[data-theme="dark"] .proposal-card {
+    background: var(--background-primary);
+}
+
+[data-theme="dark"] .proposal-eta,
+[data-theme="dark"] .proposal-route-text,
+[data-theme="dark"] .proposal-price,
+[data-theme="dark"] .proposal-card-title {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .proposal-walking-text,
+[data-theme="dark"] .proposal-note {
+    color: var(--label-secondary);
+}
+
+[data-theme="dark"] .booking-widget {
+    background: var(--background-primary);
+}
+
+[data-theme="dark"] .booking-chip {
+    background: var(--background-secondary);
+    color: var(--label-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .booking-chip:hover {
+    background: var(--background-tertiary);
+}
+
+[data-theme="dark"] .booking-chip-value {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .booking-destination-text {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .trip-map-container {
+    background-color: var(--background-tertiary);
+}
+
+[data-theme="dark"] .cancellation-reasons-widget,
+[data-theme="dark"] .payment-methods-widget,
+[data-theme="dark"] .passengers-widget,
+[data-theme="dark"] .service-hours-widget {
+    background: var(--background-primary);
+}
+
+[data-theme="dark"] .cancellation-reason-btn,
+[data-theme="dark"] .payment-method-item,
+[data-theme="dark"] .passengers-option {
+    background: var(--background-secondary);
+    color: var(--label-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .cancellation-reason-btn:hover,
+[data-theme="dark"] .payment-method-item:hover,
+[data-theme="dark"] .passengers-option:hover {
+    background: var(--background-tertiary);
+}
+
+[data-theme="dark"] .active-ride-card {
+    background: var(--background-primary);
+}
+
+[data-theme="dark"] .active-ride-status,
+[data-theme="dark"] .active-ride-info {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .active-ride-details {
+    color: var(--label-secondary);
+}
+
+[data-theme="dark"] .trip-timeline-item .trip-label,
+[data-theme="dark"] .trip-timeline-item .trip-address,
+[data-theme="dark"] .journey-segment-title,
+[data-theme="dark"] .journey-segment-subtitle,
+[data-theme="dark"] .journey-ride-brand {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .cancellation-confirm-btn.dismiss {
+    background: var(--background-secondary);
+    color: var(--label-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .voice-record-btn {
+    background: var(--background-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] #voice-transcript {
+    color: var(--label-primary);
+}
+
+/* ==========================================
+   Recent Rides & Upcoming Rides Widgets
+   ========================================== */
+
+.recent-rides-widget {
+    padding: var(--spacing-100) var(--spacing-200);
+    margin-bottom: var(--spacing-150);
+}
+
+.upcoming-rides-widget {
+    padding: var(--spacing-100) var(--spacing-200);
+    margin-bottom: var(--spacing-150);
+}
+
+.rides-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-100);
+}
+
+.ride-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-150);
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: var(--radius-150);
+    gap: var(--spacing-150);
+}
+
+/* Upcoming Ride Item - Card Design */
+.upcoming-ride-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px;
+    gap: 16px;
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 24px;
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+}
+
+.ride-route {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.ride-locations {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    font-size: var(--callout-medium-size);
+    font-weight: var(--callout-medium-weight);
+    color: var(--label-primary);
+}
+
+.ride-arrow {
+    color: var(--label-tertiary);
+}
+
+.ride-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    font-size: var(--caption-regular-size);
+    color: var(--label-secondary);
+}
+
+.ride-date,
+.ride-datetime {
+    font-size: var(--caption-regular-size);
+    color: var(--label-secondary);
+}
+
+.ride-price {
+    font-size: var(--caption-medium-size);
+    font-weight: var(--caption-medium-weight);
+    color: var(--label-primary);
+}
+
+.rebook-btn {
+    padding: var(--spacing-100) var(--spacing-150);
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-100);
+    font-size: var(--caption-medium-size);
+    font-weight: var(--caption-medium-weight);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.rebook-btn:hover {
+    background: var(--brand-5);
+}
+
+/* Upcoming ride header row */
+.upcoming-ride-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+}
+
+/* Upcoming ride status badge */
+.ride-status-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.ride-status-badge.scheduled,
+.ride-status-badge.pending {
+    background: #FFF3E0;
+    color: #E65100;
+}
+
+.ride-status-badge.confirmed {
+    background: rgba(14, 115, 79, 0.1);
+    color: var(--feedback-positive-primary);
+}
+
+/* Upcoming ride route in header */
+.upcoming-ride-header .ride-locations {
+    flex: 1;
+    font-size: 17px;
+    font-weight: 600;
+}
+
+/* Upcoming ride details section */
+.upcoming-ride-details {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+}
+
+.upcoming-ride-indicators {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding-top: 4px;
+}
+
+.upcoming-ride-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #FCE4EC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #C2185B;
+}
+
+.upcoming-ride-indicator.passenger-count {
+    background: var(--background-tertiary);
+    color: var(--label-secondary);
+    font-size: 11px;
+}
+
+.upcoming-ride-indicator.action {
+    background: transparent;
+    color: var(--label-tertiary);
+}
+
+.upcoming-ride-times {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.upcoming-ride-time-row {
+    font-size: 17px;
+    color: var(--label-primary);
+}
+
+.upcoming-ride-time-row span {
+    font-weight: 400;
+}
+
+.upcoming-ride-time-label {
+    color: var(--label-secondary);
+    font-size: 15px;
+}
+
+/* Upcoming ride journey summary */
+.upcoming-ride-journey {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--background-secondary);
+    border-radius: 24px;
+    width: 100%;
+}
+
+.journey-step {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    color: var(--label-secondary);
+}
+
+.journey-step img {
+    width: 20px;
+    height: 20px;
+}
+
+.journey-step .via-logo {
+    height: 16px;
+    width: auto;
+}
+
+.journey-separator {
+    color: var(--label-tertiary);
+    font-size: 12px;
+}
+
+.view-all-link {
+    display: block;
+    text-align: center;
+    padding: var(--spacing-150);
+    color: var(--brand-primary);
+    font-size: var(--callout-medium-size);
+    font-weight: var(--callout-medium-weight);
+    text-decoration: none;
+    margin-top: var(--spacing-100);
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}
+
+/* Dark mode for widgets */
+[data-theme="dark"] .ride-item,
+[data-theme="dark"] .upcoming-ride-item {
+    background: var(--background-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .ride-locations {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .ride-meta,
+[data-theme="dark"] .ride-date,
+[data-theme="dark"] .ride-datetime {
+    color: var(--label-secondary);
+}
+
+[data-theme="dark"] .ride-price {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .upcoming-ride-journey {
+    background: var(--background-tertiary);
+}
+
+[data-theme="dark"] .upcoming-ride-time-row {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .upcoming-ride-time-label {
+    color: var(--label-secondary);
+}
+
+[data-theme="dark"] .upcoming-ride-indicator.passenger-count {
+    background: var(--background-secondary);
+    color: var(--label-secondary);
+}
+
+/* ==========================================
+   Points of Interest Widget
+   ========================================== */
+
+.poi-widget {
+    padding: var(--spacing-100) var(--spacing-200);
+    margin-bottom: var(--spacing-150);
+}
+
+.poi-list {
+    display: flex;
+    flex-direction: column;
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 24px;
+    box-shadow: 0 1px 0 0 var(--separator-secondary);
+    overflow: hidden;
+}
+
+.poi-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-150);
+    gap: var(--spacing-150);
+}
+
+.poi-item:not(:last-child) {
+    border-bottom: 1px solid var(--separator-secondary);
+}
+
+.poi-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.poi-name {
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-medium-weight);
+    color: var(--label-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.poi-description {
+    font-size: var(--footnote-regular-size);
+    color: var(--label-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.poi-book-btn {
+    padding: 8px 16px;
+    background: var(--brand-primary);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: var(--footnote-regular-size);
+    font-weight: var(--body-medium-weight);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+}
+
+.poi-book-btn:hover {
+    opacity: 0.9;
+}
+
+/* Dark theme */
+[data-theme="dark"] .poi-list {
+    background: var(--background-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .poi-item:not(:last-child) {
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .poi-name {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .poi-description {
+    color: var(--label-secondary);
+}

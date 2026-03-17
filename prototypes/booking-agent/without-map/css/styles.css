@@ -1,0 +1,2200 @@
+/**
+ * Main Application Styles
+ * Via Transportation - Rider Agent
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Google Maps InfoWindow styling for address bubbles */
+.gm-style .gm-style-iw-c {
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    max-width: 140px !important;
+    width: fit-content !important;
+}
+
+.gm-style .gm-style-iw-d {
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 140px !important;
+}
+
+/* Hide the extra padding container */
+.gm-style .gm-style-iw-ch {
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 140px !important;
+}
+
+/* Hide the triangle/arrow pointer */
+.gm-style .gm-style-iw-t::after {
+    display: none !important;
+}
+
+.gm-style .gm-style-iw-tc::after {
+    display: none !important;
+}
+
+/* Hide InfoWindow close button */
+.gm-style .gm-ui-hover-effect {
+    display: none !important;
+}
+
+/* Address bubble content styling */
+.map-address-bubble {
+    display: inline-block;
+    padding: 8px 12px;
+    max-width: 140px;
+    border-radius: 12px;
+    background: #FFF;
+    box-shadow: 0 4px 8px 0 rgba(21, 22, 26, 0.10);
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #222429;
+    text-align: center;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-family);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background: #f5f5f5; /* Fixed light background - doesn't change with theme */
+}
+
+/* ============================================
+   Demo Controls (outside app frame)
+   ============================================ */
+.demo-controls {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.view-toggle {
+    display: flex;
+    gap: 4px;
+}
+
+.view-toggle-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.view-toggle-btn:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.view-toggle-btn.active {
+    background: #007AFF;
+    color: white;
+}
+
+.demo-controls-divider {
+    width: 1px;
+    height: 24px;
+    background: #e0e0e0;
+}
+
+.demo-toggle-btn {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #666;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.demo-toggle-btn:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+/* Theme toggle - show/hide sun/moon icons */
+.demo-toggle-btn .moon-icon {
+    display: none;
+}
+
+[data-theme="dark"] .demo-toggle-btn .sun-icon {
+    display: none;
+}
+
+[data-theme="dark"] .demo-toggle-btn .moon-icon {
+    display: block;
+}
+
+/* TTS toggle - show/hide browser/premium icons */
+.demo-toggle-btn .tts-premium-icon {
+    display: none;
+}
+
+.demo-toggle-btn.premium-active .tts-browser-icon {
+    display: none;
+}
+
+.demo-toggle-btn.premium-active .tts-premium-icon {
+    display: block;
+}
+
+.demo-toggle-btn.premium-active {
+    color: #10B981;
+}
+
+/* ============================================
+   App Container - View Modes
+   ============================================ */
+.app-container {
+    position: relative;
+    background: var(--background-primary);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile view (410px) */
+.app-container[data-view-mode="410"] {
+    max-width: 410px;
+    min-width: 410px;
+    width: 410px;
+    height: calc(100vh - 96px);
+    margin: 48px auto;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 60px rgba(0, 0, 0, 0.08);
+}
+
+/* Tablet view (720px) */
+.app-container[data-view-mode="720"] {
+    max-width: 720px;
+    min-width: 410px;
+    width: 720px;
+    height: calc(100vh - 96px);
+    margin: 48px auto;
+    border-radius: 24px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 0 60px rgba(0, 0, 0, 0.08);
+}
+
+/* Full width view */
+.app-container[data-view-mode="full"] {
+    max-width: 100%;
+    min-width: 100%;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+/* Hide status bar in full view mode */
+.app-container[data-view-mode="full"] .status-bar {
+    display: none;
+}
+
+/* Full width home screen layout - drawer on left */
+.app-container[data-view-mode="full"] #home-screen.active {
+    display: flex;
+    flex-direction: row;
+}
+
+.app-container[data-view-mode="full"] #home-screen.active #home-map {
+    flex: 1;
+    position: relative;
+    height: 100%;
+}
+
+/* Sidebar container for full width mode */
+.app-container[data-view-mode="full"] #home-screen.active .sidebar-container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 16px;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    z-index: 10;
+    max-height: calc(100% - 32px);
+}
+
+.app-container[data-view-mode="full"] #home-screen.active .sidebar-container .agent-banner {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+}
+
+.app-container[data-view-mode="full"] #home-screen.active .sidebar-container .bottom-drawer {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    min-width: auto;
+    height: auto;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    overflow-y: auto;
+}
+
+[data-theme="dark"] .app-container[data-view-mode="full"] #home-screen.active .sidebar-container .bottom-drawer {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+}
+
+.app-container[data-view-mode="full"] #home-screen.active .drawer-handle {
+    display: none;
+}
+
+/* Hide hamburger menu and account chip on map in full width mode */
+.app-container[data-view-mode="full"] #home-screen.active .home-header .hamburger,
+.app-container[data-view-mode="full"] #home-screen.active .home-header .account-chip {
+    display: none;
+}
+
+/* Adjust marker position in full width mode (map takes full height) */
+.app-container[data-view-mode="full"] #home-screen.active .location-marker {
+    top: 50%;
+}
+
+/* Adjust map control position in full width mode */
+.app-container[data-view-mode="full"] #home-screen.active .map-control {
+    top: auto;
+    bottom: var(--spacing-200);
+}
+
+/* Limit agent welcome area and footer width in full width mode */
+.app-container[data-view-mode="full"] .agent-welcome-area,
+.app-container[data-view-mode="full"] .agent-footer {
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Limit chat container width in full width mode (absolute positioned, so use left/right calc) */
+.app-container[data-view-mode="full"] #agent-chat-screen .chat-container {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1000px;
+    width: 100%;
+    right: auto;
+}
+
+.app-container[data-view-mode="full"] #agent-chat-screen .text-input-container {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1000px;
+    width: 100%;
+    right: auto;
+}
+
+.app-container[data-view-mode="full"] #home-screen.active .home-header {
+    top: var(--spacing-200);
+    left: calc(350px + 32px); /* Offset by drawer width + drawer left position */
+}
+
+
+/* Hide demo controls on small screens */
+@media screen and (max-width: 500px) {
+    .demo-controls {
+        display: none;
+    }
+    
+    .app-container,
+    .app-container[data-view-mode="410"],
+    .app-container[data-view-mode="720"],
+    .app-container[data-view-mode="full"] {
+        max-width: 100% !important;
+        min-width: 100% !important;
+        width: 100% !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+    
+    .app-container[data-view-mode="full"] #home-screen .bottom-drawer {
+        position: absolute;
+        width: 100%;
+        min-width: 100%;
+        height: 409px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        order: 0;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+    }
+    
+    .app-container[data-view-mode="full"] #home-screen .home-header {
+        left: 0;
+    }
+    
+    .app-container[data-view-mode="full"] #home-screen .drawer-handle {
+        display: block;
+    }
+    
+    .app-container[data-view-mode="full"] #home-screen .sidebar-container {
+        position: static;
+        width: 100%;
+        transform: none;
+        display: contents; /* Let children flow normally */
+    }
+    
+    .app-container[data-view-mode="full"] #home-screen .agent-banner {
+        position: absolute;
+        bottom: calc(409px + 16px);
+        left: var(--spacing-200);
+        right: var(--spacing-200);
+        width: auto;
+        margin: 0;
+    }
+}
+
+/* Screen Management */
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background-primary);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 24px;
+}
+
+.screen.active {
+    display: flex;
+}
+
+/* Screen Transitions - Forward (going deeper) */
+.screen.transitioning-out {
+    display: flex;
+    animation: slideOutLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: none;
+}
+
+.screen.transitioning-in {
+    display: flex;
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Screen Transitions - Backward (going back) */
+.screen.transitioning-out-reverse {
+    display: flex;
+    animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: none;
+}
+
+.screen.transitioning-in-reverse {
+    display: flex;
+    animation: slideInLeft 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-20%);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(30%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(30%);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-20%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Status Bar */
+.status-bar {
+    height: 44px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 var(--spacing-200);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--label-primary);
+    z-index: var(--z-header);
+    position: relative;
+}
+
+#agent-voice-screen .status-bar,
+#agent-chat-screen .status-bar {
+    background: var(--background-secondary);
+}
+
+.status-icons {
+    display: flex;
+    gap: 4px;
+}
+
+/* Home Screen */
+#home-screen {
+    background: var(--background-primary);
+}
+
+.home-header {
+    position: absolute;
+    top: 44px;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-150) var(--spacing-200);
+    z-index: var(--z-header);
+}
+
+.home-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100);
+}
+
+.home-header .theme-toggle-btn {
+    position: relative;
+    right: auto;
+    background: var(--background-primary);
+    box-shadow: var(--shadow-8);
+}
+
+.account-chip {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100);
+    padding: var(--spacing-100) var(--spacing-150);
+    background: var(--background-primary);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-8);
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    cursor: pointer;
+}
+
+/* Map Container */
+.map-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    z-index: var(--z-map);
+    background: var(--background-secondary, #f7f8fa);
+}
+
+.location-marker {
+    display: none;
+}
+
+.marker-dot {
+    width: 20px;
+    height: 20px;
+    background: var(--brand-primary);
+    border: 3px solid var(--background-primary);
+    border-radius: 50%;
+    box-shadow: var(--shadow-8);
+}
+
+.pickup-marker-icon {
+    display: block;
+    width: 54px;
+    height: 64px;
+    object-fit: contain;
+    transition: transform 0.2s ease-out;
+}
+
+/* Floating state when map is being dragged */
+.location-marker.floating .pickup-marker-icon {
+    transform: translateY(-20px);
+}
+
+.location-marker.floating .marker-pulse {
+    opacity: 0.4;
+    transform: translateX(-50%) scale(1.5);
+}
+
+/* Drop animation */
+.location-marker.dropping .pickup-marker-icon {
+    animation: markerDrop 0.3s ease-out;
+}
+
+@keyframes markerDrop {
+    0% {
+        transform: translateY(-20px);
+    }
+    60% {
+        transform: translateY(5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.marker-pulse {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background: var(--brand-primary);
+    opacity: 0.2;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+    z-index: -1;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.3;
+    }
+}
+
+.map-control {
+    position: absolute;
+    /* Position in bottom right of map area (map is 60% height) */
+    top: calc(60% - 56px); /* 60% map height - button size - spacing */
+    right: var(--spacing-200);
+    box-shadow: var(--shadow-8);
+    z-index: 100;
+}
+
+.gps-btn {
+    background: var(--background-primary);
+}
+
+/* Agent Banner */
+.agent-banner {
+    position: absolute;
+    bottom: calc(409px + 16px); /* drawer height + gap */
+    left: var(--spacing-200);
+    right: var(--spacing-200);
+    background: linear-gradient(135deg, #00A8E2 0%, #D6B6E2 100%);
+    border-radius: 24px;
+    padding: 1.5px;
+    cursor: pointer;
+    z-index: var(--z-content);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.agent-banner::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #00A8E2 0%, #D6B6E2 100%);
+    filter: blur(8px);
+    z-index: -1;
+    opacity: 0.3;
+    transition: opacity 0.3s ease;
+}
+
+.agent-banner:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 24px rgba(0, 168, 226, 0.25);
+}
+
+.agent-banner:hover::before {
+    opacity: 0.45;
+}
+
+.agent-banner:active {
+    transform: translateY(0) scale(0.99);
+    box-shadow: 0 4px 12px rgba(0, 168, 226, 0.15);
+}
+
+.agent-banner-content {
+    display: flex;
+    padding: 12px 16px;
+    align-items: center;
+    gap: 12px;
+    border-radius: 22.5px;
+    background: var(--background-primary, #FFF);
+}
+
+.agent-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    animation: agentPulse 2s ease-in-out infinite;
+}
+
+@keyframes agentPulse {
+    0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1) rotate(5deg);
+        opacity: 0.9;
+    }
+}
+
+.agent-banner-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.agent-banner-title {
+    font-size: var(--body-medium-size);
+    font-weight: var(--body-medium-weight);
+    color: var(--label-primary);
+    line-height: var(--body-medium-line-height);
+}
+
+.agent-banner-subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--label-secondary);
+    line-height: 16px;
+}
+
+.arrow-icon {
+    color: var(--label-tertiary);
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    height: 16px;
+}
+
+/* Bottom Drawer */
+.bottom-drawer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-drawer);
+    
+    /* Layout */
+    display: flex;
+    height: 409px;
+    padding: 8px 16px;
+    flex-direction: column;
+    /* align-items: center;  -- Removing this because children need to stretch or have their own alignment */
+    gap: 16px;
+    
+    /* Style */
+    background: var(--background-secondary); /* #F7F8FA */
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+    box-shadow: 0 -8px 20px 0 rgba(0, 0, 0, 0.08);
+    
+    overflow-y: auto;
+}
+
+.drawer-handle {
+    width: 32px;
+    height: 4px;
+    background: var(--label-quaternary);
+    border-radius: 2px;
+    align-self: center;
+    flex-shrink: 0;
+    margin-bottom: 8px; /* Extra space below handle */
+}
+
+.booking-params {
+    display: flex;
+    gap: var(--spacing-100);
+    width: 100%;
+}
+
+/* Home page chips - using the same .chip class as proposal chips */
+.booking-params .chip.home-chip {
+    flex: 1;
+    justify-content: center;
+}
+
+/* Origin marker icon (blue circle with white center) */
+.origin-marker-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.origin-marker-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* Destination marker icon (red pin) */
+.destination-marker-icon {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.destination-marker-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.icon-img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.location-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-150);
+    position: relative;
+    width: 100%;
+}
+
+.location-connector {
+    position: absolute;
+    top: 32px; /* Align with center of first icon */
+    bottom: 32px;
+    left: 25px; /* 16px padding + 10px (half of 20px icon) - 1px border width */
+    width: 2px;
+    border-left: 2px dotted #c8d0d8;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.location-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    padding: var(--spacing-200);
+    background: var(--background-secondary);
+    border-radius: var(--radius-200);
+    position: relative;
+    z-index: 2;
+    /* Ensure rows are white if they need to cover the line, but spec says bg-secondary for drawer. 
+       If inputs are "merged card" style, they might need a white bg? 
+       The spec doesn't say. But typical design is white bubbles on grey bg. 
+       Current code says background: var(--background-secondary).
+       If the drawer is secondary, and rows are secondary, they blend.
+       Let's assume they should be white to stand out and show structure. 
+       Or transparent if they are just fields.
+       But the user mentioned "addresses input component correctly" and "consistent".
+       Looking at typical Via designs, input fields are usually on a white card/surface.
+       Let's change to white to distinguish from the drawer background. */
+    background: var(--background-primary);
+}
+
+.location-icon-img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.location-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.location-label {
+    font-size: var(--caption-regular-size);
+    font-weight: var(--caption-medium-weight);
+    color: var(--label-secondary);
+    margin-bottom: 2px;
+}
+
+.location-row.origin-row .location-label {
+    color: var(--brand-primary);
+}
+
+.location-address {
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-medium-weight);
+    color: var(--label-primary);
+}
+
+.destination-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: var(--headline-medium-size);
+    font-weight: var(--headline-medium-weight);
+    color: var(--label-primary);
+    outline: none;
+}
+
+.destination-input::placeholder {
+    color: var(--label-tertiary);
+}
+
+.saved-places {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-150);
+    width: 100%;
+}
+
+.place-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    padding: var(--spacing-150);
+    cursor: pointer;
+    border-radius: var(--radius-150);
+    transition: background var(--transition-fast);
+}
+
+.place-item:hover {
+    background: var(--background-secondary);
+}
+
+.place-icon-img {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.place-info {
+    flex: 1;
+}
+
+.place-name {
+    font-size: var(--callout-medium-size);
+    font-weight: var(--callout-medium-weight);
+    color: var(--label-primary);
+    margin-bottom: 2px;
+}
+
+.place-address {
+    font-size: var(--caption-regular-size);
+    font-weight: var(--caption-regular-weight);
+    color: var(--label-secondary);
+}
+
+/* Agent Header */
+.agent-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    gap: var(--spacing-150);
+    padding: 24px var(--spacing-200);
+    background: var(--background-secondary);
+    border-bottom: 1px solid var(--separator-secondary);
+    z-index: var(--z-header);
+}
+
+.back-btn {
+    position: absolute;
+    left: var(--spacing-200);
+    background: none;
+    border: none;
+    padding: var(--spacing-100);
+    margin: calc(var(--spacing-100) * -1);
+    cursor: pointer;
+    border-radius: 50%;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: var(--label-primary);
+}
+
+.back-btn:hover {
+    background: var(--background-tertiary);
+    transform: translateX(-2px);
+}
+
+.back-btn:active {
+    background: var(--background-quaternary);
+    transform: translateX(-2px) scale(0.95);
+}
+
+/* Theme Toggle Button */
+.theme-toggle-btn {
+    position: absolute;
+    right: var(--spacing-200);
+    width: 32px;
+    height: 32px;
+    background: var(--background-tertiary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    color: var(--label-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.theme-toggle-btn:hover {
+    background: var(--background-quaternary);
+    transform: scale(1.08);
+}
+
+.theme-toggle-btn:hover svg {
+    transform: rotate(15deg);
+}
+
+.theme-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+/* Theme toggle in header-right container (not absolutely positioned) */
+.agent-header-right .theme-toggle-btn {
+    position: relative;
+    right: auto;
+}
+
+.theme-toggle-btn .sun-icon {
+    display: block;
+}
+
+.theme-toggle-btn .moon-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle-btn .sun-icon {
+    display: none;
+}
+
+[data-theme="dark"] .theme-toggle-btn .moon-icon {
+    display: block;
+}
+
+/* TTS Toggle Button */
+.tts-toggle-btn {
+    width: 32px;
+    height: 32px;
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 50%;
+    padding: 0;
+    cursor: pointer;
+    color: var(--label-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-8);
+}
+
+.tts-toggle-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.tts-toggle-btn:hover {
+    background: var(--background-tertiary);
+}
+
+/* Default state: browser TTS (show browser icon) */
+.tts-toggle-btn .tts-browser-icon {
+    display: block;
+}
+
+.tts-toggle-btn .tts-premium-icon {
+    display: none;
+}
+
+/* Premium state: ElevenLabs (show premium icon with star) */
+.tts-toggle-btn.premium .tts-browser-icon {
+    display: none;
+}
+
+.tts-toggle-btn.premium .tts-premium-icon {
+    display: block;
+}
+
+.tts-toggle-btn.premium {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-color: #FFD700;
+    color: #1a1b1e;
+}
+
+/* Dark mode */
+[data-theme="dark"] .tts-toggle-btn {
+    background: var(--background-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .tts-toggle-btn.premium {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    border-color: #FFD700;
+    color: #1a1b1e;
+}
+
+/* Dark mode specific overrides */
+[data-theme="dark"] .demo-controls {
+    background: #2e3035;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .demo-controls-divider {
+    background: #4a4d52;
+}
+
+[data-theme="dark"] .view-toggle-btn,
+[data-theme="dark"] .demo-toggle-btn {
+    color: #999;
+}
+
+[data-theme="dark"] .view-toggle-btn:hover,
+[data-theme="dark"] .demo-toggle-btn:hover {
+    background: #3a3d42;
+    color: #fff;
+}
+
+[data-theme="dark"] .view-toggle-btn.active {
+    background: #007AFF;
+    color: white;
+}
+
+[data-theme="dark"] .app-container[data-view-mode="410"],
+[data-theme="dark"] .app-container[data-view-mode="720"] {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4), 0 0 60px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .app-container[data-view-mode="full"] {
+    box-shadow: none;
+}
+
+[data-theme="dark"] .map-address-bubble {
+    background: #2e3035;
+    color: #f0f1f3;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .btn-primary {
+    background: var(--brand-primary);
+    color: #1a1b1e;
+}
+
+[data-theme="dark"] .proposal-card {
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .chip {
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .agent-banner {
+    border-color: #4a9eff;
+}
+
+/* Dark mode recording overlay - slightly brighter but still subtle */
+[data-theme="dark"] .recording-overlay::before {
+    box-shadow: 
+        inset 0 0 50px 20px rgba(0, 168, 226, 0.1),
+        inset 0 0 100px 40px rgba(214, 182, 226, 0.07),
+        inset 0 0 140px 50px rgba(0, 168, 226, 0.04);
+}
+
+[data-theme="dark"] .recording-overlay::after {
+    box-shadow: 
+        inset 0 0 25px 10px rgba(0, 168, 226, 0.18),
+        inset 0 0 50px 20px rgba(214, 182, 226, 0.12),
+        inset 0 0 80px 30px rgba(0, 168, 226, 0.08);
+}
+
+[data-theme="dark"] .recording-overlay.active::before {
+    animation: glowPulseDark 2s ease-in-out infinite;
+}
+
+[data-theme="dark"] .recording-overlay.active::after {
+    animation: edgeGlowPulseDark 2.5s ease-in-out infinite;
+}
+
+@keyframes glowPulseDark {
+    0%, 100% {
+        box-shadow: 
+            inset 0 0 40px 15px rgba(0, 168, 226, 0.08),
+            inset 0 0 80px 30px rgba(214, 182, 226, 0.05),
+            inset 0 0 120px 40px rgba(0, 168, 226, 0.03);
+    }
+    50% {
+        box-shadow: 
+            inset 0 0 60px 25px rgba(0, 168, 226, 0.14),
+            inset 0 0 120px 50px rgba(214, 182, 226, 0.1),
+            inset 0 0 160px 60px rgba(0, 168, 226, 0.06);
+    }
+}
+
+@keyframes edgeGlowPulseDark {
+    0%, 100% {
+        box-shadow: 
+            inset 0 0 20px 8px rgba(0, 168, 226, 0.15),
+            inset 0 0 45px 18px rgba(214, 182, 226, 0.1),
+            inset 0 0 70px 25px rgba(0, 168, 226, 0.06);
+    }
+    50% {
+        box-shadow: 
+            inset 0 0 30px 12px rgba(214, 182, 226, 0.18),
+            inset 0 0 60px 25px rgba(0, 168, 226, 0.12),
+            inset 0 0 100px 35px rgba(214, 182, 226, 0.08);
+    }
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+    background: var(--background-secondary);
+    color: var(--label-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--label-tertiary);
+}
+
+/* Dark mode - ensure all text colors are properly inverted */
+[data-theme="dark"] .location-label {
+    color: var(--label-secondary);
+}
+
+[data-theme="dark"] .location-row.origin-row .location-label {
+    color: var(--brand-primary);
+}
+
+[data-theme="dark"] .location-address,
+[data-theme="dark"] .place-name,
+[data-theme="dark"] .param-chip span,
+[data-theme="dark"] .agent-title,
+[data-theme="dark"] .agent-banner-title {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .place-address,
+[data-theme="dark"] .agent-banner-subtitle {
+    color: var(--label-secondary);
+}
+
+[data-theme="dark"] .account-chip {
+    background: var(--background-primary);
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .destination-input {
+    color: var(--label-primary);
+}
+
+[data-theme="dark"] .destination-input::placeholder {
+    color: var(--label-tertiary);
+}
+
+[data-theme="dark"] .drawer-handle {
+    background: var(--label-quaternary);
+}
+
+[data-theme="dark"] .bottom-drawer {
+    background: var(--background-secondary);
+}
+
+[data-theme="dark"] .location-row {
+    background: var(--background-primary);
+}
+
+[data-theme="dark"] .param-chip {
+    background: var(--background-primary);
+    border-color: var(--separator-secondary);
+}
+
+[data-theme="dark"] .param-chip:hover {
+    background: var(--background-tertiary);
+}
+
+[data-theme="dark"] svg {
+    color: var(--label-primary);
+}
+
+h1.agent-title,
+.agent-title {
+    font-size: 17px !important;
+    font-weight: 600 !important;
+    color: var(--label-primary);
+    text-align: center;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 22px !important;
+}
+
+/* Voice Input Screen */
+#agent-voice-screen {
+    background: var(--background-secondary);
+}
+
+/* Agent Welcome Area */
+.agent-welcome-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--spacing-400);
+    background: var(--background-secondary);
+    overflow-y: auto;
+    position: relative;
+}
+
+/* Content wrapper for centering */
+.agent-welcome-content {
+    width: 100%;
+}
+
+/* Agent Greeting */
+.agent-greeting {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-150);
+    margin-bottom: 48px;
+}
+
+.agent-greeting-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.agent-greeting-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.greeting-line {
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-regular-weight);
+    color: var(--label-secondary);
+}
+
+.greeting-headline {
+    font-size: var(--title-strong-size);
+    font-weight: var(--title-strong-weight);
+    color: var(--label-primary);
+    line-height: var(--title-strong-line-height);
+}
+
+/* Quick Action Chips Grid */
+.quick-actions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-100);
+    margin-top: var(--spacing-100);
+}
+
+.quick-action-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--spacing-150) var(--spacing-200);
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: var(--radius-full);
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-regular-weight);
+    color: var(--label-primary);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+    transform: translateY(0);
+}
+
+.quick-action-chip:hover {
+    background: var(--background-tertiary);
+    border-color: var(--separator-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.quick-action-chip:active {
+    background: var(--brand-1);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    transform: translateY(0) scale(0.97);
+    box-shadow: none;
+}
+
+/* Recording Overlay - Covers entire app frame when recording */
+.recording-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100; /* Above content but within app frame */
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    border-radius: inherit; /* Match app container's border radius */
+    overflow: hidden; /* Clip the glow effects to app frame */
+}
+
+/* Soft blurred glow around the entire app frame edges */
+.recording-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Subtle layered box-shadows for a gentle glow effect */
+    box-shadow: 
+        inset 0 0 40px 15px rgba(0, 168, 226, 0.08),
+        inset 0 0 80px 30px rgba(214, 182, 226, 0.05),
+        inset 0 0 120px 40px rgba(0, 168, 226, 0.03);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    border-radius: inherit; /* Match app container's border radius */
+}
+
+/* Soft blurred border glow (not a sharp line) */
+.recording-overlay::after {
+    content: '';
+    position: absolute;
+    inset: 0; /* Stay within app frame */
+    /* Subtle box-shadow for soft edge glow */
+    box-shadow: 
+        inset 0 0 20px 8px rgba(0, 168, 226, 0.15),
+        inset 0 0 40px 15px rgba(214, 182, 226, 0.1),
+        inset 0 0 60px 20px rgba(0, 168, 226, 0.06);
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+    border-radius: inherit; /* Match app container's border radius */
+}
+
+.recording-overlay.active {
+    opacity: 1;
+}
+
+.recording-overlay.active::before {
+    opacity: 1;
+    animation: glowPulse 2s ease-in-out infinite;
+}
+
+.recording-overlay.active::after {
+    opacity: 1;
+    animation: edgeGlowPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        box-shadow: 
+            inset 0 0 30px 12px rgba(0, 168, 226, 0.06),
+            inset 0 0 60px 25px rgba(214, 182, 226, 0.04),
+            inset 0 0 100px 35px rgba(0, 168, 226, 0.02);
+    }
+    50% {
+        box-shadow: 
+            inset 0 0 50px 20px rgba(0, 168, 226, 0.1),
+            inset 0 0 100px 40px rgba(214, 182, 226, 0.07),
+            inset 0 0 140px 50px rgba(0, 168, 226, 0.04);
+    }
+}
+
+@keyframes edgeGlowPulse {
+    0%, 100% {
+        box-shadow: 
+            inset 0 0 15px 6px rgba(0, 168, 226, 0.12),
+            inset 0 0 35px 12px rgba(214, 182, 226, 0.08),
+            inset 0 0 55px 18px rgba(0, 168, 226, 0.05);
+    }
+    50% {
+        box-shadow: 
+            inset 0 0 25px 10px rgba(214, 182, 226, 0.15),
+            inset 0 0 50px 20px rgba(0, 168, 226, 0.1),
+            inset 0 0 80px 30px rgba(214, 182, 226, 0.06);
+    }
+}
+
+/* Voice Feedback - Small indicator at tap location */
+.voice-feedback {
+    position: absolute;
+    pointer-events: none;
+    z-index: 15;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s ease-out;
+}
+
+.voice-feedback.active {
+    opacity: 1;
+}
+
+/* Outer ripple effect with gradient colors */
+.voice-feedback-ripple {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(0, 168, 226, 0.2) 0%, rgba(214, 182, 226, 0.2) 100%);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+}
+
+.voice-feedback.active .voice-feedback-ripple {
+    animation: voiceRipple 1.8s ease-out infinite;
+}
+
+@keyframes voiceRipple {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0.8;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+    }
+}
+
+/* Center dot indicator with agent gradient */
+.voice-feedback-dot {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00A8E2 0%, #D6B6E2 100%);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    opacity: 0;
+    box-shadow: 0 4px 16px rgba(0, 168, 226, 0.4);
+}
+
+.voice-feedback.active .voice-feedback-dot {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    animation: voiceDotPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes voiceDotPulse {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 4px 16px rgba(0, 168, 226, 0.4);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        box-shadow: 0 6px 24px rgba(214, 182, 226, 0.5);
+    }
+}
+
+/* Voice Transcript */
+.voice-transcript {
+    font-size: var(--headline-medium-size);
+    font-weight: var(--headline-medium-weight);
+    color: var(--label-primary);
+    text-align: center;
+    padding: var(--spacing-200) var(--spacing-400);
+    margin: 0;
+    position: absolute;
+    bottom: var(--spacing-200);
+    left: 0;
+    right: 0;
+}
+
+.voice-transcript:empty {
+    display: none;
+}
+
+/* Agent Footer */
+.agent-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-150);
+    padding: var(--spacing-200);
+    padding-bottom: 34px;
+    padding-top: 40px; /* Extra space for absolutely positioned instruction */
+    background: var(--background-secondary);
+    flex-shrink: 0;
+    margin-top: auto;
+    position: relative;
+}
+
+.agent-footer .voice-instruction {
+    position: absolute;
+    top: var(--spacing-200);
+    left: 0;
+    right: 0;
+    font-size: var(--callout-regular-size);
+    font-weight: var(--callout-regular-weight);
+    color: var(--label-tertiary);
+    text-align: center;
+    margin: 0;
+    opacity: 1;
+    transition: opacity 0.2s ease-out;
+}
+
+.agent-footer .voice-instruction.hidden {
+    opacity: 0;
+}
+
+.agent-input-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    width: 100%;
+}
+
+.agent-text-input {
+    flex: 1;
+    height: 48px;
+    padding: 0 var(--spacing-200);
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 32px;
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-regular-weight);
+    color: var(--label-primary);
+    outline: none;
+    transition: all var(--transition-fast);
+}
+
+.agent-text-input::placeholder {
+    color: var(--label-quaternary);
+}
+
+.agent-text-input:focus {
+    border-color: var(--brand-primary);
+}
+
+.mic-button {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(221.86deg, rgba(0, 177, 230, 1) 0%, rgba(0, 105, 226, 1) 100%);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    color: white;
+}
+
+.mic-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(0, 105, 226, 0.35);
+}
+
+.mic-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0, 105, 226, 0.25);
+}
+
+/* White mic button when send button is visible (user is typing) */
+.mic-button.secondary {
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    color: var(--label-primary);
+}
+
+.mic-button.recording {
+    background: var(--feedback-negative);
+    border: none;
+    animation: micPulse 1s ease-in-out infinite;
+    color: white;
+}
+
+@keyframes micPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.mic-button svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Agent send button (hidden by default, shown when typing) */
+.agent-send-btn {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(221.86deg, rgba(0, 177, 230, 1) 0%, rgba(0, 105, 226, 1) 100%);
+    border: none;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.agent-send-btn.visible {
+    display: flex;
+}
+
+.agent-send-btn:hover {
+    opacity: 0.9;
+}
+
+.agent-send-btn:active {
+    transform: scale(0.95);
+}
+
+/* Agent header right container */
+.agent-header-right {
+    position: absolute;
+    right: var(--spacing-200);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+}
+
+/* Close button style */
+.close-btn {
+    width: 32px;
+    height: 32px;
+    background: var(--background-tertiary);
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--label-secondary);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.close-btn:hover {
+    background: var(--background-quaternary);
+    transform: scale(1.05);
+}
+
+.close-btn:active {
+    transform: scale(0.95);
+}
+
+/* Hamburger menu in agent header */
+#agent-voice-screen .icon-btn.hamburger {
+    position: absolute;
+    left: var(--spacing-200);
+}
+
+/* Close button in agent voice header - sticky to right */
+#agent-voice-screen .close-btn {
+    position: absolute;
+    right: var(--spacing-200);
+}
+
+/* Legacy styles kept for backward compatibility */
+.voice-input-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-300);
+    padding: var(--spacing-400);
+    background: var(--background-secondary);
+}
+
+.microphone-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mic-glow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #d5f2ff 0%, #f7f6ff 100%);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    filter: blur(14.4px);
+}
+
+.microphone-container.recording .mic-glow {
+    opacity: 1;
+    animation: glowPulse 2s infinite;
+}
+
+@keyframes glowPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.4;
+    }
+}
+
+.mic-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(92.4424deg, #d5f2ff 63.422%, #f7f6ff 65.927%, #d5f2ff 170.83%);
+    border-radius: 19.2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--label-primary);
+    z-index: 1;
+    transition: all var(--transition-fast);
+}
+
+.microphone-container.recording .mic-icon {
+    transform: scale(1.05);
+}
+
+.mic-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* Text Input */
+.text-input-container {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-150);
+    padding: var(--spacing-200);
+    padding-bottom: 34px;
+    background: var(--background-secondary);
+    border-top: none;
+}
+
+.voice-btn {
+    width: 48px;
+    height: 48px;
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: var(--radius-150);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    color: var(--label-primary);
+}
+
+.voice-btn:hover {
+    background: var(--background-tertiary);
+}
+
+.voice-btn:active,
+.voice-btn.recording {
+    background: linear-gradient(92.4424deg, #d5f2ff 63.422%, #f7f6ff 65.927%, #d5f2ff 170.83%);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.voice-btn-chat {
+    width: 48px;
+    height: 48px;
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    color: var(--label-primary);
+    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+}
+
+.voice-btn-chat:hover {
+    background: var(--background-tertiary);
+}
+
+.voice-btn-chat:active,
+.voice-btn-chat.recording {
+    background: linear-gradient(92.4424deg, #d5f2ff 63.422%, #f7f6ff 65.927%, #d5f2ff 170.83%);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+}
+
+.text-input {
+    flex: 1;
+    height: 48px;
+    padding: 0 var(--spacing-200);
+    background: var(--background-primary);
+    border: 1px solid var(--separator-secondary);
+    border-radius: 24px;
+    font-size: var(--body-regular-size);
+    font-weight: var(--body-regular-weight);
+    color: var(--label-primary);
+    outline: none;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-1);
+}
+
+.text-input:focus {
+    border-color: var(--separator-secondary);
+    background: var(--background-primary);
+}
+
+.text-input::placeholder {
+    color: var(--label-tertiary);
+}
+
+.send-btn {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(221.86deg, rgba(0, 177, 230, 1) 0%, rgba(0, 105, 226, 1) 100%);
+    border: none;
+    border-radius: 31px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    flex-shrink: 0;
+    box-shadow: none;
+}
+
+.send-btn:hover {
+    opacity: 0.9;
+}
+
+.send-btn:active {
+    transform: scale(0.95);
+}
+
+/* Chat Screen */
+#agent-chat-screen {
+    background: var(--background-secondary);
+    position: relative;
+}
+
+#agent-chat-screen .status-bar,
+#agent-chat-screen .agent-header,
+#agent-chat-screen .text-input-container,
+#agent-chat-screen .home-indicator {
+    flex-shrink: 0;
+}
+
+/* Chat area: fixed position so height doesn’t collapse when keyboard opens or content grows */
+#agent-chat-screen .chat-container {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0; /* start from top of screen */
+    bottom: 0; /* extend to bottom, text-input-container sits on top */
+    flex: none;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: var(--spacing-200) var(--spacing-150);
+    padding-top: 96px;
+    padding-bottom: calc(var(--spacing-200) + 48px + var(--spacing-200) + 34px); /* input padding-top (16px) + input height (48px) + input padding-bottom (50px) = 114px total */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-200);
+    background: var(--background-secondary);
+}
+
+/* Reserve space for input bar so chat doesn’t sit under it */
+#agent-chat-screen .text-input-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+/* Keep messages and cards full size; only the container scrolls */
+.chat-container > * {
+    flex-shrink: 0;
+    min-width: 0;
+}
+
+.chat-message-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-150);
+    align-items: flex-start;
+}
+
+.chat-message-group.user {
+    align-items: flex-end;
+}
+
+.message-chips {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-100); /* 8px between chips */
+    padding-left: 20px;
+    padding-bottom: 8px;
+    padding-top: 4px;
+    margin-top: 0px;
+    min-height: 56px; /* Ensure chips have room (48px chip + padding) */
+    overflow-x: auto;
+    overflow-y: visible; /* Allow shadows/transforms to extend beyond container */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.message-chips::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+/* Modal */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    width: calc(100% - 32px);
+    max-width: 380px;
+    max-height: calc(100% - 48px);
+    background: var(--background-primary);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* Responsive modal - wider on larger screens */
+@media screen and (min-width: 600px) {
+    .modal-content {
+        max-width: 480px;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .modal-content {
+        max-width: 560px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .modal-content {
+        max-width: 640px;
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-300) var(--spacing-200);
+    border-bottom: 1px solid var(--separator-secondary);
+    border-radius: 24px 24px 0 0;
+}
+
+.modal-header h2 {
+    font-size: var(--title-strong-size);
+    font-weight: var(--title-strong-weight);
+    color: var(--label-primary);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    padding: var(--spacing-100);
+    cursor: pointer;
+    color: var(--label-tertiary);
+}
+
+.modal-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+    min-height: 0;
+    height: 100%; /* ensure height for percentage-based children */
+    position: relative; /* for sticky footer positioning */
+}
+
+/* Home Indicator */
+.home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: var(--label-quaternary);
+    border-radius: var(--radius-full);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.mt-1 { margin-top: var(--spacing-100); }
+.mt-2 { margin-top: var(--spacing-200); }
+.mt-3 { margin-top: var(--spacing-300); }
+.mb-1 { margin-bottom: var(--spacing-100); }
+.mb-2 { margin-bottom: var(--spacing-200); }
+.mb-3 { margin-bottom: var(--spacing-300); }
+
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+/* Hide mobile status bar when using non-mobile view modes */
+.app-container[data-view-mode="410"] .status-bar,
+.app-container[data-view-mode="720"] .status-bar {
+    display: none;
+}
+
+.app-container[data-view-mode="410"] .home-header,
+.app-container[data-view-mode="720"] .home-header {
+    top: var(--spacing-200);
+}
+
+/* Adjust chat container padding for non-full modes */
+.app-container[data-view-mode="410"] #agent-chat-screen .chat-container,
+.app-container[data-view-mode="720"] #agent-chat-screen .chat-container {
+    padding-top: 121px;
+}
+
+/* Chat container takes full width */
+#chat-container {
+    max-width: 100%;
+}
+
+/* Map minimum height */
+#map {
+    min-height: 200px;
+}

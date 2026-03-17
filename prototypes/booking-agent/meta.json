@@ -1,0 +1,11 @@
+{
+  "name": "Booking Agent",
+  "description": "AI-powered ride booking prototype with voice and chat interfaces for the Via rider app.",
+  "createdBy": "ran",
+  "createdAt": "2025-01-01",
+  "variantNames": {
+    "default": "Current Design",
+    "without-map": "Without map",
+    "full-screen-banner": "Full screen banner"
+  }
+}
