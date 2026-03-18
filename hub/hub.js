@@ -72,11 +72,10 @@
         if (email) {
             currentUser = memberFromEmail(email);
             renderIdentityIndicator();
-            renderAdminUI();
             hideIdentityPrompt();
             return;
         }
-        if (!getCookieEmail()) showIdentityPrompt();
+        showIdentityPrompt();
     }
 
     function memberFromEmail(email) {
@@ -87,13 +86,24 @@
     }
 
     function showIdentityPrompt() {
-        const bar = $('#identity-prompt');
-        if (bar) bar.style.display = 'flex';
+        const screen = $('#identity-prompt');
+        if (screen) screen.style.display = 'flex';
+        // Pre-fill from previous session if user just switched
+        const lastEmail = localStorage.getItem('hub-user-email');
+        const input = $('#identity-email-input');
+        if (input && lastEmail) input.value = lastEmail;
     }
 
     function hideIdentityPrompt() {
-        const bar = $('#identity-prompt');
-        if (bar) bar.style.display = 'none';
+        const screen = $('#identity-prompt');
+        if (screen) screen.style.display = 'none';
+    }
+
+    function setLoginError(msg) {
+        const el = $('#login-error');
+        if (!el) return;
+        if (msg) { el.textContent = msg; el.style.display = ''; }
+        else el.style.display = 'none';
     }
 
     function handleIdentitySave() {
@@ -102,16 +112,136 @@
         if (!email) { input.focus(); return; }
 
         if (!email.endsWith('@' + COMPANY_DOMAIN)) {
-            input.setCustomValidity(`Please use your @${COMPANY_DOMAIN} email`);
-            input.reportValidity();
+            setLoginError(`Please use your @${COMPANY_DOMAIN} email address.`);
+            input.focus();
             return;
         }
-        input.setCustomValidity('');
+        setLoginError(null);
         localStorage.setItem('hub-user-email', email);
         currentUser = memberFromEmail(email);
         renderIdentityIndicator();
-        renderAdminUI();
         hideIdentityPrompt();
+        applyModeUI();
+    }
+
+    /* ===== Pending Access Requests (localStorage) ===== */
+    const PENDING_KEY = 'arena-pending-requests';
+
+    function getPendingRequests() {
+        try { return JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); }
+        catch { return []; }
+    }
+
+    function addPendingRequest(email) {
+        const reqs = getPendingRequests();
+        if (!reqs.find(r => r.email === email)) {
+            reqs.push({ email, requestedAt: new Date().toISOString() });
+            localStorage.setItem(PENDING_KEY, JSON.stringify(reqs));
+        }
+    }
+
+    function dismissPendingRequest(email) {
+        const reqs = getPendingRequests().filter(r => r.email !== email);
+        localStorage.setItem(PENDING_KEY, JSON.stringify(reqs));
+    }
+
+    function updatePendingBadge() {
+        const badge = $('#pending-requests-badge');
+        if (!badge || !isAdmin()) return;
+        const count = getPendingRequests().length;
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = '';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    function renderPendingRequests() {
+        const section = $('#pending-requests-section');
+        const list = $('#pending-requests-list');
+        if (!section || !list || !isAdmin()) { if (section) section.style.display = 'none'; return; }
+
+        const reqs = getPendingRequests();
+        if (reqs.length === 0) { section.style.display = 'none'; return; }
+
+        section.style.display = '';
+        list.innerHTML = reqs.map(r => {
+            const date = new Date(r.requestedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+            return `<div class="pending-request-row" data-email="${r.email}">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                <span class="pending-request-email">${r.email}</span>
+                <span class="pending-request-date">${date}</span>
+                <div class="pending-request-actions">
+                    <button class="hub-btn hub-btn-primary pending-request-approve" data-email="${r.email}">Approve</button>
+                    <button class="hub-btn hub-btn-ghost pending-request-dismiss" data-email="${r.email}">Dismiss</button>
+                </div>
+            </div>`;
+        }).join('');
+
+        list.querySelectorAll('.pending-request-approve').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const email = btn.dataset.email;
+                dismissPendingRequest(email);
+                closeTeamViewModal();
+                openAddMemberModal();
+                const emailInput = $('#input-member-email');
+                if (emailInput) { emailInput.value = email; emailInput.disabled = false; }
+            });
+        });
+
+        list.querySelectorAll('.pending-request-dismiss').forEach(btn => {
+            btn.addEventListener('click', () => {
+                dismissPendingRequest(btn.dataset.email);
+                renderPendingRequests();
+                updatePendingBadge();
+            });
+        });
+    }
+
+    function showRequestAccessScreen() {
+        const screen = $('#request-access-screen');
+        if (!screen) return;
+        const emailEl = $('#request-access-email');
+        if (emailEl && currentUser) emailEl.textContent = currentUser.email;
+        screen.style.display = 'flex';
+
+        const reqBtn = $('#btn-request-access');
+        if (reqBtn) {
+            const newBtn = reqBtn.cloneNode(true);
+            reqBtn.replaceWith(newBtn);
+            newBtn.addEventListener('click', async () => {
+                const email = currentUser?.email;
+                newBtn.disabled = true;
+                newBtn.textContent = 'Sending…';
+                // Store locally for admin to see
+                if (email) addPendingRequest(email);
+                // Also try Worker if deployed
+                try {
+                    await fetch('/api/request-access', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                } catch { /* Worker not deployed yet */ }
+                newBtn.style.display = 'none';
+                const note = $('#request-access-note');
+                if (note) note.style.display = '';
+            });
+        }
+
+        const switchBtn = $('#btn-switch-user');
+        if (switchBtn) {
+            const newSwitch = switchBtn.cloneNode(true);
+            switchBtn.replaceWith(newSwitch);
+            newSwitch.addEventListener('click', () => {
+                localStorage.removeItem('hub-user-email');
+                document.cookie = 'hub-user-email=; Max-Age=0; path=/';
+                currentUser = null;
+                screen.style.display = 'none';
+                showIdentityPrompt();
+            });
+        }
     }
 
     function renderIdentityIndicator() {
@@ -224,13 +354,25 @@
         showIdentityPrompt();
     }
 
-    function isAdmin() {
-        return currentUser && currentUser.admin === true;
+    function userAccess() {
+        if (!currentUser) return null;
+        if (currentUser.access) return currentUser.access;
+        return currentUser.admin ? 'admin' : 'editor';
+    }
+
+    function isAdmin()  { return userAccess() === 'admin'; }
+    function isEditor() { const a = userAccess(); return a === 'editor' || a === 'admin'; }
+    function isViewer() { return userAccess() === 'viewer'; }
+
+    function isInRoster() {
+        if (!currentUser) return false;
+        return manifest.team.some(m => m.email === currentUser.email);
     }
 
     function renderAdminUI() {
         const teamSection = $('#profile-teams-section');
         if (teamSection) teamSection.style.display = isAdmin() ? '' : 'none';
+        updatePendingBadge();
     }
 
     /* ===== Space Management ===== */
@@ -257,7 +399,7 @@
     function renderSpaceToggle() {
         const toggle = $('#space-toggle');
         if (!toggle) return;
-        if (isHubMode()) {
+        if (isHubMode() || isViewer()) {
             toggle.style.display = 'none';
             return;
         }
@@ -285,16 +427,26 @@
 
         // Hide/show workspace-only UI
         const newBtn = $('#btn-new-prototype');
-        if (newBtn) newBtn.style.display = isReadOnly() ? 'none' : '';
+        if (newBtn) newBtn.style.display = (isReadOnly() || !isEditor()) ? 'none' : '';
 
         renderDashboard();
     }
 
     function applyModeUI() {
-        const newBtn = $('#btn-new-prototype');
-        if (isHubMode() || isReadOnly()) {
-            if (newBtn) newBtn.style.display = 'none';
+        if (currentUser && !isInRoster()) {
+            showRequestAccessScreen();
+            return;
         }
+
+        const newBtn = $('#btn-new-prototype');
+        const editorCanAct = isEditor() && !isReadOnly();
+        if (!editorCanAct) {
+            if (newBtn) newBtn.style.display = 'none';
+        } else {
+            if (newBtn) newBtn.style.display = '';
+        }
+
+        renderAdminUI();
         renderSpaceToggle();
     }
 
@@ -348,7 +500,7 @@
         const grid = $('#prototype-grid');
         const empty = $('#empty-state');
         const activeManifest = getActiveManifest();
-        const readOnly = isReadOnly();
+        const readOnly = isReadOnly() || !isEditor();
         const basePath = getVariantBasePath();
         let protos = activeManifest.prototypes;
 
@@ -552,7 +704,7 @@
 
     function renderSidePanel() {
         const list = $('#sp-proto-list');
-        const readOnly = isReadOnly();
+        const readOnly = isReadOnly() || !isEditor();
         const basePath = getVariantBasePath();
         const activeManifest = getActiveManifest();
         const chevronSvg = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
@@ -882,29 +1034,79 @@ git push origin main</code></pre>
     }
 
     /* ===== Modal: New / Duplicate Prototype ===== */
+    let selectedTemplate = null; // 'rider-management' | 'ride-plan' | 'booking-page' | 'import' | null (duplicate)
+
     function openNewModal() {
-        resetModal();
+        selectedTemplate = null;
         $('#modal-title').textContent = 'New Prototype';
+        showModalStep('pick');
         $('#modal-overlay').classList.add('open');
     }
 
     function openDuplicateModal(sourceId) {
-        resetModal();
+        selectedTemplate = null;
         const proto = manifest.prototypes.find((p) => p.id === sourceId);
         if (!proto) return;
+        showModalStep('details');
         $('#modal-title').textContent = 'Duplicate Prototype';
+        $('#btn-modal-back').style.display = 'none';
+        $('#modal-source-label').style.display = 'none';
+        $('#import-path-row').style.display = 'none';
         $('#input-name').value = proto.name + ' — Copy';
         $('#input-description').value = proto.description;
+        $('#input-creator').innerHTML = manifest.team
+            .map((m) => `<option value="${m.id}">${m.name} (${m.role})</option>`).join('');
         $('#modal-overlay').classList.add('open');
     }
 
-    function resetModal() {
+    function showModalStep(step) {
+        $('#modal-step-pick').style.display   = step === 'pick'    ? '' : 'none';
+        $('#modal-step-details').style.display = step === 'details' ? '' : 'none';
+        $('#modal-footer').style.display       = step === 'details' ? 'flex' : 'none';
+        $('#btn-modal-back').style.display     = step === 'details' ? '' : 'none';
+        $('#modal-output').style.display = 'none';
+        $('#modal-footer').style.display = step === 'details' ? 'flex' : 'none';
+    }
+
+    function pickTemplate(templateId) {
+        selectedTemplate = templateId;
+        showModalStep('details');
+
+        // Source label
+        const labels = {
+            'rider-management': 'Rider Management template',
+            'ride-plan': 'Ride Plan template',
+            'booking-page': 'Booking Page template',
+            'import': 'Import folder'
+        };
+        const sourceLabel = $('#modal-source-label');
+        sourceLabel.textContent = `Starting from: ${labels[templateId] || templateId}`;
+        sourceLabel.style.display = '';
+
+        // Import path row
+        const isImport = templateId === 'import';
+        $('#import-path-row').style.display = isImport ? '' : 'none';
         $('#input-name').value = '';
         $('#input-description').value = '';
-        $('#modal-output').style.display = 'none';
-        $('#modal-footer').style.display = 'flex';
+        $('#input-import-path').value = '';
         $('#input-creator').innerHTML = manifest.team
             .map((m) => `<option value="${m.id}">${m.name} (${m.role})</option>`).join('');
+
+        // Pre-select current user
+        if (currentUser) {
+            const option = Array.from($('#input-creator').options).find(o => o.value === currentUser.id);
+            if (option) option.selected = true;
+        }
+
+        $('#input-name').focus();
+    }
+
+    function resetModal() {
+        selectedTemplate = null;
+        showModalStep('pick');
+        $('#input-name').value = '';
+        $('#input-description').value = '';
+        $('#input-import-path').value = '';
     }
 
     function closeModal() { $('#modal-overlay').classList.remove('open'); }
@@ -918,6 +1120,14 @@ git push origin main</code></pre>
 
         let cmd = `cd "${HUB_ROOT}" && ./scripts/new-prototype.sh --name "${name}" --creator "${creatorId}"`;
         if (desc) cmd += ` --description "${desc}"`;
+
+        if (selectedTemplate === 'import') {
+            const importPath = $('#input-import-path').value.trim();
+            if (!importPath) { $('#input-import-path').focus(); return; }
+            cmd += ` --import-path "${importPath}"`;
+        } else if (selectedTemplate) {
+            cmd += ` --template "${selectedTemplate}"`;
+        }
 
         $('#modal-output-code').textContent = cmd;
         $('#modal-output').style.display = 'block';
@@ -1035,6 +1245,7 @@ git push origin main</code></pre>
     let editingMemberEmail = null;
 
     function openTeamViewModal() {
+        renderPendingRequests();
         renderTeamList();
         $('#team-view-overlay').classList.add('open');
     }
@@ -1047,13 +1258,15 @@ git push origin main</code></pre>
         const list = $('#team-list');
         list.innerHTML = manifest.team.map(m => {
             const color = avatarColor(m.name);
-            const adminBadge = m.admin ? '<span class="admin-badge">Admin</span>' : '';
+            const access = m.access || (m.admin ? 'admin' : 'editor');
+            const badgeColor = access === 'admin' ? '#0069e2' : access === 'viewer' ? '#6b7280' : '#16a34a';
+            const accessBadge = `<span class="admin-badge" style="background:${badgeColor}20;color:${badgeColor};border:1px solid ${badgeColor}40">${access.charAt(0).toUpperCase() + access.slice(1)}</span>`;
             return `
             <div class="team-member-card" data-email="${m.email}">
                 <div class="team-member-info">
                     <div class="avatar" style="background:${color}">${initials(m.name)}</div>
                     <div class="team-member-details">
-                        <div class="team-member-name">${m.name} ${adminBadge}</div>
+                        <div class="team-member-name">${m.name} ${accessBadge}</div>
                         <div class="team-member-email">${m.email}</div>
                         <div class="team-member-role">${m.role || '—'}</div>
                     </div>
@@ -1080,7 +1293,7 @@ git push origin main</code></pre>
         $('#input-member-email').value = '';
         $('#input-member-email').disabled = false;
         $('#input-member-role').value = '';
-        $('#input-member-admin').checked = false;
+        $('#input-member-access').value = 'editor';
         $('#team-modal-output').style.display = 'none';
         $('#team-modal-footer').style.display = 'flex';
         $('#btn-team-modal-generate').textContent = 'Generate Command';
@@ -1096,7 +1309,7 @@ git push origin main</code></pre>
         $('#input-member-email').value = member.email;
         $('#input-member-email').disabled = true;
         $('#input-member-role').value = member.role || '';
-        $('#input-member-admin').checked = !!member.admin;
+        $('#input-member-access').value = member.access || (member.admin ? 'admin' : 'editor');
         $('#team-modal-output').style.display = 'none';
         $('#team-modal-footer').style.display = 'flex';
         $('#btn-team-modal-generate').textContent = 'Generate Command';
@@ -1119,14 +1332,14 @@ git push origin main</code></pre>
         const name = $('#input-member-name').value.trim();
         const email = $('#input-member-email').value.trim().toLowerCase();
         const role = $('#input-member-role').value.trim();
-        const admin = $('#input-member-admin').checked;
+        const access = $('#input-member-access').value;
 
         if (!name) { $('#input-member-name').focus(); return; }
         if (!email) { $('#input-member-email').focus(); return; }
 
         let cmd = `cd "${HUB_ROOT}" && ./scripts/team.sh add --name "${name}" --email "${email}"`;
         if (role) cmd += ` --role "${role}"`;
-        if (admin) cmd += ' --admin';
+        cmd += ` --access ${access}`;
 
         $('#team-modal-output-code').textContent = cmd;
         $('#team-modal-output').style.display = 'block';
@@ -1136,15 +1349,15 @@ git push origin main</code></pre>
     function generateEditCommand() {
         const name = $('#input-member-name').value.trim();
         const role = $('#input-member-role').value.trim();
-        const admin = $('#input-member-admin').checked;
+        const access = $('#input-member-access').value;
         const member = manifest.team.find(m => m.email === editingMemberEmail);
         if (!member) return;
 
+        const currentAccess = member.access || (member.admin ? 'admin' : 'editor');
         const parts = [`cd "${HUB_ROOT}" && ./scripts/team.sh edit --email "${editingMemberEmail}"`];
         if (name && name !== member.name) parts.push(`--name "${name}"`);
         if (role !== (member.role || '')) parts.push(`--role "${role}"`);
-        if (admin && !member.admin) parts.push('--admin');
-        if (!admin && member.admin) parts.push('--no-admin');
+        if (access !== currentAccess) parts.push(`--access ${access}`);
 
         if (parts.length === 1) {
             alert('No changes detected.');
@@ -1212,6 +1425,14 @@ git push origin main</code></pre>
         $('#btn-modal-cancel').addEventListener('click', closeModal);
         $('#btn-modal-generate').addEventListener('click', generateInstructions);
         $('#btn-copy-output').addEventListener('click', copyOutput);
+        $('#btn-modal-back').addEventListener('click', () => {
+            selectedTemplate = null;
+            showModalStep('pick');
+            $('#modal-title').textContent = 'New Prototype';
+        });
+        document.querySelectorAll('.template-tile:not([disabled])').forEach(tile => {
+            tile.addEventListener('click', () => pickTemplate(tile.dataset.template));
+        });
 
         // Edit prototype modal
         $('#edit-modal-close').addEventListener('click', closeEditModal);

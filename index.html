@@ -10,11 +10,25 @@
     <link rel="stylesheet" href="hub/hub.css">
 </head>
 <body>
-    <!-- ===== Identity Prompt (first visit) ===== -->
-    <div class="identity-prompt" id="identity-prompt" style="display:none">
-        <span class="identity-prompt-label">Enter your email to identify yourself:</span>
-        <input type="email" class="identity-prompt-input" id="identity-email-input" placeholder="you@ridewithvia.com">
-        <button class="hub-btn hub-btn-primary identity-prompt-btn" id="identity-save-btn">Save</button>
+    <!-- ===== Login Screen ===== -->
+    <div id="identity-prompt" style="display:none">
+        <div class="login-card">
+            <div class="login-logo">
+                <svg width="36" height="36" viewBox="0 0 28 28" fill="none">
+                    <rect width="28" height="28" rx="8" fill="#0069e2"/>
+                    <path d="M8 10l4 8 4-8M20 10v8" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="login-logo-name">Arena</span>
+            </div>
+            <h2 class="login-title">Sign in to Arena</h2>
+            <p class="login-subtitle">Use your <strong>@ridewithvia.com</strong> email to continue.</p>
+            <div class="login-field">
+                <label class="login-label" for="identity-email-input">Work email</label>
+                <input type="email" class="login-input" id="identity-email-input" placeholder="you@ridewithvia.com" autocomplete="email">
+            </div>
+            <p class="login-error" id="login-error" style="display:none"></p>
+            <button class="hub-btn hub-btn-primary login-btn" id="identity-save-btn">Continue</button>
+        </div>
     </div>
 
     <!-- ===== Dashboard View ===== -->
@@ -115,12 +129,66 @@
 
     <!-- ===== New Prototype Modal ===== -->
     <div class="modal-overlay" id="modal-overlay">
-        <div class="modal" id="new-prototype-modal">
+        <div class="modal modal-new-prototype" id="new-prototype-modal">
             <div class="modal-header">
-                <h3 class="modal-title" id="modal-title">New Prototype</h3>
+                <div class="modal-header-with-back">
+                    <button class="modal-back-btn" id="btn-modal-back" style="display:none">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                    </button>
+                    <h3 class="modal-title" id="modal-title">New Prototype</h3>
+                </div>
                 <button class="modal-close" id="modal-close">&times;</button>
             </div>
-            <div class="modal-body">
+
+            <!-- Step 1: Template picker -->
+            <div id="modal-step-pick" class="modal-body">
+                <p class="modal-step-hint">Choose a starting point for your prototype</p>
+                <div class="template-grid">
+                    <button class="template-tile template-tile-disabled" data-template="rider-management" disabled>
+                        <div class="template-tile-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                        </div>
+                        <div class="template-tile-text">
+                            <span class="template-tile-name">Rider Management</span>
+                            <span class="template-tile-desc">Rider-facing dashboard & flows</span>
+                        </div>
+                        <span class="template-tile-badge">Coming soon</span>
+                    </button>
+                    <button class="template-tile template-tile-disabled" data-template="ride-plan" disabled>
+                        <div class="template-tile-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        </div>
+                        <div class="template-tile-text">
+                            <span class="template-tile-name">Ride Plan</span>
+                            <span class="template-tile-desc">Scheduling & ride planning UI</span>
+                        </div>
+                        <span class="template-tile-badge">Coming soon</span>
+                    </button>
+                    <button class="template-tile template-tile-disabled" data-template="booking-page" disabled>
+                        <div class="template-tile-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <div class="template-tile-text">
+                            <span class="template-tile-name">Booking Page</span>
+                            <span class="template-tile-desc">Booking flow & confirmation</span>
+                        </div>
+                        <span class="template-tile-badge">Coming soon</span>
+                    </button>
+                    <button class="template-tile template-tile-import" data-template="import">
+                        <div class="template-tile-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/><line x1="12" y1="11" x2="12" y2="17"/><polyline points="9 14 12 17 15 14"/></svg>
+                        </div>
+                        <div class="template-tile-text">
+                            <span class="template-tile-name">Import folder</span>
+                            <span class="template-tile-desc">Use an existing local repository</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2a: Details for template -->
+            <div id="modal-step-details" class="modal-body" style="display:none">
+                <div class="modal-source-label" id="modal-source-label"></div>
                 <label class="form-label">
                     Prototype Name
                     <input type="text" class="form-input" id="input-name" placeholder="e.g. Ride Scheduling Redesign">
@@ -133,15 +201,23 @@
                     Created By
                     <select class="form-input" id="input-creator"></select>
                 </label>
+                <div id="import-path-row" style="display:none">
+                    <label class="form-label">
+                        Folder path
+                        <input type="text" class="form-input" id="input-import-path" placeholder="e.g. /Users/you/projects/my-app">
+                    </label>
+                    <p class="form-hint">Paste the full path to your local project folder. The script will copy it into <code>prototypes/</code>.</p>
+                </div>
                 <div class="modal-output" id="modal-output" style="display:none">
                     <p class="modal-output-label">Run this in your terminal:</p>
                     <pre class="modal-output-code" id="modal-output-code"></pre>
                     <button class="hub-btn hub-btn-primary modal-copy-btn" id="btn-copy-output">Copy to Clipboard</button>
                 </div>
             </div>
-            <div class="modal-footer" id="modal-footer">
+
+            <div class="modal-footer" id="modal-footer" style="display:none">
                 <button class="hub-btn hub-btn-ghost" id="btn-modal-cancel">Cancel</button>
-                <button class="hub-btn hub-btn-primary" id="btn-modal-generate">Generate Instructions</button>
+                <button class="hub-btn hub-btn-primary" id="btn-modal-generate">Generate Command</button>
             </div>
         </div>
     </div>
@@ -244,6 +320,14 @@
                 </div>
             </div>
             <div class="modal-body">
+                <div id="pending-requests-section" style="display:none">
+                    <div class="pending-requests-header">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        Pending Requests
+                    </div>
+                    <div id="pending-requests-list"></div>
+                    <div class="pending-requests-divider"></div>
+                </div>
                 <div class="team-list" id="team-list"></div>
             </div>
         </div>
@@ -269,9 +353,13 @@
                     Role
                     <input type="text" class="form-input" id="input-member-role" placeholder="e.g. Designer, Product, Engineer">
                 </label>
-                <label class="form-label form-checkbox-label">
-                    <input type="checkbox" id="input-member-admin">
-                    <span>Grant admin access</span>
+                <label class="form-label">
+                    Access Level
+                    <select class="form-input" id="input-member-access">
+                        <option value="viewer">Viewer — can browse published prototypes</option>
+                        <option value="editor" selected>Editor — can create and publish prototypes</option>
+                        <option value="admin">Admin — full access + team management</option>
+                    </select>
                 </label>
                 <div class="modal-output" id="team-modal-output" style="display:none">
                     <p class="modal-output-label">Run this in your terminal:</p>
@@ -301,6 +389,7 @@
                     <button class="profile-action-row" id="profile-manage-team">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
                         <span>Manage team members</span>
+                        <span class="pending-requests-badge" id="pending-requests-badge" style="display:none"></span>
                         <svg class="profile-action-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
                 </div>
@@ -354,6 +443,25 @@
                 <button class="hub-btn hub-btn-ghost" id="btn-publish-cancel">Cancel</button>
                 <button class="hub-btn hub-btn-primary" id="btn-publish-confirm">Publish</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ===== Request Access Screen ===== -->
+    <div id="request-access-screen" style="display:none">
+        <div class="request-access-card">
+            <svg class="request-access-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <h2 class="request-access-title">Access Required</h2>
+            <p class="request-access-message">
+                Your account (<strong><span id="request-access-email"></span></strong>) isn't on the Arena team yet.
+            </p>
+            <button class="hub-btn hub-btn-primary request-access-btn" id="btn-request-access">Request Access</button>
+            <p class="request-access-note" id="request-access-note" style="display:none">
+                Request sent! You'll receive an invite once an admin approves.
+            </p>
+            <button class="hub-btn hub-btn-ghost request-access-switch" id="btn-switch-user">Switch account</button>
         </div>
     </div>
 
