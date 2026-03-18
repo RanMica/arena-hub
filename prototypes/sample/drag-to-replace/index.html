@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ride Cards — Drag to Replace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ─────────────────────────────────────────────────── */
+    :root {
+      --bg-page:         #f5f6f7;
+      --bg-card:         #ffffff;
+      --separator:       #e8e9eb;
+      --bg-tertiary:     #e8e9eb;
+      --label-primary:   #222429;
+      --label-secondary: #4f545d;
+      --brand:           #0054b4;
+      --drag-ring:       #0054b4;
+      --drop-bg:         #eff6ff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-page);
+      min-height: 100vh;
+      padding: 32px 20px 48px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      /* prevent text selection while dragging */
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    .page-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      text-align: center;
+    }
+    .page-title  { font-size: 22px; font-weight: 700; color: var(--label-primary); letter-spacing: -0.3px; }
+    .page-hint   { font-size: 13px; color: var(--label-secondary); font-weight: 500; }
+
+    /* ── Tab bar ────────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      background: var(--bg-card);
+      border: 1px solid var(--separator);
+      border-radius: 10px;
+      padding: 3px;
+      gap: 2px;
+    }
+    .tab {
+      padding: 7px 20px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--label-secondary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tab.active { background: var(--label-primary); color: #fff; }
+
+    /* ── Card grid ──────────────────────────────────────────────── */
+    .card-grid {
+      display: grid;
+      gap: 16px;
+      width: 100%;
+      justify-content: center;
+    }
+    .card-grid[data-count="2"] { grid-template-columns: repeat(auto-fill, minmax(300px, 343px)); max-width: 760px; }
+    .card-grid[data-count="4"] { grid-template-columns: repeat(auto-fill, minmax(300px, 343px)); max-width: 760px; }
+    .card-grid[data-count="8"] { grid-template-columns: repeat(auto-fill, minmax(280px, 343px)); max-width: 1160px; }
+
+    /* ── Card ───────────────────────────────────────────────────── */
+    .card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--separator);
+      border-radius: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      padding: 16px 0;
+      width: 100%;
+      cursor: grab;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+      touch-action: none;       /* let JS handle all pointer events */
+      transition: transform 0.18s cubic-bezier(.22,.68,0,1.2),
+                  box-shadow 0.18s ease,
+                  border-color 0.15s,
+                  background 0.15s,
+                  opacity 0.18s;
+      will-change: transform;
+      position: relative;
+    }
+
+    /* Drag handle hint */
+    .drag-handle {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28px;
+      height: 4px;
+      background: var(--separator);
+      border-radius: 2px;
+      opacity: 0;
+      transition: opacity 0.15s;
+      pointer-events: none;
+    }
+    .card:hover .drag-handle { opacity: 1; }
+
+    /* Source card while dragging */
+    .card.dragging {
+      opacity: 0.35;
+      transform: scale(0.96);
+      box-shadow: none;
+      cursor: grabbing;
+    }
+
+    /* Drop target highlight */
+    .card.drag-over {
+      border-color: var(--drag-ring);
+      background: var(--drop-bg);
+      box-shadow: 0 0 0 3px rgba(0,84,180,0.15);
+      transform: scale(1.025);
+    }
+
+    /* ── Floating ghost card ────────────────────────────────────── */
+    #drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      border-radius: 16px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--separator);
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+      padding: 16px 0;
+      /* tilt + lift */
+      transform: rotate(4deg) scale(1.04);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.18),
+        0 6px 16px rgba(0,0,0,0.10);
+      transition: none; /* moves must be instant */
+      will-change: left, top;
+    }
+
+    /* ── Swap flash ─────────────────────────────────────────────── */
+    @keyframes swapFlash {
+      0%   { box-shadow: 0 0 0 0   rgba(0,84,180,0.45); }
+      60%  { box-shadow: 0 0 0 10px rgba(0,84,180,0); }
+      100% { box-shadow: 0 0 0 0   rgba(0,84,180,0); }
+    }
+    .card.swapped { animation: swapFlash 0.45s ease-out; }
+
+    /* ── Card internals ─────────────────────────────────────────── */
+    .upper {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 16px; height: 28px;
+    }
+    .rider { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .avatar-initials { font-size: 10px; font-weight: 700; line-height: 1; }
+    .rider-name {
+      font-size: 14px; font-weight: 600; color: var(--label-primary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px;
+    }
+    .view-link {
+      font-size: 14px; font-weight: 600; color: var(--brand);
+      white-space: nowrap; text-decoration: none; flex-shrink: 0;
+    }
+    .separator { height: 1px; background: var(--separator); margin: 0 16px; }
+    .middle { display: flex; flex-direction: column; gap: 12px; }
+    .pickup-row {
+      display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+    }
+    .pickup-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .pickup-icon { width: 24px; height: 24px; flex-shrink: 0; }
+    .pickup-icon svg { width: 100%; height: 100%; }
+    .pickup-details { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    .pickup-title { font-size: 18px; font-weight: 700; color: var(--label-primary); white-space: nowrap; }
+    .pickup-address {
+      font-size: 13px; font-weight: 500; color: var(--label-secondary);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .eta { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+    .live-icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; }
+    .live-icon svg { width: 100%; height: 100%; }
+    .eta-time { font-size: 14px; font-weight: 700; color: var(--label-primary); white-space: nowrap; }
+    .bottom {
+      display: flex; align-items: center; justify-content: space-between; padding: 0 16px;
+    }
+    .driver { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .driver-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1px solid var(--separator); overflow: hidden; flex-shrink: 0;
+      background: var(--bg-tertiary); display: flex; align-items: center;
+      justify-content: center; font-size: 9px; font-weight: 700; color: var(--label-secondary);
+    }
+    .driver-details { display: flex; flex-direction: column; min-width: 0; }
+    .driver-name   { font-size: 13px; font-weight: 600; color: var(--label-primary); white-space: nowrap; }
+    .driver-vehicle{ font-size: 12px; font-weight: 500; color: var(--label-secondary); white-space: nowrap; }
+    .plate { background: var(--bg-tertiary); border-radius: 29px; padding: 5px 8px; flex-shrink: 0; }
+    .plate-text { font-size: 12px; font-weight: 600; color: var(--label-primary); white-space: nowrap; }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <span class="page-title">Ride Cards</span>
+    <span class="page-hint">Drag any card to swap its position with another</span>
+  </div>
+
+  <div class="tab-bar" id="tab-bar">
+    <button class="tab active" data-count="2">2 cards</button>
+    <button class="tab"        data-count="4">4 cards</button>
+    <button class="tab"        data-count="8">8 cards</button>
+  </div>
+
+  <div class="card-grid" id="card-grid" data-count="2"></div>
+
+  <!-- Floating ghost that follows the pointer -->
+  <div id="drag-ghost"></div>
+
+<script>
+/* ── Card data ───────────────────────────────────────────────────── */
+const CARDS = [
+  {
+    initials:'SM', avatarBg:'#e1efff', avatarColor:'#0054b4',
+    riderName:"Stacy M's ride",
+    pickupTime:'Pickup in 15 min', pickupAddress:'From 1273 Eveningwood St.',
+    etaTime:'12:40', driverInitials:'MB', driverName:'Martin B.', driverVehicle:'Mercedes Sprinter', plate:'#8JV1242'
+  },
+  {
+    initials:'JK', avatarBg:'#fef3c7', avatarColor:'#d97706',
+    riderName:"James K's ride",
+    pickupTime:'Pickup in 8 min', pickupAddress:'From 450 River Valley Dr.',
+    etaTime:'12:33', driverInitials:'ST', driverName:'Sarah T.', driverVehicle:'Toyota Sienna', plate:'#4RK9870'
+  },
+  {
+    initials:'AL', avatarBg:'#f0fdf4', avatarColor:'#16a34a',
+    riderName:"Amy L's ride",
+    pickupTime:'Pickup in 22 min', pickupAddress:'From 88 Harbor Blvd.',
+    etaTime:'12:55', driverInitials:'MD', driverName:'Mike D.', driverVehicle:'Ford Transit', plate:'#2MX5548'
+  },
+  {
+    initials:'RP', avatarBg:'#fdf2f8', avatarColor:'#9333ea',
+    riderName:"Robert P's ride",
+    pickupTime:'Pickup in 5 min', pickupAddress:'From 201 Oak Street',
+    etaTime:'12:30', driverInitials:'LC', driverName:'Lisa C.', driverVehicle:'VW Crafter', plate:'#7PQ3316'
+  },
+  {
+    initials:'EW', avatarBg:'#fff7ed', avatarColor:'#ea580c',
+    riderName:"Elena W's ride",
+    pickupTime:'Pickup in 31 min', pickupAddress:'From 675 Maple Ave.',
+    etaTime:'13:08', driverInitials:'JR', driverName:'John R.', driverVehicle:'Mercedes Sprinter', plate:'#9YT6621'
+  },
+  {
+    initials:'DF', avatarBg:'#f0f9ff', avatarColor:'#0284c7',
+    riderName:"David F's ride",
+    pickupTime:'Pickup in 12 min', pickupAddress:'From 340 Pine Circle',
+    etaTime:'12:47', driverInitials:'NK', driverName:'Nina K.', driverVehicle:'Toyota Sienna', plate:'#3SD4490'
+  },
+  {
+    initials:'MH', avatarBg:'#fef9c3', avatarColor:'#ca8a04',
+    riderName:"Maria H's ride",
+    pickupTime:'Pickup in 18 min', pickupAddress:'From 512 Cedar Lane',
+    etaTime:'12:53', driverInitials:'AB', driverName:'Alex B.', driverVehicle:'Ford Transit', plate:'#6WE1183'
+  },
+  {
+    initials:'TN', avatarBg:'#fdf2f8', avatarColor:'#db2777',
+    riderName:"Thomas N's ride",
+    pickupTime:'Pickup in 25 min', pickupAddress:'From 789 Birch Road',
+    etaTime:'13:02', driverInitials:'ZM', driverName:'Zoe M.', driverVehicle:'VW Crafter', plate:'#1JF8855'
+  }
+];
+
+const pickupSvg = `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="12" cy="6" r="3" fill="#222429"/>
+  <path d="M6 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#222429" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M12 14v-4M10 12l2-2 2 2" stroke="#222429" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+const liveSvg = `<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M2.5 10.5a7.5 7.5 0 0 1 0-5" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+  <path d="M4.5 9a4.5 4.5 0 0 1 0-2" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+  <circle cx="8" cy="8" r="1.5" fill="#222429"/>
+  <path d="M11.5 9a4.5 4.5 0 0 0 0-2" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+  <path d="M13.5 10.5a7.5 7.5 0 0 0 0-5" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+</svg>`;
+
+/* ── State ───────────────────────────────────────────────────────── */
+let currentCount = 2;
+const orders = { 2:[0,1], 4:[0,1,2,3], 8:[0,1,2,3,4,5,6,7] };
+
+/* ── Card HTML builder ───────────────────────────────────────────── */
+function buildCardInner(c) {
+  return `
+    <div class="drag-handle"></div>
+    <div class="upper">
+      <div class="rider">
+        <div class="avatar" style="background:${c.avatarBg}">
+          <span class="avatar-initials" style="color:${c.avatarColor}">${c.initials}</span>
+        </div>
+        <span class="rider-name">${c.riderName}</span>
+      </div>
+      <a class="view-link" href="#" onclick="return false">View →</a>
+    </div>
+    <div class="separator"></div>
+    <div class="middle">
+      <div class="pickup-row">
+        <div class="pickup-left">
+          <div class="pickup-icon">${pickupSvg}</div>
+          <div class="pickup-details">
+            <span class="pickup-title">${c.pickupTime}</span>
+            <span class="pickup-address">${c.pickupAddress}</span>
+          </div>
+        </div>
+        <div class="eta">
+          <div class="live-icon">${liveSvg}</div>
+          <span class="eta-time">${c.etaTime}</span>
+        </div>
+      </div>
+    </div>
+    <div class="separator"></div>
+    <div class="bottom">
+      <div class="driver">
+        <div class="driver-avatar">${c.driverInitials}</div>
+        <div class="driver-details">
+          <span class="driver-name">${c.driverName}</span>
+          <span class="driver-vehicle">${c.driverVehicle}</span>
+        </div>
+      </div>
+      <div class="plate"><span class="plate-text">${c.plate}</span></div>
+    </div>`;
+}
+
+/* ── Render ──────────────────────────────────────────────────────── */
+function render() {
+  const grid  = document.getElementById('card-grid');
+  grid.setAttribute('data-count', currentCount);
+  const order = orders[currentCount];
+  grid.innerHTML = '';
+  order.forEach((cardIdx, pos) => {
+    const el = document.createElement('div');
+    el.className = 'card';
+    el.dataset.position = pos;
+    el.innerHTML = buildCardInner(CARDS[cardIdx]);
+    grid.appendChild(el);
+  });
+  setupDrag();
+}
+
+/* ── Drag (unified pointer events — mouse + touch) ───────────────── */
+const ghost = document.getElementById('drag-ghost');
+
+let dragState = null;
+// dragState = { fromPos, offsetX, offsetY, cardW, cardH, currentTarget }
+
+function getCardAtPoint(x, y) {
+  ghost.style.display = 'none';
+  const el = document.elementFromPoint(x, y);
+  ghost.style.display = 'flex';
+  return el ? el.closest('.card') : null;
+}
+
+function clearDropTargets() {
+  document.querySelectorAll('#card-grid .card').forEach(c => c.classList.remove('drag-over'));
+}
+
+function setupDrag() {
+  document.querySelectorAll('#card-grid .card').forEach(card => {
+    card.addEventListener('pointerdown', onPointerDown);
+  });
+}
+
+function onPointerDown(e) {
+  // Only main button (mouse) or first touch
+  if (e.button !== undefined && e.button !== 0) return;
+
+  const card = e.currentTarget;
+  const rect = card.getBoundingClientRect();
+
+  // Offset: where inside the card the pointer landed
+  const offsetX = e.clientX - rect.left;
+  const offsetY = e.clientY - rect.top;
+
+  dragState = {
+    fromPos: parseInt(card.dataset.position),
+    offsetX,
+    offsetY,
+    cardW: rect.width,
+    cardH: rect.height,
+    currentTarget: null
+  };
+
+  // Build ghost to match card size
+  ghost.style.width  = rect.width + 'px';
+  ghost.style.height = rect.height + 'px';
+  ghost.innerHTML = buildCardInner(CARDS[orders[currentCount][dragState.fromPos]]);
+  ghost.style.display = 'flex';
+  moveGhost(e.clientX, e.clientY);
+
+  card.classList.add('dragging');
+  document.body.style.cursor = 'grabbing';
+
+  // Capture pointer so we keep getting events even outside the card
+  card.setPointerCapture(e.pointerId);
+
+  document.addEventListener('pointermove', onPointerMove);
+  document.addEventListener('pointerup',   onPointerUp);
+  document.addEventListener('pointercancel', onPointerCancel);
+  e.preventDefault();
+}
+
+function onPointerMove(e) {
+  if (!dragState) return;
+  moveGhost(e.clientX, e.clientY);
+
+  const target = getCardAtPoint(e.clientX, e.clientY);
+  clearDropTargets();
+  if (target && parseInt(target.dataset.position) !== dragState.fromPos) {
+    target.classList.add('drag-over');
+    dragState.currentTarget = parseInt(target.dataset.position);
+  } else {
+    dragState.currentTarget = null;
+  }
+}
+
+function onPointerUp(e) {
+  if (!dragState) return;
+  const fromPos = dragState.fromPos;
+  const toPos   = dragState.currentTarget;
+  endDrag();
+  if (toPos !== null) swap(fromPos, toPos);
+}
+
+function onPointerCancel() { endDrag(); }
+
+function endDrag() {
+  ghost.style.display = 'none';
+  clearDropTargets();
+  document.querySelectorAll('#card-grid .card').forEach(c => c.classList.remove('dragging'));
+  document.body.style.cursor = '';
+  document.removeEventListener('pointermove', onPointerMove);
+  document.removeEventListener('pointerup',   onPointerUp);
+  document.removeEventListener('pointercancel', onPointerCancel);
+  dragState = null;
+}
+
+function moveGhost(cx, cy) {
+  ghost.style.left = (cx - dragState.offsetX) + 'px';
+  ghost.style.top  = (cy - dragState.offsetY) + 'px';
+}
+
+/* ── Swap ────────────────────────────────────────────────────────── */
+function swap(fromPos, toPos) {
+  if (fromPos < 0 || fromPos === toPos) return;
+  const order = orders[currentCount];
+  [order[fromPos], order[toPos]] = [order[toPos], order[fromPos]];
+  render();
+  // Flash the two swapped cards
+  document.querySelectorAll('#card-grid .card').forEach(c => {
+    const pos = parseInt(c.dataset.position);
+    if (pos === fromPos || pos === toPos) {
+      c.classList.add('swapped');
+      c.addEventListener('animationend', () => c.classList.remove('swapped'), { once: true });
+    }
+  });
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────── */
+document.getElementById('tab-bar').addEventListener('click', e => {
+  const tab = e.target.closest('.tab');
+  if (!tab) return;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  currentCount = parseInt(tab.dataset.count);
+  render();
+});
+
+/* ── Init ────────────────────────────────────────────────────────── */
+render();
+</script>
+</body>
+</html>

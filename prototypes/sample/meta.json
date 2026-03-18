@@ -1,0 +1,15 @@
+{
+  "name": "Sample",
+  "description": "Example",
+  "createdBy": "ran",
+  "createdAt": "2026-03-18",
+  "importedFrom": "sample",
+  "variantNames": {
+    "drag-to-replace": "Drag to replace",
+    "exapnding-handles": "Exapnding handles"
+  },
+  "variantDescriptions": {
+    "drag-to-replace": "2, 4, and 8 cards with drag-to-swap \u2014 mouse and touch",
+    "exapnding-handles": "each card will have expanding handles when hovering it. When grabbing one of the handles and pulling, the card will expand or collapse in a pesponsive way and all the other cards will response as well according to how the pulled card is modified. the grid layout width should stay the same so the cards should response accordingly"
+  }
+}

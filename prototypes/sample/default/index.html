@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ride Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* Design tokens */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-tertiary: #e8e9eb;
+      --separator-secondary: #e8e9eb;
+      --label-primary: #222429;
+      --label-secondary: #4f545d;
+      --partner-brand1: #e1efff;
+      --partner-brand5: #0054b4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f6f7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    /* Card */
+    .card {
+      background: var(--bg-primary);
+      border: 1px solid var(--separator-secondary);
+      border-radius: 16px;
+      box-shadow: 0px 1px 0px 0px var(--separator-secondary);
+      padding: 16px 0;
+      width: 343px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    /* Upper row */
+    .upper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      height: 28px;
+    }
+
+    .rider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 24px;
+      height: 24px;
+      background: var(--partner-brand1);
+      border-radius: 31px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .avatar-initials {
+      font-size: 10px;
+      font-weight: 600;
+      line-height: 20px;
+      color: var(--partner-brand5);
+    }
+
+    .rider-name {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: var(--label-primary);
+      white-space: nowrap;
+    }
+
+    .view-link {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 20px;
+      color: var(--partner-brand5);
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    /* Separator */
+    .separator {
+      height: 1px;
+      background: var(--separator-secondary);
+      margin: 0 16px;
+    }
+
+    /* Middle — pickup */
+    .middle {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pickup-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+
+    .pickup-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pickup-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .pickup-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .pickup-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .pickup-title {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      color: var(--label-primary);
+      white-space: nowrap;
+    }
+
+    .pickup-address {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--label-secondary);
+      white-space: nowrap;
+    }
+
+    .eta {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .live-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .live-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .eta-time {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+      color: var(--label-primary);
+      white-space: nowrap;
+    }
+
+    /* Bottom — driver */
+    .bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+    }
+
+    .driver {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .driver-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 32px;
+      border: 1px solid var(--separator-secondary);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .driver-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 32px;
+      display: block;
+    }
+
+    .driver-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .driver-name {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--label-primary);
+      white-space: nowrap;
+    }
+
+    .driver-vehicle {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--label-secondary);
+      white-space: nowrap;
+    }
+
+    .plate {
+      background: var(--bg-tertiary);
+      border-radius: 29px;
+      padding: 6px 8px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .plate-text {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--label-primary);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="card">
+    <!-- Upper: rider info + view link -->
+    <div class="upper">
+      <div class="rider">
+        <div class="avatar">
+          <span class="avatar-initials">SP</span>
+        </div>
+        <span class="rider-name">Stacy M's ride</span>
+      </div>
+      <a class="view-link" href="#">View -&gt;</a>
+    </div>
+
+    <!-- Separator -->
+    <div class="separator"></div>
+
+    <!-- Middle: pickup info + ETA -->
+    <div class="middle">
+      <div class="pickup-row">
+        <div class="pickup-left">
+          <div class="pickup-icon">
+            <!-- Pickup icon (person + arrow up) -->
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="6" r="3" fill="#222429"/>
+              <path d="M6 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#222429" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M12 14v-4M10 12l2-2 2 2" stroke="#222429" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="pickup-details">
+            <span class="pickup-title">Pickup in 15 min</span>
+            <span class="pickup-address">From 1273 Eveningwood St.</span>
+          </div>
+        </div>
+        <div class="eta">
+          <div class="live-icon">
+            <!-- Live / signal icon -->
+            <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2.5 10.5a7.5 7.5 0 0 1 0-5" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M4.5 9a4.5 4.5 0 0 1 0-2" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+              <circle cx="8" cy="8" r="1.5" fill="#222429"/>
+              <path d="M11.5 9a4.5 4.5 0 0 0 0-2" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+              <path d="M13.5 10.5a7.5 7.5 0 0 0 0-5" stroke="#222429" stroke-width="1.3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="eta-time">12:40</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Separator -->
+    <div class="separator"></div>
+
+    <!-- Bottom: driver info + plate -->
+    <div class="bottom">
+      <div class="driver">
+        <div class="driver-avatar">
+          <img
+            src="http://localhost:3845/assets/658e59e420361481b604b68e111b1a0479bd5365.png"
+            alt="Martin B."
+            onerror="this.style.display='none'; this.parentElement.style.background='#d0d3d8';"
+          />
+        </div>
+        <div class="driver-details">
+          <span class="driver-name">Martin B.</span>
+          <span class="driver-vehicle">Mercedes Sprinter</span>
+        </div>
+      </div>
+      <div class="plate">
+        <span class="plate-text">#8JV1242</span>
+      </div>
+    </div>
+  </button>
+
+</body>
+</html>

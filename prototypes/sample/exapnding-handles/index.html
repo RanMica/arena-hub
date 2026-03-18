@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ride Cards — Expanding Handles</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ──────────────────────────────────────────────── */
+    :root {
+      --bg-page:   #f5f6f7;
+      --bg-card:   #ffffff;
+      --sep:       #e8e9eb;
+      --bg-chip:   #e8e9eb;
+      --txt-1:     #222429;
+      --txt-2:     #4f545d;
+      --brand:     #0054b4;
+      --brand-lt:  #eff6ff;
+      --gap:       14px;
+      --card-h:    88px;
+      --min-w:     152px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-page);
+      min-height: 100vh;
+      padding: 36px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    /* ── Page header ─────────────────────────────────────────── */
+    .page-header { text-align: center; display: flex; flex-direction: column; gap: 4px; }
+    .page-title  { font-size: 22px; font-weight: 700; color: var(--txt-1); letter-spacing: -.3px; }
+    .page-hint   { font-size: 13px; color: var(--txt-2); font-weight: 500; }
+
+    /* ── Grid (flex-wrap, fixed max-width) ───────────────────── */
+    #card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--gap);
+      width: 100%;
+      max-width: 1160px;
+      align-items: flex-start;
+    }
+
+    /* ── Card shell ──────────────────────────────────────────── */
+    .card {
+      height: var(--card-h);
+      flex-shrink: 0;
+      flex-grow: 0;
+      position: relative;
+      overflow: visible;       /* handle lives outside */
+      border-radius: 14px;
+      transition: box-shadow .18s;
+    }
+
+    /* inner clips content to rounded rect */
+    .card-body {
+      height: 100%;
+      width: 100%;
+      background: var(--bg-card);
+      border: 1.5px solid var(--sep);
+      border-radius: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+      transition: border-color .15s, box-shadow .15s;
+      container-type: inline-size;   /* enables @container on children */
+    }
+
+    .card.is-resizing .card-body {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 3px rgba(0,84,180,.14), 0 4px 16px rgba(0,0,0,.1);
+    }
+
+    /* ── Sections inside the card body ──────────────────────── */
+    /*  All sections are flex-row, vertically centred.
+        Optional sections start hidden; container queries reveal them. */
+
+    .s {
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      flex-shrink: 0;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .s-rider  { flex: 0 0 auto; min-width: 0; }
+    .s-pickup { display: none; flex-direction: column; gap: 2px; padding: 0 14px; justify-content: center; }
+    .s-eta    { display: none; flex-shrink: 0; padding: 0 12px; }
+    .s-driver { display: none; flex-direction: column; gap: 1px; padding: 0 14px; justify-content: center; }
+    .s-plate  { display: none; padding: 0 12px; }
+    .s-view   { margin-left: auto; padding: 0 16px; flex-shrink: 0; }
+
+    /* vertical separators between sections */
+    .vsep {
+      width: 1px;
+      height: 44px;
+      background: var(--sep);
+      flex-shrink: 0;
+      align-self: center;
+      display: none;
+    }
+    .vsep.v1, .vsep.v2, .vsep.v3, .vsep.v4 { display: none; }
+
+    /* ── Container queries — progressive reveal ──────────────── */
+    @container (min-width: 250px) {
+      .s-pickup { display: flex; }
+      .vsep.v1  { display: block; }
+    }
+    @container (min-width: 370px) {
+      .s-eta   { display: flex; }
+      .vsep.v2 { display: block; }
+    }
+    @container (min-width: 520px) {
+      .s-driver { display: flex; }
+      .vsep.v3  { display: block; }
+    }
+    @container (min-width: 680px) {
+      .s-plate { display: flex; }
+      .vsep.v4 { display: block; }
+    }
+
+    /* ── Rider section ───────────────────────────────────────── */
+    .avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .rider-info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .rider-name {
+      font-size: 13px; font-weight: 600; color: var(--txt-1);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 110px;
+    }
+    .rider-label { font-size: 11px; color: var(--txt-2); font-weight: 500; white-space: nowrap; }
+
+    /* ── Pickup section ──────────────────────────────────────── */
+    .pickup-time  { font-size: 14px; font-weight: 700; color: var(--txt-1); white-space: nowrap; }
+    .pickup-addr  { font-size: 12px; font-weight: 500; color: var(--txt-2); white-space: nowrap; }
+
+    /* ── ETA section ─────────────────────────────────────────── */
+    .eta-inner { display: flex; align-items: center; gap: 3px; }
+    .live-dot  { width: 7px; height: 7px; border-radius: 50%; background: #16a34a; flex-shrink: 0; }
+    .eta-time  { font-size: 14px; font-weight: 700; color: var(--txt-1); white-space: nowrap; }
+
+    /* ── Driver section ──────────────────────────────────────── */
+    .driver-avatar {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1px solid var(--sep); background: var(--bg-chip);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; color: var(--txt-2); flex-shrink: 0;
+    }
+    .driver-name    { font-size: 13px; font-weight: 600; color: var(--txt-1); white-space: nowrap; }
+    .driver-vehicle { font-size: 12px; font-weight: 500; color: var(--txt-2); white-space: nowrap; }
+
+    /* ── Plate section ───────────────────────────────────────── */
+    .plate-chip {
+      background: var(--bg-chip); border-radius: 20px;
+      padding: 4px 10px;
+      font-size: 12px; font-weight: 600; color: var(--txt-1); white-space: nowrap;
+    }
+
+    /* ── View link ───────────────────────────────────────────── */
+    .view-link {
+      font-size: 13px; font-weight: 600; color: var(--brand);
+      text-decoration: none; white-space: nowrap;
+    }
+
+    /* ── Resize handle ───────────────────────────────────────── */
+    .resize-handle {
+      position: absolute;
+      top: 50%;
+      right: -13px;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 44px;
+      background: var(--brand-lt);
+      border: 1.5px solid var(--brand);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: col-resize;
+      opacity: 0;
+      transition: opacity .15s, transform .12s;
+      z-index: 20;
+      touch-action: none;
+    }
+
+    .card:hover .resize-handle,
+    .card.is-resizing .resize-handle {
+      opacity: 1;
+    }
+
+    .card.is-resizing .resize-handle {
+      transform: translateY(-50%) scaleX(1.2);
+      background: var(--brand);
+    }
+
+    /* grip dots */
+    .grip {
+      display: flex; flex-direction: column; gap: 3.5px;
+      align-items: center;
+    }
+    .grip span {
+      width: 3px; height: 3px; border-radius: 50%;
+      background: var(--brand);
+      display: block;
+      transition: background .12s;
+    }
+    .card.is-resizing .grip span { background: #fff; }
+
+    /* ── Width badge (shown while resizing) ──────────────────── */
+    .width-badge {
+      position: absolute;
+      top: -26px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--txt-1);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .1s;
+    }
+    .width-badge::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 4px solid transparent;
+      border-top-color: var(--txt-1);
+    }
+    .card.is-resizing .width-badge { opacity: 1; }
+
+    /* ── Resize flash ────────────────────────────────────────── */
+    @keyframes resizeFlash {
+      0%   { box-shadow: 0 0 0 0   rgba(0,84,180,.5); }
+      100% { box-shadow: 0 0 0 12px rgba(0,84,180,0); }
+    }
+    .card.flash .card-body { animation: resizeFlash .3s ease-out; }
+
+    /* ── Column guide (while dragging) ──────────────────────── */
+    #col-guide {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      display: none;
+    }
+    #col-guide-inner {
+      position: absolute;
+      display: flex;
+      gap: var(--gap);
+    }
+    .cg-col {
+      background: rgba(0,84,180,.04);
+      border: 1px dashed rgba(0,84,180,.18);
+      border-radius: 10px;
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-header">
+    <span class="page-title">Ride Cards</span>
+    <span class="page-hint">Hover a card · drag the right handle to resize · other cards respond</span>
+  </div>
+
+  <div id="card-grid"></div>
+
+  <div id="col-guide"><div id="col-guide-inner"></div></div>
+
+<script>
+/* ── Card data (12 cards → 3 rows of 4) ──────────────────────── */
+const CARDS = [
+  { initials:'SM', ab:'#e1efff', ac:'#0054b4', name:"Stacy M's ride",  label:'Shared ride',
+    ptime:'Pickup in 15 min', addr:'1273 Eveningwood St.', eta:'12:40',
+    di:'MB', dn:'Martin B.', dv:'Mercedes Sprinter', plate:'#8JV1242' },
+  { initials:'JK', ab:'#fef3c7', ac:'#d97706', name:"James K's ride",  label:'Private ride',
+    ptime:'Pickup in 8 min',  addr:'450 River Valley Dr.', eta:'12:33',
+    di:'ST', dn:'Sarah T.',   dv:'Toyota Sienna',    plate:'#4RK9870' },
+  { initials:'AL', ab:'#f0fdf4', ac:'#16a34a', name:"Amy L's ride",    label:'Shared ride',
+    ptime:'Pickup in 22 min', addr:'88 Harbor Blvd.',     eta:'12:55',
+    di:'MD', dn:'Mike D.',    dv:'Ford Transit',     plate:'#2MX5548' },
+  { initials:'RP', ab:'#fdf2f8', ac:'#9333ea', name:"Robert P's ride", label:'Private ride',
+    ptime:'Pickup in 5 min',  addr:'201 Oak Street',      eta:'12:30',
+    di:'LC', dn:'Lisa C.',    dv:'VW Crafter',       plate:'#7PQ3316' },
+  { initials:'EW', ab:'#fff7ed', ac:'#ea580c', name:"Elena W's ride",  label:'Shared ride',
+    ptime:'Pickup in 31 min', addr:'675 Maple Ave.',      eta:'13:08',
+    di:'JR', dn:'John R.',    dv:'Mercedes Sprinter', plate:'#9YT6621' },
+  { initials:'DF', ab:'#f0f9ff', ac:'#0284c7', name:"David F's ride",  label:'Private ride',
+    ptime:'Pickup in 12 min', addr:'340 Pine Circle',     eta:'12:47',
+    di:'NK', dn:'Nina K.',    dv:'Toyota Sienna',    plate:'#3SD4490' },
+  { initials:'MH', ab:'#fef9c3', ac:'#ca8a04', name:"Maria H's ride",  label:'Shared ride',
+    ptime:'Pickup in 18 min', addr:'512 Cedar Lane',      eta:'12:53',
+    di:'AB', dn:'Alex B.',    dv:'Ford Transit',     plate:'#6WE1183' },
+  { initials:'TN', ab:'#fdf2f8', ac:'#db2777', name:"Thomas N's ride", label:'Private ride',
+    ptime:'Pickup in 25 min', addr:'789 Birch Road',      eta:'13:02',
+    di:'ZM', dn:'Zoe M.',     dv:'VW Crafter',       plate:'#1JF8855' },
+  { initials:'CP', ab:'#f0fdf4', ac:'#0d9488', name:"Clara P's ride",  label:'Shared ride',
+    ptime:'Pickup in 10 min', addr:'56 Lakeview Dr.',     eta:'12:35',
+    di:'BW', dn:'Ben W.',     dv:'Mercedes Sprinter', plate:'#5KT7731' },
+  { initials:'OB', ab:'#fef3c7', ac:'#b45309', name:"Oscar B's ride",  label:'Private ride',
+    ptime:'Pickup in 20 min', addr:'332 Elm Boulevard',   eta:'12:58',
+    di:'HR', dn:'Helen R.',   dv:'Toyota Sienna',    plate:'#2LP4498' },
+  { initials:'FS', ab:'#fdf2f8', ac:'#7c3aed', name:"Fiona S's ride",  label:'Shared ride',
+    ptime:'Pickup in 7 min',  addr:'11 Orchard Close',   eta:'12:32',
+    di:'TK', dn:'Tom K.',     dv:'Ford Transit',     plate:'#8GX9023' },
+  { initials:'DM', ab:'#f0f9ff', ac:'#0369a1', name:"Dan M's ride",    label:'Private ride',
+    ptime:'Pickup in 28 min', addr:'900 Waterfront Rd.',  eta:'13:05',
+    di:'YL', dn:'Yuki L.',    dv:'VW Crafter',       plate:'#3NQ6617' },
+];
+
+const pickupSvg = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+  <circle cx="12" cy="6" r="3" fill="#222429"/>
+  <path d="M6 20c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="#222429" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M12 14v-4M10 12l2-2 2 2" stroke="#222429" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+/* ── State ───────────────────────────────────────────────────── */
+const GAP    = 14;
+const MIN_W  = 152;
+const MAX_COL = 4;           // reference columns to set initial widths
+
+let cardWidths = [];         // pixel width for each card
+let containerW = 0;
+
+/* ── Init widths ─────────────────────────────────────────────── */
+function initWidths() {
+  containerW = document.getElementById('card-grid').offsetWidth;
+  const col  = (containerW - GAP * (MAX_COL - 1)) / MAX_COL;
+  cardWidths  = CARDS.map(() => col);
+}
+
+/* ── Render ──────────────────────────────────────────────────── */
+function buildCard(i) {
+  const c = CARDS[i];
+  return `
+  <div class="card" id="card-${i}" data-idx="${i}" style="width:${cardWidths[i]}px">
+    <span class="width-badge" id="badge-${i}"></span>
+    <div class="card-body">
+
+      <!-- Rider (always) -->
+      <div class="s s-rider">
+        <div class="avatar" style="background:${c.ab}">
+          <span style="color:${c.ac}">${c.initials}</span>
+        </div>
+        <div class="rider-info">
+          <span class="rider-name">${c.name}</span>
+          <span class="rider-label">${c.label}</span>
+        </div>
+      </div>
+
+      <div class="vsep v1"></div>
+
+      <!-- Pickup (≥250px) -->
+      <div class="s-pickup">
+        <span class="pickup-time">${c.ptime}</span>
+        <span class="pickup-addr">From ${c.addr}</span>
+      </div>
+
+      <div class="vsep v2"></div>
+
+      <!-- ETA (≥370px) -->
+      <div class="s s-eta">
+        <div class="eta-inner">
+          <div class="live-dot"></div>
+          <span class="eta-time">${c.eta}</span>
+        </div>
+      </div>
+
+      <div class="vsep v3"></div>
+
+      <!-- Driver (≥520px) -->
+      <div class="s-driver">
+        <div class="driver-avatar">${c.di}</div>
+        <div>
+          <div class="driver-name">${c.dn}</div>
+          <div class="driver-vehicle">${c.dv}</div>
+        </div>
+      </div>
+
+      <div class="vsep v4"></div>
+
+      <!-- Plate (≥680px) -->
+      <div class="s s-plate">
+        <div class="plate-chip">${c.plate}</div>
+      </div>
+
+      <!-- View link (always, pinned right) -->
+      <div class="s s-view">
+        <a class="view-link" href="#" onclick="return false">View →</a>
+      </div>
+
+    </div><!-- /.card-body -->
+
+    <div class="resize-handle" data-idx="${i}">
+      <div class="grip"><span></span><span></span><span></span><span></span></div>
+    </div>
+  </div>`;
+}
+
+function render() {
+  const grid = document.getElementById('card-grid');
+  grid.innerHTML = CARDS.map((_, i) => buildCard(i)).join('');
+  attachHandles();
+}
+
+/* ── Resize ──────────────────────────────────────────────────── */
+let rs = null;
+// rs = { idx, startX, startWidth, nextIdx, nextStartWidth }
+
+function getRowNeighbour(myIdx) {
+  // Find the card immediately to the right in the same flex row
+  const cards  = [...document.querySelectorAll('#card-grid .card')];
+  const myEl   = document.getElementById('card-' + myIdx);
+  const myTop  = myEl.getBoundingClientRect().top;
+
+  for (let i = myIdx + 1; i < cards.length; i++) {
+    const r = cards[i].getBoundingClientRect();
+    if (Math.abs(r.top - myTop) < 4) return i;   // same row
+    if (r.top > myTop + 4) break;                  // next row
+  }
+  return null;
+}
+
+function attachHandles() {
+  document.querySelectorAll('.resize-handle').forEach(h => {
+    h.addEventListener('pointerdown', onDown);
+  });
+}
+
+function onDown(e) {
+  e.preventDefault();
+  const idx      = parseInt(e.currentTarget.dataset.idx);
+  const nextIdx  = getRowNeighbour(idx);
+
+  rs = {
+    idx,
+    startX:          e.clientX,
+    startWidth:      cardWidths[idx],
+    nextIdx,
+    nextStartWidth:  nextIdx !== null ? cardWidths[nextIdx] : null,
+  };
+
+  document.getElementById('card-' + idx).classList.add('is-resizing');
+  document.body.style.cursor = 'col-resize';
+
+  showGuide();
+  e.currentTarget.setPointerCapture(e.pointerId);
+  document.addEventListener('pointermove', onMove);
+  document.addEventListener('pointerup',   onUp);
+}
+
+function onMove(e) {
+  if (!rs) return;
+  const dx      = e.clientX - rs.startX;
+  const rawNew  = rs.startWidth + dx;
+
+  // Clamp: can't go below MIN_W; can't steal more than neighbour has
+  const maxExpand = rs.nextIdx !== null
+    ? rs.nextStartWidth - MIN_W    // neighbour's shrink budget
+    : containerW - rs.startWidth; // free space (last card in row)
+
+  const newW  = Math.max(MIN_W, Math.min(rs.startWidth + maxExpand, rawNew));
+  const delta = newW - rs.startWidth;
+
+  // Apply to dragged card
+  cardWidths[rs.idx] = newW;
+  const myEl = document.getElementById('card-' + rs.idx);
+  myEl.style.width = newW + 'px';
+
+  // Update badge
+  const badge = document.getElementById('badge-' + rs.idx);
+  if (badge) badge.textContent = Math.round(newW) + 'px';
+
+  // Apply inverse delta to neighbour
+  if (rs.nextIdx !== null) {
+    const neighbourW = Math.max(MIN_W, rs.nextStartWidth - delta);
+    cardWidths[rs.nextIdx] = neighbourW;
+    const nEl = document.getElementById('card-' + rs.nextIdx);
+    if (nEl) nEl.style.width = neighbourW + 'px';
+  }
+}
+
+function onUp() {
+  if (!rs) return;
+  const idx = rs.idx;
+  rs = null;
+
+  const myEl = document.getElementById('card-' + idx);
+  if (myEl) {
+    myEl.classList.remove('is-resizing');
+    myEl.classList.add('flash');
+    myEl.addEventListener('animationend', () => myEl.classList.remove('flash'), { once: true });
+  }
+
+  document.body.style.cursor = '';
+  hideGuide();
+  document.removeEventListener('pointermove', onMove);
+  document.removeEventListener('pointerup',   onUp);
+}
+
+/* ── Column guide ────────────────────────────────────────────── */
+function showGuide() {
+  const guide = document.getElementById('col-guide');
+  const inner = document.getElementById('col-guide-inner');
+  const grid  = document.getElementById('card-grid');
+  const rect  = grid.getBoundingClientRect();
+  const scrollY = window.scrollY;
+
+  guide.style.display = 'block';
+  inner.style.left    = rect.left + 'px';
+  inner.style.top     = (rect.top + scrollY) + 'px';
+  inner.style.width   = rect.width + 'px';
+  inner.style.height  = rect.height + 'px';
+
+  inner.innerHTML = Array(MAX_COL).fill('<div class="cg-col"></div>').join('');
+}
+
+function hideGuide() {
+  document.getElementById('col-guide').style.display = 'none';
+}
+
+/* ── Resize observer — recalc on window resize ───────────────── */
+const ro = new ResizeObserver(() => {
+  const newW = document.getElementById('card-grid').offsetWidth;
+  if (Math.abs(newW - containerW) < 2) return;
+  const ratio = newW / containerW;
+  containerW  = newW;
+  cardWidths  = cardWidths.map(w => Math.max(MIN_W, w * ratio));
+  document.querySelectorAll('#card-grid .card').forEach((el, i) => {
+    el.style.width = cardWidths[i] + 'px';
+  });
+});
+
+/* ── Boot ────────────────────────────────────────────────────── */
+initWidths();
+render();
+ro.observe(document.getElementById('card-grid'));
+</script>
+</body>
+</html>
