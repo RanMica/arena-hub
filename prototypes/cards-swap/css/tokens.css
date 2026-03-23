@@ -1,0 +1,140 @@
+/**
+ * Via Design System — CSS Tokens
+ * Maps the full Via DS token set to CSS custom properties.
+ * All prototype styles should reference these --via-* variables exclusively.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
+
+:root {
+    /* ── Brand ── */
+    --via-brand-primary: #0069e2;
+    --via-brand-primary-hover: #0054b4;
+    --via-brand-primary-light: #e1efff;
+    --via-brand-secondary: #7c3aed;
+
+    /* ── Text ── */
+    --via-text-primary: #222429;
+    --via-text-secondary: #4f545d;
+    --via-text-tertiary: #6c7380;
+    --via-text-disabled: #8f949e;
+    --via-text-on-brand: #fafbfc;
+    --via-text-on-dark: #f0f1f3;
+    --via-text-inverse: #ffffff;
+
+    /* ── Background / Surface ── */
+    --via-bg-default: #ffffff;
+    --via-bg-subtle: #f7f8fa;
+    --via-bg-muted: #e8e9eb;
+    --via-bg-emphasis: #d5d7db;
+    --via-bg-overlay: rgba(0, 0, 0, 0.4);
+
+    /* ── Border ── */
+    --via-border-default: #d5d7db;
+    --via-border-strong: #8f949e;
+    --via-border-subtle: #e8e9eb;
+    --via-border-focus: #0069e2;
+
+    /* ── Status ── */
+    --via-status-info: #0069e2;
+    --via-status-info-light: #e1efff;
+    --via-status-success: #0e734f;
+    --via-status-success-light: #d1fae5;
+    --via-status-warning: #b45309;
+    --via-status-warning-light: #fef3c7;
+    --via-status-error: #da2c2c;
+    --via-status-error-light: #fee2e2;
+
+    /* ── Typography ── */
+    --via-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --via-font-mono: 'Roboto Mono', ui-monospace, 'SF Mono', monospace;
+
+    --via-font-xs: 10px;
+    --via-font-sm: 12px;
+    --via-font-md: 14px;
+    --via-font-lg: 16px;
+    --via-font-xl: 18px;
+    --via-font-xxl: 20px;
+    --via-font-xxxl: 24px;
+
+    --via-weight-regular: 400;
+    --via-weight-medium: 500;
+    --via-weight-semibold: 600;
+    --via-weight-bold: 700;
+
+    --via-leading-tight: 1.2;
+    --via-leading-normal: 1.5;
+    --via-leading-relaxed: 1.75;
+
+    /* ── Spacing (8px base) ── */
+    --via-space-0: 0px;
+    --via-space-1: 4px;
+    --via-space-2: 8px;
+    --via-space-3: 12px;
+    --via-space-4: 16px;
+    --via-space-5: 20px;
+    --via-space-6: 24px;
+    --via-space-8: 32px;
+    --via-space-10: 40px;
+    --via-space-12: 48px;
+    --via-space-16: 64px;
+
+    /* ── Corner Radius ── */
+    --via-radius-minimal: 4px;
+    --via-radius-minimal-rounded: 6px;
+    --via-radius-semi-rounded: 8px;
+    --via-radius-rounded: 12px;
+    --via-radius-full: 360px;
+
+    /* ── Shadows / Elevation ── */
+    --via-shadow-sm: 0 1px 2px rgba(21, 22, 26, 0.08);
+    --via-shadow-md: 0 4px 12px rgba(21, 22, 26, 0.1);
+    --via-shadow-lg: 0 8px 24px rgba(21, 22, 26, 0.12);
+    --via-shadow-xl: 0 20px 40px rgba(21, 22, 26, 0.14);
+
+    /* ── Transitions ── */
+    --via-ease-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --via-ease-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --via-ease-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Dark Theme ── */
+[data-theme="dark"] {
+    --via-brand-primary: #4a9eff;
+    --via-brand-primary-hover: #6bb3ff;
+    --via-brand-primary-light: #1a3a5c;
+    --via-brand-secondary: #a78bfa;
+
+    --via-text-primary: #f0f1f3;
+    --via-text-secondary: #a8adb5;
+    --via-text-tertiary: #7d828a;
+    --via-text-disabled: #5c6168;
+    --via-text-on-brand: #1c1d20;
+    --via-text-on-dark: #f0f1f3;
+    --via-text-inverse: #222429;
+
+    --via-bg-default: #1a1b20;
+    --via-bg-subtle: #141518;
+    --via-bg-muted: #2a2b31;
+    --via-bg-emphasis: #3a3b42;
+    --via-bg-overlay: rgba(0, 0, 0, 0.6);
+
+    --via-border-default: #3a3b42;
+    --via-border-strong: #5c6168;
+    --via-border-subtle: #2a2b31;
+    --via-border-focus: #4a9eff;
+
+    --via-status-info: #4a9eff;
+    --via-status-info-light: #1a3a5c;
+    --via-status-success: #2dd4a0;
+    --via-status-success-light: #0a3d2e;
+    --via-status-warning: #fbbf24;
+    --via-status-warning-light: #3d2e0a;
+    --via-status-error: #ff6b6b;
+    --via-status-error-light: #3d0a0a;
+
+    --via-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --via-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --via-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --via-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.6);
+}

@@ -1,0 +1,137 @@
+/**
+ * Via Design System — Base Styles
+ * Reset, app shell layout, and responsive utilities.
+ */
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+    font-family: var(--via-font-family);
+    font-size: var(--via-font-md);
+    line-height: var(--via-leading-normal);
+    color: var(--via-text-primary);
+    background: var(--via-bg-subtle);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;
+}
+
+/* ── App Shell (mobile prototype frame) ── */
+.app-shell {
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--via-bg-default);
+    position: relative;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 431px) {
+    body {
+        display: flex;
+        justify-content: center;
+        background: var(--via-bg-muted);
+    }
+    .app-shell {
+        margin-top: var(--via-space-6);
+        border-radius: var(--via-radius-rounded);
+        box-shadow: var(--via-shadow-xl);
+        min-height: calc(100vh - var(--via-space-12));
+    }
+}
+
+/* ── Full-width Shell (desktop prototype) ── */
+.app-shell-full {
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: var(--via-bg-default);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ── Status Bar (mobile sim) ── */
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--via-space-3) var(--via-space-4) var(--via-space-2);
+    font-size: var(--via-font-sm);
+    font-weight: var(--via-weight-semibold);
+}
+
+/* ── Screen Header ── */
+.screen-header {
+    padding: var(--via-space-2) var(--via-space-4) var(--via-space-4);
+}
+
+.screen-header h1 {
+    font-size: var(--via-font-xxl);
+    font-weight: var(--via-weight-bold);
+    letter-spacing: -0.3px;
+    line-height: var(--via-leading-tight);
+}
+
+.screen-header p {
+    font-size: var(--via-font-md);
+    color: var(--via-text-tertiary);
+    margin-top: var(--via-space-1);
+}
+
+/* ── Home Indicator (mobile sim) ── */
+.home-indicator {
+    width: 134px;
+    height: 5px;
+    background: var(--via-text-primary);
+    border-radius: 3px;
+    margin: var(--via-space-2) auto;
+    opacity: 0.2;
+}
+
+/* ── Theme Toggle ── */
+.theme-toggle {
+    position: fixed;
+    bottom: var(--via-space-4);
+    right: var(--via-space-4);
+    width: 40px;
+    height: 40px;
+    border-radius: var(--via-radius-full);
+    border: 1px solid var(--via-border-default);
+    background: var(--via-bg-default);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: var(--via-shadow-md);
+    z-index: 999;
+    transition: all var(--via-ease-fast);
+}
+
+.theme-toggle:hover {
+    background: var(--via-bg-subtle);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--via-border-default); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--via-border-strong); }
+
+/* ── Selection ── */
+::selection {
+    background: var(--via-brand-primary-light);
+    color: var(--via-text-primary);
+}
+
+/* ── Focus Visible ── */
+:focus-visible {
+    outline: 2px solid var(--via-border-focus);
+    outline-offset: 2px;
+}

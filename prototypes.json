@@ -96,6 +96,20 @@
         }
       ],
       "createdAt": "2026-03-18"
+    },
+    {
+      "id": "cards-swap",
+      "name": "Cards swap",
+      "description": "Example",
+      "createdBy": "ran",
+      "variants": [
+        {
+          "id": "default",
+          "name": "Default",
+          "path": "prototypes/cards-swap/"
+        }
+      ],
+      "createdAt": "2026-03-23"
     }
   ]
 }

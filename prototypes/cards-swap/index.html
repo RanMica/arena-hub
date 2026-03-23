@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cards Swap — Ride Plan</title>
+    <link rel="stylesheet" href="css/tokens.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+    <div class="app-shell-full">
+        <!-- Header -->
+        <header class="rp-header">
+            <div class="rp-header-left">
+                <h1 class="via-heading-sm">Ride Plan</h1>
+            </div>
+            <div class="rp-header-center">
+                <div class="rp-search">
+                    <svg class="rp-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <span>VOC Search</span>
+                </div>
+            </div>
+            <div class="rp-header-right">
+                <span class="via-body-sm" style="color:var(--via-text-tertiary)">7:37 AM</span>
+            </div>
+        </header>
+
+        <!-- Subheader -->
+        <div class="rp-subheader">
+            <div class="rp-subheader-left">
+                <button class="via-icon-button via-icon-button--sm" aria-label="Previous day">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <span class="via-body-md" style="font-weight:var(--via-weight-medium)">Today</span>
+                <button class="via-icon-button via-icon-button--sm" aria-label="Next day">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+                <div class="via-textfield" style="margin-left:var(--via-space-3);flex-direction:row;align-items:center;gap:var(--via-space-2)">
+                    <input class="via-textfield__input" type="text" placeholder="Search" style="width:160px;padding:var(--via-space-1) var(--via-space-3);font-size:var(--via-font-sm)">
+                </div>
+            </div>
+            <div class="rp-subheader-right">
+                <div class="rp-otp">
+                    <span class="via-body-sm" style="font-weight:var(--via-weight-medium);color:var(--via-text-secondary)">OTP</span>
+                    <div class="rp-otp-bar">
+                        <div class="rp-otp-fill" style="width:85%"></div>
+                        <div class="rp-otp-warn" style="width:8%"></div>
+                        <div class="rp-otp-danger" style="width:7%"></div>
+                    </div>
+                    <span class="via-body-sm" style="font-weight:var(--via-weight-semibold)">94%</span>
+                </div>
+                <div class="rp-stat rp-stat--groups">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    Groups
+                </div>
+                <div class="rp-stat">
+                    <span class="via-badge via-badge--pill via-badge--warning">3</span>
+                    Overflow
+                </div>
+                <div class="rp-stat">
+                    <span class="via-badge via-badge--pill via-badge--error">23</span>
+                    Unassigned
+                </div>
+            </div>
+        </div>
+
+        <!-- Control bar -->
+        <div class="rp-controls">
+            <div class="rp-controls-left">
+                <button class="via-chip via-chip--selected">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    Tags
+                </button>
+                <button class="via-chip">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Pickup / Dropoff location
+                </button>
+                <button class="via-chip via-chip--dashed">+ Add filter</button>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="rp-main">
+            <div class="rp-main-scroll">
+                <!-- Sticky column header row -->
+                <div class="rp-grid-header">
+                    <div class="rp-driver-panel-header">
+                        <span class="via-body-md" style="font-weight:var(--via-weight-semibold)">Drivers (9)</span>
+                    </div>
+                    <div class="rp-time-axis" id="time-axis"></div>
+                </div>
+                <!-- Driver rows -->
+                <div class="rp-grid-body" id="grid-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Group Side Panel -->
+    <div class="rp-panel-overlay" id="panel-overlay"></div>
+    <div class="rp-panel" id="group-panel">
+        <div class="rp-panel-header">
+            <button class="via-icon-button via-icon-button--sm" aria-label="Edit">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="via-icon-button via-icon-button--sm" aria-label="More options">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+            </button>
+            <button class="via-icon-button via-icon-button--sm" id="panel-close" aria-label="Close">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+        <div class="rp-panel-title-row">
+            <div class="rp-panel-title-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="rp-panel-title" id="panel-group-name"></div>
+        </div>
+        <div class="rp-panel-banner">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Rides may be assigned to multiple shifts
+            <span class="rp-panel-banner-link">View rides for this group</span>
+        </div>
+        <div class="rp-panel-body" id="panel-body"></div>
+    </div>
+
+    <button class="theme-toggle" onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? '' : 'dark'">🌓</button>
+
+    <script>
+    (() => {
+        const drivers = [
+            { id: 'd1', name: 'Ethan Blackwood', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd2', name: 'Olivia Rhodes', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd3', name: 'Seraphina Montgomery', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd4', name: 'Nathaniel Everett Caldwell', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd5', name: 'Harrison Alexander Fitzgerald', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd6', name: 'Tariq Jamal Al-Sayed', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd7', name: 'Yuki Haruka Nakamura', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd8', name: 'Chinwe Nneka Okafor', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+            { id: 'd9', name: 'Gustavo Kuhlman', vehicle: 'GH-575-SR', fleet: 'Alpha Taxis', plate: '78 POI 305-71' },
+        ];
+
+        const rideColors = ['green', 'orange', 'coral', 'blue', 'teal'];
+
+        const rideNames = [
+            'Guy Hawkins', 'Lauren Darian', 'Latoya Kautzer', 'Sam Lee', 'Brooke Anderson',
+            'Bernice Hahn', 'Jennifer Atkins', 'Willis Bradtke', 'Jeffery Bernier',
+            'Nicole', 'Dean Gordon', 'Kevin B.', 'William Jackson', 'Herman Bloc',
+            'James Levi', 'Hannah Kov.', 'Sam Gr.', 'Caroline Grant', 'Iris Champlin',
+            'Zoe Geier', 'Jenny Wi.', 'Antonia Hart.', 'Ethan Ramirez', 'Jacob Jones',
+            'Domingo', 'Don Borton', 'Cora Spencer', 'Pearl Kovacek',
+            'Gloria Sanchez', 'Julia Helle', 'Harrold Gibson', 'Leticia Greenholt', 'Ben Smith',
+            'Tamara Wilkinson', 'Lawrence Dawn', 'Kirsten Loam', 'Crystal Bos.',
+            'Thelma Woods', 'Johnie Ames', 'Gerardo Lang', 'Patsy Buckridge',
+            'Mary Johnson', 'Kay Reynolds', 'Jonathon Kunde'
+        ];
+
+        const addresses = [
+            '27 Dewey St, Port Jefferson', '342 Dejah Summit', '740 5th St',
+            '31133 Anderson Green', 'Shelbyville Hospital', '43249 Schneider Plaza',
+            '1052 Swankville', '940 Main', '75 Enterprise', '977 Runolfsson Manors Street, South',
+            '11005 Vince Island', 'Oakwood Lake', '266 Salle Frieda',
+            '941 Mary Haven Street, West', '7887 Genesis Lane, Westview',
+            '982 Central Mall', '38 Jefferson Lake',
+            '598 Brayan Inlet', '37 Goldner Terrace', '7468 Melba Fields', '467 Leo Ave'
+        ];
+
+        const groupNames = [
+            'Shelbyville daycare Monday',
+            'Alemán daycare center',
+            'Springfield School AM',
+            'Riverside Senior Center',
+            'Oak Park Community',
+        ];
+
+        const groupPickups = [
+            'Shelbyville Hospital',
+            'Alemán daycare center',
+            'Springfield Elementary',
+            'Riverside Plaza',
+            'Oak Park Station',
+        ];
+
+        function makeGroupRiders(count) {
+            const riders = [];
+            const used = new Set();
+            for (let i = 0; i < count; i++) {
+                let name;
+                do { name = rideNames[Math.floor(Math.random() * rideNames.length)]; } while (used.has(name));
+                used.add(name);
+                const addr = addresses[Math.floor(Math.random() * addresses.length)];
+                const hasWheelchair = Math.random() < 0.4;
+                const hasTransfer = Math.random() < 0.3;
+                riders.push({ name, address: addr, wheelchair: hasWheelchair, transfer: hasTransfer });
+            }
+            return riders;
+        }
+
+        const groups = groupNames.map((name, i) => ({
+            id: `g${i}`,
+            name,
+            pickup: groupPickups[i],
+            riderCount: 4 + Math.floor(Math.random() * 6),
+            arriveBy: `${9 + Math.floor(Math.random() * 3)}:${['00','15','30','45'][Math.floor(Math.random()*4)]}`,
+            riders: null,
+        }));
+        groups.forEach(g => { g.riders = makeGroupRiders(g.riderCount); });
+
+        function randomRides(count) {
+            const rides = [];
+            const startHour = 6;
+            for (let i = 0; i < count; i++) {
+                const hour = startHour + Math.floor(Math.random() * 7);
+                const min = Math.floor(Math.random() * 4) * 15;
+                const durMins = 30 + Math.floor(Math.random() * 70);
+                const color = rideColors[Math.floor(Math.random() * rideColors.length)];
+                const name = rideNames[Math.floor(Math.random() * rideNames.length)];
+                const addr = addresses[Math.floor(Math.random() * addresses.length)];
+                rides.push({
+                    id: `r${Math.random().toString(36).slice(2, 8)}`,
+                    type: 'ride',
+                    name,
+                    address: addr,
+                    startHour: hour,
+                    startMin: min,
+                    duration: durMins,
+                    color,
+                });
+            }
+            return rides;
+        }
+
+        function randomGroup(startHour) {
+            const g = groups[Math.floor(Math.random() * groups.length)];
+            const min = Math.floor(Math.random() * 4) * 15;
+            return {
+                id: `rg${Math.random().toString(36).slice(2, 8)}`,
+                type: 'group',
+                groupId: g.id,
+                name: g.name,
+                pickup: g.pickup,
+                riderCount: g.riderCount,
+                startHour,
+                startMin: min,
+                duration: 60 + Math.floor(Math.random() * 40),
+            };
+        }
+
+        let driverRides = {};
+        drivers.forEach((d, idx) => {
+            const rides = randomRides(3 + Math.floor(Math.random() * 4));
+            if (idx % 3 === 0) {
+                const gh = 7 + Math.floor(Math.random() * 3);
+                rides.push(randomGroup(gh));
+            }
+            rides.sort((a, b) => a.startHour * 60 + a.startMin - (b.startHour * 60 + b.startMin));
+            driverRides[d.id] = rides;
+        });
+
+        const timeAxis = document.getElementById('time-axis');
+        const startHour = 6;
+        const endHour = 14;
+        for (let h = startHour; h <= endHour; h++) {
+            for (let m = 0; m < 60; m += 30) {
+                if (h === endHour && m > 0) break;
+                const el = document.createElement('div');
+                el.className = 'rp-time-tick via-caption';
+                el.style.fontWeight = 'var(--via-weight-medium)';
+                const hh = h.toString().padStart(2, '0');
+                const mm = m.toString().padStart(2, '0');
+                el.textContent = `${hh}:${mm}`;
+                timeAxis.appendChild(el);
+            }
+        }
+
+        const totalMinutes = (endHour - startHour) * 60;
+
+        function minuteToPercent(hour, min) {
+            return ((hour - startHour) * 60 + min) / totalMinutes * 100;
+        }
+
+        const gridBody = document.getElementById('grid-body');
+
+        function renderAll() {
+            gridBody.innerHTML = '';
+
+            drivers.forEach(driver => {
+                const rowWrapper = document.createElement('div');
+                rowWrapper.className = 'rp-row-wrapper';
+
+                const card = document.createElement('div');
+                card.className = 'rp-driver-card';
+                card.dataset.driverId = driver.id;
+                card.innerHTML = `
+                    <div class="rp-driver-name via-body-md" style="font-weight:var(--via-weight-medium)">${driver.name}</div>
+                    <div class="rp-driver-meta">
+                        <span class="rp-driver-tag via-caption">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+                            ${driver.vehicle}
+                        </span>
+                        <span class="rp-driver-tag via-caption">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+                            ${driver.fleet}
+                        </span>
+                    </div>
+                    <div class="rp-driver-meta">
+                        <span class="via-badge via-badge--info">SP</span>
+                        <span class="rp-driver-tag via-caption">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13" rx="2"/><path d="M16 8h4l3 3v5h-3"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                            ${driver.plate}
+                        </span>
+                    </div>
+                `;
+                rowWrapper.appendChild(card);
+
+                const row = document.createElement('div');
+                row.className = 'rp-timeline-row';
+                row.dataset.driverId = driver.id;
+
+                const items = driverRides[driver.id];
+                items.forEach(item => {
+                    const left = minuteToPercent(item.startHour, item.startMin);
+                    const width = (item.duration / totalMinutes) * 100;
+
+                    if (item.type === 'group') {
+                        const el = document.createElement('div');
+                        el.className = 'rp-group';
+                        el.dataset.groupId = item.groupId;
+                        el.style.left = `${left}%`;
+                        el.style.width = `${Math.max(width, 8)}%`;
+                        el.innerHTML = `
+                            <span class="rp-group-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                                <span class="rp-group-count">${item.riderCount}</span>
+                            </span>
+                            <span class="rp-group-name">From ${item.name}</span>
+                            <span class="rp-group-divider"></span>
+                            <span class="rp-group-pickup">Pickup: ${item.pickup}</span>
+                            <svg class="rp-group-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                        `;
+                        el.addEventListener('click', () => openGroupPanel(item.groupId));
+                        row.appendChild(el);
+                    } else {
+                        const strip = document.createElement('div');
+                        strip.className = `rp-strip rp-strip--${item.color}`;
+                        strip.dataset.rideId = item.id;
+                        strip.dataset.driverId = driver.id;
+                        strip.draggable = true;
+                        strip.style.left = `${left}%`;
+                        strip.style.width = `${Math.max(width, 5)}%`;
+                        strip.innerHTML = `
+                            <span class="rp-strip-otp rp-strip-otp--pu"></span>
+                            <span class="rp-strip-content">
+                                <svg class="rp-strip-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                <span class="rp-strip-name">${item.name}</span>
+                                <span class="rp-strip-divider"></span>
+                                <span class="rp-strip-addr">${item.address}</span>
+                            </span>
+                            <span class="rp-strip-otp rp-strip-otp--do"></span>
+                        `;
+                        row.appendChild(strip);
+                    }
+                });
+
+                for (let h = startHour; h <= endHour; h++) {
+                    for (let m = 0; m < 60; m += 30) {
+                        if (h === endHour && m > 0) break;
+                        const line = document.createElement('div');
+                        line.className = 'rp-grid-line';
+                        line.style.left = `${minuteToPercent(h, m)}%`;
+                        row.appendChild(line);
+                    }
+                }
+
+                rowWrapper.appendChild(row);
+                gridBody.appendChild(rowWrapper);
+            });
+
+            initDragAndDrop();
+        }
+
+        // ===== Group Side Panel =====
+        const panelOverlay = document.getElementById('panel-overlay');
+        const panelEl = document.getElementById('group-panel');
+        const panelBody = document.getElementById('panel-body');
+        const panelName = document.getElementById('panel-group-name');
+        const panelClose = document.getElementById('panel-close');
+
+        let currentGroupId = null;
+
+        function riderCardHTML(rider) {
+            const initial = rider.name.charAt(0).toUpperCase();
+            const badges = [];
+            if (rider.wheelchair) badges.push('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="4" r="2"/><path d="M8 22l1.5-5H15l2 5"/><path d="M9.5 12H15l2 5"/><path d="M7 12a5 5 0 105 5"/></svg>');
+            if (rider.transfer) badges.push('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>');
+            return `
+                <div class="rp-panel-rider-avatar">${initial}</div>
+                <div class="rp-panel-rider-info">
+                    <div class="rp-panel-rider-name-row">
+                        <span class="rp-panel-rider-name">${rider.name}</span>
+                        ${badges.length ? `<span class="rp-panel-rider-badges">${badges.join('')}</span>` : ''}
+                    </div>
+                    <div class="rp-panel-rider-addr">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7 6 13 6 13s6-6 6-13z"/><circle cx="12" cy="8" r="2"/></svg>
+                        ${rider.address}
+                    </div>
+                </div>`;
+        }
+
+        function openGroupPanel(groupId) {
+            currentGroupId = groupId;
+            const group = groups.find(g => g.id === groupId);
+            if (!group) return;
+
+            panelName.textContent = group.name;
+
+            let html = `<div class="rp-panel-section-title">Rides (${group.riderCount})</div>`;
+            html += `<div class="rp-panel-pickup-header">
+                <div class="rp-panel-pickup-left">
+                    <div class="rp-panel-pickup-icon">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-10-10h4m12 0h4"/></svg>
+                        Pickup ${group.riderCount} passengers
+                    </div>
+                    <div class="rp-panel-pickup-name">${group.pickup}</div>
+                </div>
+                <div class="rp-panel-arrive">Arrive by ${group.arriveBy}</div>
+            </div>`;
+
+            html += `<div class="rp-rider-list" id="rider-list">`;
+            group.riders.forEach((rider, i) => {
+                html += `<div class="rp-panel-rider" data-rider-idx="${i}">${riderCardHTML(rider)}</div>`;
+            });
+            html += `</div>`;
+
+            html += `<div class="rp-panel-prefs">
+                <div class="rp-panel-section-title">Group Preferences</div>
+                <label class="rp-panel-checkbox-row">
+                    <input type="checkbox" checked style="accent-color:var(--via-brand-primary);width:18px;height:18px">
+                    Set preferred shift for this group
+                </label>
+                <select class="rp-panel-select">
+                    <option>78 POI 305-71 | Driver: Olivia Rhodes</option>
+                    <option>GH-575-SR | Driver: Ethan Blackwood</option>
+                </select>
+            </div>`;
+
+            panelBody.innerHTML = html;
+            initRiderDrag();
+
+            panelOverlay.classList.add('open');
+            panelEl.classList.add('open');
+        }
+
+        function closeGroupPanel() {
+            panelOverlay.classList.remove('open');
+            panelEl.classList.remove('open');
+            currentGroupId = null;
+        }
+
+        panelClose.addEventListener('click', closeGroupPanel);
+        panelOverlay.addEventListener('click', closeGroupPanel);
+
+        // ===== Rider Card Drag-to-Reorder =====
+        function initRiderDrag() {
+            const list = document.getElementById('rider-list');
+            if (!list) return;
+
+            let dragging = false;
+            let floatingEl = null;
+            let sourceIdx = -1;
+            let currentIdx = -1;
+            let cards = [];
+            let cardRects = [];
+            let startX = 0, startY = 0;
+            let offsetX = 0, offsetY = 0;
+            let listRect = null;
+            let cardHeight = 0;
+
+            function getCards() {
+                return Array.from(list.querySelectorAll('.rp-panel-rider:not(.rp-panel-rider--floating)'));
+            }
+
+            list.addEventListener('pointerdown', onPointerDown);
+
+            function onPointerDown(e) {
+                const card = e.target.closest('.rp-panel-rider');
+                if (!card || card.classList.contains('rp-panel-rider--floating')) return;
+
+                cards = getCards();
+                sourceIdx = cards.indexOf(card);
+                if (sourceIdx === -1) return;
+
+                const rect = card.getBoundingClientRect();
+                listRect = list.getBoundingClientRect();
+                startX = e.clientX;
+                startY = e.clientY;
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+
+                cardRects = cards.map(c => c.getBoundingClientRect());
+                cardHeight = rect.height + 8;
+
+                floatingEl = card.cloneNode(true);
+                floatingEl.classList.add('rp-panel-rider--floating');
+                floatingEl.style.width = rect.width + 'px';
+                floatingEl.style.left = rect.left + 'px';
+                floatingEl.style.top = rect.top + 'px';
+                floatingEl.style.transform = 'rotate(0deg) scale(1)';
+                document.body.appendChild(floatingEl);
+
+                card.classList.add('is-placeholder');
+                currentIdx = sourceIdx;
+                dragging = true;
+
+                requestAnimationFrame(() => {
+                    floatingEl.style.transform = 'rotate(1.5deg) scale(1.03)';
+                    floatingEl.style.transition = 'transform 0.2s cubic-bezier(0.2,0.9,0.3,1), box-shadow 0.2s ease';
+                });
+
+                document.addEventListener('pointermove', onPointerMove);
+                document.addEventListener('pointerup', onPointerUp);
+                e.preventDefault();
+            }
+
+            function onPointerMove(e) {
+                if (!dragging || !floatingEl) return;
+
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                const tiltX = Math.max(-4, Math.min(4, dx * 0.04));
+                const newLeft = e.clientX - offsetX;
+                const newTop = e.clientY - offsetY;
+
+                floatingEl.style.left = newLeft + 'px';
+                floatingEl.style.top = newTop + 'px';
+                floatingEl.style.transform = `rotate(${tiltX}deg) scale(1.03)`;
+
+                const centerY = e.clientY;
+                let newIdx = sourceIdx;
+
+                for (let i = 0; i < cardRects.length; i++) {
+                    const mid = cardRects[i].top + cardRects[i].height / 2;
+                    if (centerY > mid) newIdx = i;
+                }
+                newIdx = Math.max(0, Math.min(cards.length - 1, newIdx));
+
+                if (newIdx !== currentIdx) {
+                    currentIdx = newIdx;
+                    cards.forEach((c, i) => {
+                        if (i === sourceIdx) return;
+                        c.classList.add('is-shifting');
+                        let shift = 0;
+                        if (sourceIdx < currentIdx) {
+                            if (i > sourceIdx && i <= currentIdx) shift = -cardHeight;
+                        } else {
+                            if (i >= currentIdx && i < sourceIdx) shift = cardHeight;
+                        }
+                        c.style.transform = `translateY(${shift}px)`;
+                    });
+                }
+            }
+
+            function onPointerUp(e) {
+                document.removeEventListener('pointermove', onPointerMove);
+                document.removeEventListener('pointerup', onPointerUp);
+
+                if (!dragging || !floatingEl) return;
+                dragging = false;
+
+                const placeholder = cards[sourceIdx];
+                let targetRect;
+
+                if (currentIdx === sourceIdx) {
+                    targetRect = cardRects[sourceIdx];
+                } else if (currentIdx > sourceIdx) {
+                    targetRect = {
+                        left: cardRects[currentIdx].left,
+                        top: cardRects[currentIdx].top + cardRects[currentIdx].height - cardRects[sourceIdx].height,
+                    };
+                } else {
+                    targetRect = { left: cardRects[currentIdx].left, top: cardRects[currentIdx].top };
+                }
+
+                floatingEl.classList.add('rp-panel-rider--landing');
+                floatingEl.style.left = targetRect.left + 'px';
+                floatingEl.style.top = targetRect.top + 'px';
+                floatingEl.style.transform = 'rotate(0deg) scale(1)';
+
+                floatingEl.addEventListener('transitionend', function handler(ev) {
+                    if (ev.propertyName !== 'transform') return;
+                    floatingEl.removeEventListener('transitionend', handler);
+
+                    if (currentIdx !== sourceIdx) {
+                        const group = groups.find(g => g.id === currentGroupId);
+                        if (group) {
+                            const [moved] = group.riders.splice(sourceIdx, 1);
+                            group.riders.splice(currentIdx, 0, moved);
+                        }
+                    }
+
+                    if (floatingEl) { floatingEl.remove(); floatingEl = null; }
+
+                    cards.forEach(c => {
+                        c.classList.remove('is-shifting', 'is-placeholder');
+                        c.style.transform = '';
+                    });
+
+                    const g = groups.find(g => g.id === currentGroupId);
+                    if (g) {
+                        const listEl = document.getElementById('rider-list');
+                        listEl.innerHTML = '';
+                        g.riders.forEach((rider, i) => {
+                            const div = document.createElement('div');
+                            div.className = 'rp-panel-rider';
+                            div.dataset.riderIdx = i;
+                            div.innerHTML = riderCardHTML(rider);
+                            listEl.appendChild(div);
+                        });
+                    }
+                }, { once: false });
+            }
+        }
+
+        // ===== Drag & Drop =====
+        let dragData = null;
+        let dragGhost = null;
+        let dragSourceEl = null;
+        let dropTargetEl = null;
+
+        function initDragAndDrop() {
+            document.querySelectorAll('.rp-strip').forEach(strip => {
+                strip.addEventListener('dragstart', onDragStart);
+                strip.addEventListener('dragend', onDragEnd);
+            });
+
+            document.querySelectorAll('.rp-timeline-row').forEach(row => {
+                row.addEventListener('dragover', onDragOver);
+                row.addEventListener('dragleave', onDragLeave);
+                row.addEventListener('drop', onDrop);
+            });
+        }
+
+        function onDragStart(e) {
+            const strip = e.target.closest('.rp-strip');
+            if (!strip) return;
+
+            dragData = {
+                rideId: strip.dataset.rideId,
+                sourceDriverId: strip.dataset.driverId,
+            };
+            dragSourceEl = strip;
+
+            dragGhost = strip.cloneNode(true);
+            dragGhost.classList.add('rp-strip-ghost');
+            dragGhost.style.width = strip.offsetWidth + 'px';
+            document.body.appendChild(dragGhost);
+            e.dataTransfer.setDragImage(dragGhost, strip.offsetWidth / 2, 14);
+            e.dataTransfer.effectAllowed = 'move';
+
+            requestAnimationFrame(() => {
+                strip.classList.add('rp-strip--dragging');
+            });
+        }
+
+        function onDragEnd() {
+            if (dragSourceEl) dragSourceEl.classList.remove('rp-strip--dragging');
+            document.querySelectorAll('.rp-timeline-row').forEach(r => r.classList.remove('rp-row--drop-target'));
+            if (dragGhost) { dragGhost.remove(); dragGhost = null; }
+            dragData = null;
+            dragSourceEl = null;
+            dropTargetEl = null;
+        }
+
+        function onDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const row = e.target.closest('.rp-timeline-row');
+            if (!row) return;
+            if (dropTargetEl && dropTargetEl !== row) dropTargetEl.classList.remove('rp-row--drop-target');
+            row.classList.add('rp-row--drop-target');
+            dropTargetEl = row;
+        }
+
+        function onDragLeave(e) {
+            const row = e.target.closest('.rp-timeline-row');
+            if (row && !row.contains(e.relatedTarget)) row.classList.remove('rp-row--drop-target');
+        }
+
+        function onDrop(e) {
+            e.preventDefault();
+            const targetRow = e.target.closest('.rp-timeline-row');
+            if (!targetRow || !dragData) return;
+
+            const targetDriverId = targetRow.dataset.driverId;
+            const sourceDriverId = dragData.sourceDriverId;
+            const rideId = dragData.rideId;
+
+            if (targetDriverId === sourceDriverId) return;
+
+            const targetStrips = targetRow.querySelectorAll('.rp-strip');
+            let closestStrip = null;
+            let closestDist = Infinity;
+            const dropX = e.clientX;
+
+            targetStrips.forEach(s => {
+                const rect = s.getBoundingClientRect();
+                const center = rect.left + rect.width / 2;
+                const dist = Math.abs(dropX - center);
+                if (dist < closestDist) { closestDist = dist; closestStrip = s; }
+            });
+
+            if (!closestStrip) return;
+
+            const targetRideId = closestStrip.dataset.rideId;
+
+            animateSwap(dragSourceEl, closestStrip, () => {
+                const sourceRides = driverRides[sourceDriverId];
+                const targetRides = driverRides[targetDriverId];
+                const srcIdx = sourceRides.findIndex(r => r.id === rideId);
+                const tgtIdx = targetRides.findIndex(r => r.id === targetRideId);
+                if (srcIdx === -1 || tgtIdx === -1) return;
+
+                const srcRide = sourceRides[srcIdx];
+                const tgtRide = targetRides[tgtIdx];
+                sourceRides[srcIdx] = tgtRide;
+                targetRides[tgtIdx] = srcRide;
+                renderAll();
+            });
+        }
+
+        function animateSwap(elA, elB, callback) {
+            const rectA = elA.getBoundingClientRect();
+            const rectB = elB.getBoundingClientRect();
+
+            const deltaAx = rectB.left - rectA.left;
+            const deltaAy = rectB.top - rectA.top;
+            const deltaBx = rectA.left - rectB.left;
+            const deltaBy = rectA.top - rectB.top;
+
+            elA.classList.remove('rp-strip--dragging');
+            elB.classList.add('rp-strip--swapping');
+            elA.classList.add('rp-strip--swapping');
+            elA.style.zIndex = '100';
+            elB.style.zIndex = '99';
+
+            const anim = elA.animate([
+                { transform: 'translate(0, 0)', opacity: 1 },
+                { transform: `translate(${deltaAx}px, ${deltaAy}px)`, opacity: 1 },
+            ], { duration: 400, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)', fill: 'forwards' });
+
+            elB.animate([
+                { transform: 'translate(0, 0)', opacity: 1 },
+                { transform: `translate(${deltaBx}px, ${deltaBy}px)`, opacity: 1 },
+            ], { duration: 400, easing: 'cubic-bezier(0.2, 0.9, 0.3, 1)', fill: 'forwards' });
+
+            anim.onfinish = () => {
+                elA.style.zIndex = '';
+                elB.style.zIndex = '';
+                elA.classList.remove('rp-strip--swapping');
+                elB.classList.remove('rp-strip--swapping');
+                callback();
+            };
+        }
+
+        renderAll();
+    })();
+    </script>
+</body>
+</html>
