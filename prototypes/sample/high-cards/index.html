@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ride Cards — Expanding Handles (Vertical)</title>
+  <title>Ride Cards — Side Handles</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -18,7 +18,8 @@
       --brand:     #0054b4;
       --brand-lt:  #eff6ff;
       --gap:       14px;
-      --min-h:     72px;
+      --card-h:    350px;
+      --min-w:     120px;
       --cols:      4;
     }
 
@@ -41,20 +42,19 @@
     .page-title  { font-size: 22px; font-weight: 700; color: var(--txt-1); letter-spacing: -.3px; }
     .page-hint   { font-size: 13px; color: var(--txt-2); font-weight: 500; }
 
-    /* ── Column grid ──────────────────────────────────────────── */
+    /* ── Row-based grid ─────────────────────────────────────────── */
     #card-grid {
-      display: grid;
-      grid-template-columns: repeat(var(--cols), 1fr);
-      gap: var(--gap);
-      width: 100%;
-      max-width: 1160px;
-      align-items: start;
-    }
-
-    .col {
       display: flex;
       flex-direction: column;
       gap: var(--gap);
+      width: 100%;
+      max-width: 1160px;
+    }
+
+    .row {
+      display: flex;
+      gap: var(--gap);
+      height: var(--card-h);
     }
 
     /* ── Card shell ───────────────────────────────────────────── */
@@ -63,6 +63,7 @@
       overflow: visible;
       border-radius: 14px;
       flex-shrink: 0;
+      height: var(--card-h);
       transition: box-shadow .18s;
     }
 
@@ -77,7 +78,7 @@
       flex-direction: column;
       overflow: hidden;
       transition: border-color .15s, box-shadow .15s;
-      container-type: size;
+      container-type: inline-size;
     }
 
     .card.is-resizing .card-body {
@@ -96,35 +97,36 @@
     }
 
     .s-rider  { flex: 0 0 auto; padding: 12px 14px 0; }
-    .s-pickup { display: none; flex-direction: column; gap: 2px; padding: 6px 14px 0; }
-    .s-eta    { display: none; flex-shrink: 0; padding: 6px 14px 0; }
-    .s-driver { display: none; flex-direction: column; gap: 1px; padding: 6px 14px 0; }
-    .s-plate  { display: none; padding: 6px 14px 0; }
+    .s-pickup { flex-direction: column; gap: 2px; padding: 6px 14px 0; }
+    .s-eta    { flex-shrink: 0; padding: 6px 14px 0; }
+    .s-driver { flex-direction: column; gap: 1px; padding: 6px 14px 0; }
+    .s-plate  { padding: 6px 14px 0; }
     .s-view   { margin-top: auto; padding: 8px 14px 12px; flex-shrink: 0; }
 
-    /* horizontal separators */
     .hsep {
       height: 1px;
       margin: 6px 14px 0;
       background: var(--sep);
       flex-shrink: 0;
-      display: none;
     }
 
-    /* ── Container queries — progressive reveal by height ─────── */
-    @container (min-height: 130px) {
+    /* ── Container queries — progressive reveal by WIDTH ──────── */
+    .s-pickup, .s-eta, .s-driver, .s-plate { display: none; }
+    .hsep { display: none; }
+
+    @container (min-width: 160px) {
       .s-pickup { display: flex; }
       .hsep.h1  { display: block; }
     }
-    @container (min-height: 180px) {
+    @container (min-width: 200px) {
       .s-eta   { display: flex; }
       .hsep.h2 { display: block; }
     }
-    @container (min-height: 240px) {
+    @container (min-width: 240px) {
       .s-driver { display: flex; }
       .hsep.h3  { display: block; }
     }
-    @container (min-height: 300px) {
+    @container (min-width: 280px) {
       .s-plate { display: flex; }
       .hsep.h4 { display: block; }
     }
@@ -176,40 +178,52 @@
       text-decoration: none; white-space: nowrap;
     }
 
-    /* ── Resize handle (bottom edge) ──────────────────────────── */
-    .resize-handle {
+    /* ── Resize handles (left & right edges) ───────────────────── */
+    .resize-handle-left,
+    .resize-handle-right {
       position: absolute;
-      bottom: -13px;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 20px;
-      width: 44px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 44px;
       background: var(--brand-lt);
       border: 1.5px solid var(--brand);
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: row-resize;
+      cursor: col-resize;
       opacity: 0;
       transition: opacity .15s, transform .12s;
       z-index: 20;
       touch-action: none;
     }
 
-    .card:hover .resize-handle,
-    .card.is-resizing .resize-handle {
+    .resize-handle-left  { left: -13px; }
+    .resize-handle-right { right: -13px; }
+
+    .card:hover .resize-handle-left,
+    .card:hover .resize-handle-right,
+    .card.is-resizing .resize-handle-left,
+    .card.is-resizing .resize-handle-right {
       opacity: 1;
     }
 
-    .card.is-resizing .resize-handle {
-      transform: translateX(-50%) scaleY(1.2);
+    .card.is-resizing .resize-handle-left,
+    .card.is-resizing .resize-handle-right {
       background: var(--brand);
     }
 
-    /* grip dots (horizontal row) */
+    .card.is-resizing .resize-handle-left {
+      transform: translateY(-50%) scaleX(1.2);
+    }
+    .card.is-resizing .resize-handle-right {
+      transform: translateY(-50%) scaleX(1.2);
+    }
+
+    /* Vertical grip dots */
     .grip {
-      display: flex; flex-direction: row; gap: 3.5px;
+      display: flex; flex-direction: column; gap: 3.5px;
       align-items: center;
     }
     .grip span {
@@ -220,12 +234,12 @@
     }
     .card.is-resizing .grip span { background: #fff; }
 
-    /* ── Height badge (shown while resizing) ──────────────────── */
-    .height-badge {
+    /* ── Width badge (shown while resizing) ─────────────────────── */
+    .width-badge {
       position: absolute;
-      right: -48px;
-      top: 50%;
-      transform: translateY(-50%);
+      bottom: -28px;
+      left: 50%;
+      transform: translateX(-50%);
       background: var(--txt-1);
       color: #fff;
       font-size: 11px;
@@ -237,15 +251,15 @@
       pointer-events: none;
       transition: opacity .1s;
     }
-    .height-badge::after {
+    .width-badge::after {
       content: '';
       position: absolute;
-      right: 100%; top: 50%;
-      transform: translateY(-50%);
+      bottom: 100%; left: 50%;
+      transform: translateX(-50%);
       border: 4px solid transparent;
-      border-right-color: var(--txt-1);
+      border-bottom-color: var(--txt-1);
     }
-    .card.is-resizing .height-badge { opacity: 1; }
+    .card.is-resizing .width-badge { opacity: 1; }
 
     /* ── Resize flash ─────────────────────────────────────────── */
     @keyframes resizeFlash {
@@ -254,21 +268,20 @@
     }
     .card.flash .card-body { animation: resizeFlash .3s ease-out; }
 
-    /* ── Row guide (while dragging) ───────────────────────────── */
-    #row-guide {
+    /* ── Column guide (while dragging) ─────────────────────────── */
+    #col-guide {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
       display: none;
     }
-    #row-guide-inner {
+    #col-guide-inner {
       position: absolute;
       display: flex;
-      flex-direction: column;
       gap: var(--gap);
     }
-    .rg-row {
+    .cg-col {
       background: rgba(0,84,180,.04);
       border: 1px dashed rgba(0,84,180,.18);
       border-radius: 10px;
@@ -280,12 +293,12 @@
 
   <div class="page-header">
     <span class="page-title">Ride Cards</span>
-    <span class="page-hint">Hover a card · drag the bottom handle to resize · cards in the same column respond</span>
+    <span class="page-hint">Hover a card · drag the left or right handle to resize · cards in the same row respond</span>
   </div>
 
   <div id="card-grid"></div>
 
-  <div id="row-guide"><div id="row-guide-inner"></div></div>
+  <div id="col-guide"><div id="col-guide-inner"></div></div>
 
 <script>
 const CARDS = [
@@ -327,28 +340,43 @@ const CARDS = [
     di:'YL', dn:'Yuki L.',    dv:'VW Crafter',       plate:'#3NQ6617' },
 ];
 
-const GAP       = 14;
-const MIN_H     = 72;
-const NUM_COLS  = 4;
-const ROWS_PER_COL = Math.ceil(CARDS.length / NUM_COLS);
+const GAP      = 14;
+const MIN_W    = 120;
+const NUM_COLS = 4;
+const NUM_ROWS = Math.ceil(CARDS.length / NUM_COLS);
 
-let cardHeights = [];
+let cardWidths = [];
 
-/* Cards are distributed column-first: col0=[0,1,2], col1=[3,4,5], … */
-function colOf(idx)     { return Math.floor(idx / ROWS_PER_COL); }
-function rowInCol(idx)  { return idx % ROWS_PER_COL; }
-function cardIdx(col, row) { return col * ROWS_PER_COL + row; }
+function rowOf(idx)       { return Math.floor(idx / NUM_COLS); }
+function colInRow(idx)    { return idx % NUM_COLS; }
+function cardIdx(row, col){ return row * NUM_COLS + col; }
 
-function initHeights() {
-  const initH = 160;
-  cardHeights = CARDS.map(() => initH);
+function initWidths() {
+  const grid = document.getElementById('card-grid');
+  const totalW = grid.clientWidth;
+  const perCard = (totalW - GAP * (NUM_COLS - 1)) / NUM_COLS;
+  cardWidths = CARDS.map(() => perCard);
 }
 
 function buildCard(i) {
   const c = CARDS[i];
+  const col = colInRow(i);
+  const isFirst = col === 0;
+  const isLast  = col === NUM_COLS - 1 || i === CARDS.length - 1;
+
+  const leftHandle = !isFirst ? `
+    <div class="resize-handle-left" data-idx="${i}" data-side="left">
+      <div class="grip"><span></span><span></span><span></span><span></span></div>
+    </div>` : '';
+
+  const rightHandle = !isLast ? `
+    <div class="resize-handle-right" data-idx="${i}" data-side="right">
+      <div class="grip"><span></span><span></span><span></span><span></span></div>
+    </div>` : '';
+
   return `
-  <div class="card" id="card-${i}" data-idx="${i}" style="height:${cardHeights[i]}px">
-    <span class="height-badge" id="badge-${i}"></span>
+  <div class="card" id="card-${i}" data-idx="${i}" style="width:${cardWidths[i]}px">
+    <span class="width-badge" id="badge-${i}"></span>
     <div class="card-body">
 
       <div class="s s-rider">
@@ -399,19 +427,18 @@ function buildCard(i) {
 
     </div>
 
-    <div class="resize-handle" data-idx="${i}">
-      <div class="grip"><span></span><span></span><span></span><span></span></div>
-    </div>
+    ${leftHandle}
+    ${rightHandle}
   </div>`;
 }
 
 function render() {
   const grid = document.getElementById('card-grid');
   let html = '';
-  for (let col = 0; col < NUM_COLS; col++) {
-    html += '<div class="col">';
-    for (let row = 0; row < ROWS_PER_COL; row++) {
-      const idx = cardIdx(col, row);
+  for (let row = 0; row < NUM_ROWS; row++) {
+    html += '<div class="row">';
+    for (let col = 0; col < NUM_COLS; col++) {
+      const idx = cardIdx(row, col);
       if (idx < CARDS.length) html += buildCard(idx);
     }
     html += '</div>';
@@ -423,68 +450,80 @@ function render() {
 /* ── Resize state ─────────────────────────────────────────────── */
 let rs = null;
 
-function getColumnNeighbour(idx) {
-  const col = colOf(idx);
-  const row = rowInCol(idx);
-  const nextRow = row + 1;
-  if (nextRow >= ROWS_PER_COL) return null;
-  const nextIdx = cardIdx(col, nextRow);
-  return nextIdx < CARDS.length ? nextIdx : null;
+function getNeighbour(idx, side) {
+  const col = colInRow(idx);
+  if (side === 'left') {
+    const prevCol = col - 1;
+    if (prevCol < 0) return null;
+    const prevIdx = cardIdx(rowOf(idx), prevCol);
+    return prevIdx < CARDS.length ? prevIdx : null;
+  } else {
+    const nextCol = col + 1;
+    if (nextCol >= NUM_COLS) return null;
+    const nextIdx = cardIdx(rowOf(idx), nextCol);
+    return nextIdx < CARDS.length ? nextIdx : null;
+  }
 }
 
 function attachHandles() {
-  document.querySelectorAll('.resize-handle').forEach(h => {
+  document.querySelectorAll('.resize-handle-left, .resize-handle-right').forEach(h => {
     h.addEventListener('pointerdown', onDown);
   });
 }
 
 function onDown(e) {
   e.preventDefault();
-  const idx     = parseInt(e.currentTarget.dataset.idx);
-  const nextIdx = getColumnNeighbour(idx);
+  const handle  = e.currentTarget;
+  const idx     = parseInt(handle.dataset.idx);
+  const side    = handle.dataset.side;
+  const neighbourIdx = side === 'right' ? getNeighbour(idx, 'right') : getNeighbour(idx, 'left');
+
+  if (neighbourIdx === null) return;
 
   rs = {
     idx,
-    startY:          e.clientY,
-    startHeight:     cardHeights[idx],
-    nextIdx,
-    nextStartHeight: nextIdx !== null ? cardHeights[nextIdx] : null,
+    side,
+    startX:            e.clientX,
+    startWidth:        cardWidths[idx],
+    neighbourIdx,
+    neighbourStartWidth: cardWidths[neighbourIdx],
   };
 
   document.getElementById('card-' + idx).classList.add('is-resizing');
-  document.body.style.cursor = 'row-resize';
+  document.body.style.cursor = 'col-resize';
 
   showGuide();
-  e.currentTarget.setPointerCapture(e.pointerId);
+  handle.setPointerCapture(e.pointerId);
   document.addEventListener('pointermove', onMove);
   document.addEventListener('pointerup',   onUp);
 }
 
 function onMove(e) {
   if (!rs) return;
-  const dy     = e.clientY - rs.startY;
-  const rawNew = rs.startHeight + dy;
 
-  const maxExpand = rs.nextIdx !== null
-    ? rs.nextStartHeight - MIN_H
-    : 600;
+  const dx = e.clientX - rs.startX;
+  const dir = rs.side === 'right' ? 1 : -1;
+  const delta = dx * dir;
 
-  const newH  = Math.max(MIN_H, Math.min(rs.startHeight + maxExpand, rawNew));
-  const delta = newH - rs.startHeight;
+  const maxGrow = rs.neighbourStartWidth - MIN_W;
+  const maxShrink = rs.startWidth - MIN_W;
 
-  cardHeights[rs.idx] = newH;
+  const clampedDelta = Math.max(-maxShrink, Math.min(maxGrow, delta));
+
+  const newW = rs.startWidth + clampedDelta;
+  const neighbourW = rs.neighbourStartWidth - clampedDelta;
+
+  cardWidths[rs.idx] = newW;
+  cardWidths[rs.neighbourIdx] = neighbourW;
+
   const myEl = document.getElementById('card-' + rs.idx);
-  myEl.style.height = newH + 'px';
+  myEl.style.width = newW + 'px';
+
+  const nEl = document.getElementById('card-' + rs.neighbourIdx);
+  if (nEl) nEl.style.width = neighbourW + 'px';
 
   const badge = document.getElementById('badge-' + rs.idx);
-  if (badge) badge.textContent = Math.round(newH) + 'px';
-
-  if (rs.nextIdx !== null) {
-    const neighbourH = Math.max(MIN_H, rs.nextStartHeight - delta);
-    cardHeights[rs.nextIdx] = neighbourH;
-    const nEl = document.getElementById('card-' + rs.nextIdx);
-    if (nEl) nEl.style.height = neighbourH + 'px';
-  }
+  if (badge) badge.textContent = Math.round(newW) + 'px';
 }
 
 function onUp() {
@@ -505,10 +544,10 @@ function onUp() {
   document.removeEventListener('pointerup',   onUp);
 }
 
-/* ── Row guide ────────────────────────────────────────────────── */
+/* ── Column guide ────────────────────────────────────────────── */
 function showGuide() {
-  const guide = document.getElementById('row-guide');
-  const inner = document.getElementById('row-guide-inner');
+  const guide = document.getElementById('col-guide');
+  const inner = document.getElementById('col-guide-inner');
   const grid  = document.getElementById('card-grid');
   const rect  = grid.getBoundingClientRect();
 
@@ -518,15 +557,25 @@ function showGuide() {
   inner.style.width  = rect.width + 'px';
   inner.style.height = rect.height + 'px';
 
-  inner.innerHTML = Array(ROWS_PER_COL).fill('<div class="rg-row"></div>').join('');
+  inner.innerHTML = Array(NUM_COLS).fill('<div class="cg-col"></div>').join('');
 }
 
 function hideGuide() {
-  document.getElementById('row-guide').style.display = 'none';
+  document.getElementById('col-guide').style.display = 'none';
 }
 
+/* ── Responsive recalc on window resize ──────────────────────── */
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    initWidths();
+    render();
+  }, 150);
+});
+
 /* ── Boot ─────────────────────────────────────────────────────── */
-initHeights();
+initWidths();
 render();
 </script>
 </body>
