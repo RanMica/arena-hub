@@ -113,6 +113,20 @@
         }
       ],
       "createdAt": "2026-03-23"
+    },
+    {
+      "id": "fr-exp",
+      "name": "FR Exp",
+      "description": "",
+      "createdBy": "ran",
+      "variants": [
+        {
+          "id": "default",
+          "name": "Default",
+          "path": "prototypes/fr-exp/"
+        }
+      ],
+      "createdAt": "2026-03-24"
     }
   ]
 }
